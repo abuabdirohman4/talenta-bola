@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Data Siswa & Roster KU-10 · SSB Galuh Putra</title>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
+  </style>
+  <script>
+    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+  </script>
+</head>
+<body class="bg-[#F1F5F9] dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-full antialiased selection:bg-emerald-500 selection:text-white flex flex-col md:flex-row transition-colors duration-200">
+
+  <!-- ========================================================================= -->
+  <!-- 1. DESKTOP SIDEBAR                                                        -->
+  <!-- ========================================================================= -->
+  <aside class="hidden md:flex md:w-64 lg:w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex-col shrink-0 min-h-screen sticky top-0 z-30 shadow-sm">
+    
+    <!-- Brand Logo Header -->
+    <div class="p-5 border-b border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white flex items-center justify-center font-black text-sm shadow-sm tracking-wider">
+          GP
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="font-extrabold text-sm text-slate-900 dark:text-white tracking-tight">TalentaBola</span>
+            <span class="text-[9px] font-extrabold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-400 px-1.5 py-0.2 rounded border border-emerald-300 dark:border-emerald-800">PRO</span>
+          </div>
+          <p class="text-[11px] text-slate-600 dark:text-slate-400 font-medium">SSB Galuh Putra Tasikmalaya</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active KU Badge -->
+    <div class="p-3 mx-3 mt-3 bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/70 rounded-xl flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+        <div>
+          <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Grup Aktif</span>
+          <span class="text-xs font-extrabold text-slate-900 dark:text-slate-200">KU-10 (2016)</span>
+        </div>
+      </div>
+      <span class="text-[11px] text-slate-600 dark:text-slate-400 font-bold px-1.5 py-0.5 rounded bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600">40 Anak</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="p-3 space-y-1 flex-1 overflow-y-auto custom-scrollbar">
+      <div class="px-3 pt-2 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Menu Utama</div>
+      
+      <a href="dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        <span>Dashboard</span>
+      </a>
+
+      <a href="mockup-01-presensi.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+          <span>Presensi Lapangan</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">Live</span>
+      </a>
+
+      <a href="papan-taktik.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8-8h16M12 9a3 3 0 100 6 3 3 0 000-6z"></path></svg>
+          <span>Papan Taktik & Formasi</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-300">7v7</span>
+      </a>
+
+      <a href="mockup-02-form-rapor.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+          <span>Rapor & Evaluasi</span>
+        </div>
+        <span class="text-[10px] font-medium text-slate-500 dark:text-slate-400">28/40</span>
+      </a>
+
+      <a href="mockup-03-rapor-ortu.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"></path></svg>
+          <span>Rapor Digital Pemain</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800">Ortu</span>
+      </a>
+
+      <!-- TIM & PEMAIN -->
+      <div class="px-3 pt-3.5 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tim & Pemain</div>
+
+      <!-- ACTIVE: DATA SISWA & ROSTER -->
+      <a href="roster.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold text-xs shadow-sm border border-emerald-300 dark:border-emerald-800/60">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <span>Data Siswa & Roster</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-200/80 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">40 Anak</span>
+      </a>
+
+      <a href="jadwal.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+        <span>Jadwal & Agenda</span>
+      </a>
+
+      <!-- OPERASIONAL & KEUANGAN -->
+      <div class="px-3 pt-3.5 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Operasional</div>
+
+      <a href="spp.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span>Iuran SPP Bulanan</span>
+        </div>
+        <span class="text-[10px] font-bold text-emerald-600">34 Lunas</span>
+      </a>
+
+      <a href="broadcast.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+        <span>Broadcast WhatsApp</span>
+      </a>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="p-3 border-t border-slate-200/80 dark:border-slate-800/80 m-2 space-y-2">
+      <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all border border-slate-200 dark:border-slate-700">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <span>Mode Tampilan</span>
+        </div>
+        <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">Dark / Light</span>
+      </button>
+
+      <div class="flex items-center gap-2.5 px-2 py-1.5">
+        <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+          CR
+        </div>
+        <div class="leading-tight overflow-hidden">
+          <p class="text-xs font-bold text-slate-900 dark:text-white truncate">Coach Riyandi</p>
+          <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Pelatih Kepala KU-10</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN WORKSPACE CONTENT                                                -->
+  <!-- ========================================================================= -->
+  <div class="flex-1 flex flex-col min-w-0 min-h-screen">
+    
+    <!-- Top Header Bar -->
+    <header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 md:px-8 py-3.5 sticky top-0 z-20 shadow-sm flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex md:hidden items-center justify-center font-black text-xs">
+          GP
+        </div>
+        <div>
+          <div class="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+            <span>KU-10 (Kelahiran 2016)</span>
+            <span>/</span>
+            <span class="text-slate-900 dark:text-slate-200 font-bold">Database Siswa</span>
+          </div>
+          <h1 class="text-base md:text-lg font-black text-slate-900 dark:text-white tracking-tight">
+            Data Siswa & Roster Pemain
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <button onclick="toggleDarkMode()" class="md:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+
+        <button onclick="alert('Fitur tambah siswa baru: formulir pendaftaran siswa SSB Galuh Putra')" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-xs font-bold text-white flex items-center gap-1.5 shadow-sm transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+          <span>Tambah Siswa</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 p-3.5 md:p-8 space-y-5 max-w-6xl w-full mx-auto pb-24 md:pb-8">
+
+      <!-- SUMMARY KPI STATS -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+          <span class="text-[10px] font-extrabold uppercase text-slate-500 dark:text-slate-400 block">Total Siswa Terdaftar</span>
+          <span class="text-2xl font-black text-slate-900 dark:text-white">40 Anak</span>
+          <span class="text-[10px] text-emerald-600 font-bold block mt-1">Kelahiran 2016 (KU-10)</span>
+        </div>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+          <span class="text-[10px] font-extrabold uppercase text-slate-500 dark:text-slate-400 block">Komposisi Posisi</span>
+          <span class="text-xs font-extrabold text-slate-800 dark:text-slate-200 block mt-1">3 GK · 12 Bek · 17 Mid · 8 ST</span>
+          <span class="text-[10px] text-slate-500 font-medium block mt-1">Formasi Filanesia 7v7</span>
+        </div>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+          <span class="text-[10px] font-extrabold uppercase text-slate-500 dark:text-slate-400 block">Status Rapor Semester</span>
+          <span class="text-2xl font-black text-slate-900 dark:text-white">28 <span class="text-sm font-semibold text-slate-500">/ 40</span></span>
+          <span class="text-[10px] text-blue-600 font-bold block mt-1">70% Selesai Dievaluasi</span>
+        </div>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+          <span class="text-[10px] font-extrabold uppercase text-slate-500 dark:text-slate-400 block">Status Iuran SPP</span>
+          <span class="text-2xl font-black text-emerald-600">34 Lunas</span>
+          <span class="text-[10px] text-rose-500 font-bold block mt-1">6 Menunggak Bulan Ini</span>
+        </div>
+      </div>
+
+      <!-- TOOLBAR: SEARCH & POSITION FILTER TABS -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        
+        <!-- Search Input -->
+        <div class="relative flex-1 max-w-md">
+          <input type="text" id="rosterSearch" oninput="filterRoster()" placeholder="Cari nama siswa, nomor punggung, atau nama ortu..." 
+            class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 pl-9 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        </div>
+
+        <!-- Filter Posisi Chips -->
+        <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1 md:pb-0">
+          <button onclick="setPosFilter('ALL')" id="pos-ALL" class="pos-tab px-3 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-600 text-white shadow-sm transition-all shrink-0">Semua (40)</button>
+          <button onclick="setPosFilter('GK')" id="pos-GK" class="pos-tab px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 bg-slate-100 dark:bg-slate-800 transition-all shrink-0">Kiper (3)</button>
+          <button onclick="setPosFilter('DEF')" id="pos-DEF" class="pos-tab px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 bg-slate-100 dark:bg-slate-800 transition-all shrink-0">Bek (12)</button>
+          <button onclick="setPosFilter('MID')" id="pos-MID" class="pos-tab px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 bg-slate-100 dark:bg-slate-800 transition-all shrink-0">Tengah (17)</button>
+          <button onclick="setPosFilter('FWD')" id="pos-FWD" class="pos-tab px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 bg-slate-100 dark:bg-slate-800 transition-all shrink-0">Depan (8)</button>
+        </div>
+
+      </div>
+
+      <!-- ROSTER CARDS GRID (RESPONSIVE) -->
+      <div id="roster-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <!-- Rendered by JS -->
+      </div>
+
+    </main>
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 shadow-lg px-2 py-1.5 flex items-center justify-around">
+      <a href="dashboard.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Home</span>
+      </a>
+      <a href="mockup-01-presensi.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Presensi</span>
+      </a>
+      <a href="papan-taktik.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8-8h16M12 9a3 3 0 100 6 3 3 0 000-6z"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Taktik</span>
+      </a>
+      <a href="mockup-02-form-rapor.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Rapor</span>
+      </a>
+      <a href="mockup-03-rapor-ortu.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Ortu</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- MODAL DETAIL SISWA -->
+  <div id="student-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="flex items-center gap-3">
+          <div id="modal-jersey" class="w-10 h-10 rounded-xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center">
+            #10
+          </div>
+          <div>
+            <h3 id="modal-name" class="text-sm font-black text-slate-900 dark:text-white">Athar Razka Pratama</h3>
+            <p id="modal-pos" class="text-xs text-slate-500 dark:text-slate-400">Gelandang (CM) · KU-10</p>
+          </div>
+        </div>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">✕</button>
+      </div>
+
+      <div class="space-y-2.5 text-xs">
+        <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5">
+          <div class="flex justify-between"><span class="text-slate-500">Tanggal Lahir:</span> <strong id="modal-dob" class="text-slate-800 dark:text-white">15 Mei 2016 (10 Tahun)</strong></div>
+          <div class="flex justify-between"><span class="text-slate-500">Nama Orang Tua:</span> <strong id="modal-parent" class="text-slate-800 dark:text-white">Bpk. Hendra Pratama</strong></div>
+          <div class="flex justify-between"><span class="text-slate-500">WhatsApp Wali:</span> <strong id="modal-phone" class="text-emerald-600 font-mono">0812-3456-7890</strong></div>
+          <div class="flex justify-between"><span class="text-slate-500">Catatan Medis:</span> <span id="modal-medical" class="text-slate-600 dark:text-slate-300">Tidak ada riwayat asma/alergi</span></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 text-center">
+          <div class="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800">
+            <span class="text-[10px] font-bold text-emerald-800 dark:text-emerald-400 uppercase block">Tingkat Hadir</span>
+            <span id="modal-att" class="text-base font-black text-emerald-900 dark:text-emerald-200">100% (12 Sesi)</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-300 dark:border-blue-800">
+            <span class="text-[10px] font-bold text-blue-800 dark:text-blue-400 uppercase block">Rapor Coach</span>
+            <span id="modal-score" class="text-base font-black text-blue-900 dark:text-blue-200">4.4 / 5.0 (Siap)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 pt-2">
+        <a id="modal-rapor-link" href="mockup-03-rapor-ortu.html" class="w-1/2 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-xs font-bold text-slate-800 dark:text-white text-center transition-all">
+          Buka Rapor Ortu
+        </a>
+        <a id="modal-wa-link" href="#" class="w-1/2 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black text-center shadow-sm transition-all flex items-center justify-center gap-1.5">
+          <span>📲 Chat WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const rosterData = [
+      { id: 1, name: "Athar Razka Pratama", no: 10, pos: "CM", group: "MID", dob: "15 Mei 2016", parent: "Hendra Pratama", phone: "081234567890", att: "100%", spp: "LUNAS", score: "4.4", medical: "Tidak ada riwayat alergi / sehat" },
+      { id: 2, name: "Argya", no: 7, pos: "RW", group: "MID", dob: "22 Jan 2016", parent: "Dedi Kurnia", phone: "081298765432", att: "92%", spp: "LUNAS", score: "4.2", medical: "Sehat" },
+      { id: 3, name: "Argyo", no: 11, pos: "LW", group: "MID", dob: "22 Jan 2016", parent: "Dedi Kurnia", phone: "081298765432", att: "83%", spp: "LUNAS", score: "3.9", medical: "Sehat" },
+      { id: 4, name: "Azril", no: 4, pos: "CB", group: "DEF", dob: "04 Mar 2016", parent: "Iwan Setiawan", phone: "081345678901", att: "92%", spp: "LUNAS", score: "4.0", medical: "Sehat" },
+      { id: 5, name: "Arsyadan", no: 8, pos: "CM", group: "MID", dob: "19 Agu 2016", parent: "Budi Santoso", phone: "081378901234", att: "75%", spp: "BELUM", score: "-", medical: "Pernah cedera engkel ringan" },
+      { id: 6, name: "Chandra", no: 1, pos: "GK", group: "GK", dob: "11 Feb 2016", parent: "Agus Ramdani", phone: "081211223344", att: "100%", spp: "LUNAS", score: "4.5", medical: "Kiper utama KU-10" },
+      { id: 7, name: "Shiraj", no: 9, pos: "ST", group: "FWD", dob: "09 Sep 2016", parent: "Yudi Suryadi", phone: "081355667788", att: "92%", spp: "LUNAS", score: "4.1", medical: "Sehat" },
+      { id: 8, name: "Hanif", no: 5, pos: "CB", group: "DEF", dob: "18 Jun 2016", parent: "Rahmat Hidayat", phone: "081266778899", att: "92%", spp: "LUNAS", score: "4.3", medical: "Sehat" },
+      { id: 9, name: "Hibat", no: 6, pos: "LB", group: "DEF", dob: "14 Jul 2016", parent: "Asep Saepudin", phone: "081277889900", att: "83%", spp: "BELUM", score: "-", medical: "Sehat" },
+      { id: 10, name: "Kenzie", no: 14, pos: "RB", group: "DEF", dob: "28 Okt 2016", parent: "Dadan Ramdan", phone: "081288990011", att: "83%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 11, name: "Harlan", no: 17, pos: "CM", group: "MID", dob: "03 Apr 2016", parent: "Ade Gunawan", phone: "081399001122", att: "92%", spp: "LUNAS", score: "4.0", medical: "Sehat" },
+      { id: 12, name: "Mahrez", no: 26, pos: "RW", group: "MID", dob: "26 Des 2016", parent: "Eka Permana", phone: "081300112233", att: "92%", spp: "LUNAS", score: "4.2", medical: "Sehat" },
+      { id: 13, name: "Nazriel", no: 20, pos: "GK", group: "GK", dob: "17 Mei 2016", parent: "Wawan Hermawan", phone: "081212345678", att: "75%", spp: "BELUM", score: "-", medical: "Kiper cadangan" },
+      { id: 14, name: "Hasan", no: 18, pos: "ST", group: "FWD", dob: "12 Ags 2016", parent: "Cecep Supriatna", phone: "081223456789", att: "92%", spp: "LUNAS", score: "4.0", medical: "Sehat" },
+      { id: 15, name: "Kasatria", no: 22, pos: "CB", group: "DEF", dob: "05 Nov 2016", parent: "Dadang Darmawan", phone: "081234567891", att: "83%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 16, name: "Abidzar", no: 23, pos: "CM", group: "MID", dob: "14 Feb 2016", parent: "Taufik Hidayat", phone: "081245678912", att: "92%", spp: "LUNAS", score: "4.1", medical: "Sehat" },
+      { id: 17, name: "Sakha", no: 19, pos: "LW", group: "MID", dob: "30 Mar 2016", parent: "Guntur Tri", phone: "081256789123", att: "75%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 18, name: "Abiyan", no: 24, pos: "RB", group: "DEF", dob: "08 Jun 2016", parent: "Jajang Nurjaman", phone: "081267891234", att: "92%", spp: "LUNAS", score: "3.9", medical: "Sehat" },
+      { id: 19, name: "Izzul", no: 25, pos: "LB", group: "DEF", dob: "21 Sep 2016", parent: "Kiki Rizki", phone: "081278912345", att: "83%", spp: "BELUM", score: "-", medical: "Sehat" },
+      { id: 20, name: "Raz", no: 15, pos: "CM", group: "MID", dob: "16 Jan 2016", parent: "Lutfi Hakim", phone: "081289123456", att: "92%", spp: "LUNAS", score: "4.2", medical: "Sehat" },
+      { id: 21, name: "Fatih", no: 12, pos: "ST", group: "FWD", dob: "02 Feb 2016", parent: "Mamat Rohimat", phone: "081290123457", att: "75%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 22, name: "Najwan", no: 28, pos: "RW", group: "MID", dob: "18 Mei 2016", parent: "Nana Suryana", phone: "081301234568", att: "83%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 23, name: "Nabil", no: 30, pos: "LW", group: "MID", dob: "27 Jul 2016", parent: "Oki Setiawan", phone: "081312345679", att: "92%", spp: "LUNAS", score: "4.1", medical: "Sehat" },
+      { id: 24, name: "Reza", no: 31, pos: "CB", group: "DEF", dob: "09 Okt 2016", parent: "Panji Gumilang", phone: "081323456780", att: "75%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 25, name: "Rafandra", no: 32, pos: "CM", group: "MID", dob: "13 Des 2016", parent: "Qomarudin", phone: "081334567891", att: "83%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 26, name: "Rhehan", no: 33, pos: "RB", group: "DEF", dob: "07 Jan 2016", parent: "Rudi Hartono", phone: "081345678902", att: "75%", spp: "BELUM", score: "-", medical: "Sehat" },
+      { id: 27, name: "Tristan", no: 34, pos: "LB", group: "DEF", dob: "25 Apr 2016", parent: "Soleh Solihun", phone: "081356789013", att: "92%", spp: "LUNAS", score: "4.0", medical: "Sehat" },
+      { id: 28, name: "Zuhud", no: 35, pos: "GK", group: "GK", dob: "19 Nov 2016", parent: "Tatang Sutisna", phone: "081367890124", att: "83%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 29, name: "Khalifah", no: 37, pos: "ST", group: "FWD", dob: "03 Agu 2016", parent: "Ujang Koswara", phone: "081378901235", att: "92%", spp: "LUNAS", score: "4.2", medical: "Sehat" },
+      { id: 30, name: "Gilby", no: 38, pos: "RW", group: "MID", dob: "11 Sep 2016", parent: "Vicky Prasetyo", phone: "081389012346", att: "75%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 31, name: "Kelvin", no: 39, pos: "LW", group: "MID", dob: "29 Jun 2016", parent: "Wahyu Hidayat", phone: "081390123457", att: "83%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 32, name: "Raditya", no: 40, pos: "CB", group: "DEF", dob: "14 Okt 2016", parent: "Yana Mulyana", phone: "081401234568", att: "83%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 33, name: "Adlian", no: 41, pos: "CM", group: "MID", dob: "08 Mar 2016", parent: "Zainal Abidin", phone: "081412345679", att: "75%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 34, name: "Mulki", no: 42, pos: "RB", group: "DEF", dob: "22 Des 2016", parent: "Ahmad Dahlan", phone: "081423456780", att: "83%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 35, name: "Rangga", no: 43, pos: "LB", group: "DEF", dob: "30 Mei 2016", parent: "Bambang Pamungkas", phone: "081434567891", att: "67%", spp: "LUNAS", score: "-", medical: "Sering demam jika cuaca hujan" },
+      { id: 36, name: "M. Radika", no: 44, pos: "ST", group: "FWD", dob: "17 Jan 2016", parent: "Cahyadi", phone: "081445678902", att: "75%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 37, name: "M. Gibran", no: 45, pos: "RW", group: "MID", dob: "05 Apr 2016", parent: "Doni Tata", phone: "081456789013", att: "83%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 38, name: "Ardan", no: 46, pos: "LW", group: "MID", dob: "19 Nov 2016", parent: "Edi Brokoli", phone: "081467890124", att: "75%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 39, name: "Ibrahim", no: 47, pos: "CB", group: "DEF", dob: "02 Jul 2016", parent: "Farhan Malik", phone: "081478901235", att: "83%", spp: "LUNAS", score: "-", medical: "Sehat" },
+      { id: 40, name: "Alfatar", no: 48, pos: "CM", group: "MID", dob: "28 Agu 2016", parent: "Gani Kasmat", phone: "081489012346", att: "75%", spp: "BELUM", score: "-", medical: "Sehat" }
+    ];
+
+    let currentPosFilter = 'ALL';
+
+    function renderRoster() {
+      const container = document.getElementById('roster-grid');
+      const searchVal = document.getElementById('rosterSearch').value.toLowerCase().trim();
+
+      const filtered = rosterData.filter(s => {
+        const matchesSearch = s.name.toLowerCase().includes(searchVal) || 
+                              String(s.no).includes(searchVal) || 
+                              s.parent.toLowerCase().includes(searchVal);
+        if (!matchesSearch) return false;
+        if (currentPosFilter !== 'ALL' && s.group !== currentPosFilter) return false;
+        return true;
+      });
+
+      container.innerHTML = '';
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 text-xs bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">Tidak ada siswa yang sesuai pencarian.</div>`;
+        return;
+      }
+
+      filtered.forEach(s => {
+        const card = document.createElement('div');
+        card.onclick = () => openModal(s);
+        card.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm hover:border-emerald-400 dark:hover:border-emerald-600 transition-all cursor-pointer flex flex-col justify-between space-y-3 group";
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-emerald-600 group-hover:text-white text-slate-900 dark:text-white font-black text-sm flex items-center justify-center shrink-0 border border-slate-200 dark:border-slate-700 transition-colors">
+                #${s.no}
+              </div>
+              <div class="truncate">
+                <h4 class="text-xs font-bold text-slate-900 dark:text-white truncate block group-hover:text-emerald-600 transition-colors">${s.name}</h4>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">${s.pos} · Ortu: ${s.parent}</p>
+              </div>
+            </div>
+            <span class="text-[10px] font-extrabold px-1.5 py-0.2 rounded ${s.spp === 'LUNAS' ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300' : 'bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300'} shrink-0">
+              ${s.spp === 'LUNAS' ? 'SPP Lunas' : 'Menunggak'}
+            </span>
+          </div>
+
+          <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <span class="text-[11px] font-medium">Hadir: <strong class="text-slate-900 dark:text-white">${s.att}</strong></span>
+            <span class="text-[11px] font-medium">Rapor: <strong class="text-slate-900 dark:text-white">${s.score !== '-' ? s.score + ' ★' : 'Draft'}</strong></span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function setPosFilter(pos) {
+      currentPosFilter = pos;
+      document.querySelectorAll('.pos-tab').forEach(b => {
+        b.className = "pos-tab px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 bg-slate-100 dark:bg-slate-800 transition-all shrink-0";
+      });
+      const active = document.getElementById('pos-' + pos);
+      if (active) {
+        active.className = "pos-tab px-3 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-600 text-white shadow-sm transition-all shrink-0";
+      }
+      renderRoster();
+    }
+
+    function filterRoster() {
+      renderRoster();
+    }
+
+    function openModal(s) {
+      document.getElementById('modal-jersey').innerText = '#' + s.no;
+      document.getElementById('modal-name').innerText = s.name;
+      document.getElementById('modal-pos').innerText = `${s.pos} · KU-10 (Kelahiran 2016)`;
+      document.getElementById('modal-dob').innerText = s.dob;
+      document.getElementById('modal-parent').innerText = s.parent;
+      document.getElementById('modal-phone').innerText = s.phone;
+      document.getElementById('modal-medical').innerText = s.medical;
+      document.getElementById('modal-att').innerText = s.att;
+      document.getElementById('modal-score').innerText = s.score !== '-' ? s.score + ' / 5.0 (Siap)' : 'Belum Lengkap';
+      document.getElementById('modal-wa-link').href = `https://api.whatsapp.com/send?phone=62${s.phone.replace(/^0/, '')}&text=Halo%20Bpk/Ibu%20${encodeURIComponent(s.parent)},%20kami%20dari%20SSB%20Galuh%20Putra...`;
+      document.getElementById('student-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('student-modal').classList.add('hidden');
+    }
+
+    // Init
+    renderRoster();
+  </script>
+</body>
+</html>

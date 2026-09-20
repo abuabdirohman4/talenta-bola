@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Papan Taktik & Formasi 7v7 (Filanesia) · SSB Galuh Putra</title>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
+
+    /* Football Pitch 2D Realistic Grass Stripes */
+    .pitch-grass {
+      background: repeating-linear-gradient(
+        0deg,
+        #15803d,
+        #15803d 40px,
+        #16a34a 40px,
+        #16a34a 80px
+      );
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.35);
+    }
+    .player-token {
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .player-token:hover {
+      transform: scale(1.1);
+      z-index: 20;
+    }
+    .player-token.selected {
+      ring: 4px solid #facc15;
+      transform: scale(1.15);
+      z-index: 30;
+      animation: pulse-ring 1.5s infinite;
+    }
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(250, 204, 21, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0); }
+    }
+  </style>
+  <script>
+    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+  </script>
+</head>
+<body class="bg-[#F1F5F9] dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-full antialiased selection:bg-emerald-500 selection:text-white flex flex-col md:flex-row transition-colors duration-200">
+
+  <!-- ========================================================================= -->
+  <!-- 1. DESKTOP SIDEBAR NAVIGATION                                            -->
+  <!-- ========================================================================= -->
+  <aside class="hidden md:flex md:w-64 lg:w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex-col shrink-0 min-h-screen sticky top-0 z-30 shadow-sm">
+    
+    <!-- Brand Header -->
+    <div class="p-5 border-b border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white flex items-center justify-center font-black text-sm shadow-sm tracking-wider">
+          GP
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="font-extrabold text-sm text-slate-900 dark:text-white tracking-tight">TalentaBola</span>
+            <span class="text-[9px] font-extrabold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-400 px-1.5 py-0.2 rounded border border-emerald-300 dark:border-emerald-800">PRO</span>
+          </div>
+          <p class="text-[11px] text-slate-600 dark:text-slate-400 font-medium">SSB Galuh Putra Tasikmalaya</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active KU Selector -->
+    <div class="p-3 mx-3 mt-3 bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/70 rounded-xl flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+        <div>
+          <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Kelompok Usia</span>
+          <span class="text-xs font-extrabold text-slate-900 dark:text-slate-200">KU-10 (Kelahiran 2016)</span>
+        </div>
+      </div>
+      <span class="text-[11px] text-slate-600 dark:text-slate-400 font-bold px-1.5 py-0.5 rounded bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600">40 Anak</span>
+    </div>
+
+    <!-- Nav Links -->
+    <nav class="p-3 space-y-1 flex-1 overflow-y-auto custom-scrollbar">
+      <div class="px-3 pt-2 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Menu Utama</div>
+      
+      <!-- Dashboard -->
+      <a href="dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+        </svg>
+        <span>Dashboard</span>
+      </a>
+
+      <!-- Presensi Lapangan -->
+      <a href="mockup-01-presensi.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+          </svg>
+          <span>Presensi Lapangan</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">Live</span>
+      </a>
+
+      <!-- Papan Taktik & Formasi (ACTIVE) -->
+      <a href="papan-taktik.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold text-xs shadow-sm border border-emerald-300 dark:border-emerald-800/60">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8-8h16M12 9a3 3 0 100 6 3 3 0 000-6z"></path>
+          </svg>
+          <span>Papan Taktik & Formasi</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-200/80 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">7v7</span>
+      </a>
+
+      <!-- Rapor & Evaluasi -->
+      <a href="mockup-02-form-rapor.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+          </svg>
+          <span>Rapor & Evaluasi</span>
+        </div>
+        <span class="text-[10px] font-medium text-slate-500 dark:text-slate-400">28/40</span>
+      </a>
+
+      <!-- Rapor Digital Pemain -->
+      <a href="mockup-03-rapor-ortu.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"></path>
+          </svg>
+          <span>Rapor Digital Pemain</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800">Ortu</span>
+      </a>
+
+      <!-- TIM & PEMAIN -->
+      <div class="px-3 pt-3.5 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tim & Pemain</div>
+
+      <a href="roster.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <span>Data Siswa & Roster</span>
+        </div>
+        <span class="text-[10px] text-slate-500">40 anak</span>
+      </a>
+
+      <a href="jadwal.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <span>Jadwal & Agenda</span>
+      </a>
+
+      <!-- KEUANGAN & OPERASIONAL -->
+      <div class="px-3 pt-3.5 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Operasional</div>
+
+      <a href="spp.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>Iuran SPP Bulanan</span>
+        </div>
+        <span class="text-[10px] font-bold text-emerald-600">34 Lunas</span>
+      </a>
+
+      <a href="broadcast.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+        </svg>
+        <span>Broadcast WhatsApp</span>
+      </a>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="p-3 border-t border-slate-200/80 dark:border-slate-800/80 m-2 space-y-2">
+      <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all border border-slate-200 dark:border-slate-700">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <span>Tema Tampilan</span>
+        </div>
+        <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">Dark / Light</span>
+      </button>
+
+      <div class="flex items-center gap-2.5 px-2 py-1.5">
+        <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+          CR
+        </div>
+        <div class="leading-tight overflow-hidden">
+          <p class="text-xs font-bold text-slate-900 dark:text-white truncate">Coach Riyandi</p>
+          <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Pelatih Kepala KU-10</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN CONTENT AREA (Tactical Board 7v7)                                 -->
+  <!-- ========================================================================= -->
+  <div class="flex-1 flex flex-col min-w-0">
+    
+    <!-- Top Header Bar -->
+    <header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 md:px-8 py-3.5 sticky top-0 z-20 shadow-sm flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex md:hidden items-center justify-center font-black text-xs">
+          GP
+        </div>
+        <div>
+          <div class="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+            <span>KU-10 (2016)</span>
+            <span>/</span>
+            <span class="text-emerald-600 dark:text-emerald-400 font-bold">Kurikulum PSSI Filanesia</span>
+          </div>
+          <h1 class="text-base md:text-lg font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+            Papan Taktik & Rotasi 7v7
+            <span class="text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-300 dark:border-emerald-800">
+              Formasi 2-3-1
+            </span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <!-- Dark Mode Toggle Mobile -->
+        <button onclick="toggleDarkMode()" class="md:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+
+        <!-- Sparing / Match Selector -->
+        <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>Match: SSB Galuh Putra vs SSB Tasik Raya (2x20 Menit)</span>
+        </div>
+
+        <button onclick="simulasiPergantianBabak()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-xs font-bold text-white flex items-center gap-2 shadow-sm transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+          <span class="hidden sm:inline">Rotasi Otomatis Babak 2</span>
+          <span class="sm:hidden">Rotasi B2</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Layout: Tactical Field + Right Panel -->
+    <main class="flex-1 p-3 md:p-6 grid grid-cols-1 xl:grid-cols-12 gap-5 max-w-7xl w-full mx-auto pb-24 md:pb-6">
+
+      <!-- COLUMN 1: TACTICAL PITCH & QUICK FORMATION (8 Cols) -->
+      <div class="xl:col-span-8 space-y-4">
+        
+        <!-- Tactical Controls Bar -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 shadow-sm flex flex-wrap items-center justify-between gap-3">
+          
+          <!-- Formation Selector Tabs -->
+          <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700">
+            <button id="btn-formasi-231" onclick="setFormation('2-3-1')" class="px-3 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-600 text-white shadow-sm transition-all">
+              2 - 3 - 1 (Filanesia Standar)
+            </button>
+            <button id="btn-formasi-321" onclick="setFormation('3-2-1')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+              3 - 2 - 1 (Defensif)
+            </button>
+            <button id="btn-formasi-213" onclick="setFormation('2-1-3')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+              2 - 1 - 3 (Ofensif)
+            </button>
+          </div>
+
+          <!-- Filanesia Phase Pill Selector -->
+          <div class="flex items-center gap-1">
+            <span class="text-[10px] font-extrabold uppercase text-slate-500 dark:text-slate-400 mr-1 hidden sm:inline">Fase Filanesia:</span>
+            <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 cursor-pointer">
+              1. Build-up dari Bawah
+            </span>
+          </div>
+        </div>
+
+        <!-- 2D GREEN GRASS FOOTBALL PITCH (Responsive Aspect Ratio) -->
+        <div class="relative bg-slate-900 rounded-2xl p-3 md:p-5 border-2 border-emerald-900/60 shadow-md overflow-hidden select-none">
+          
+          <!-- Pitch Canvas Wrapper -->
+          <div class="relative w-full aspect-[4/3] md:aspect-[16/10] pitch-grass rounded-xl border-2 border-white/80 overflow-hidden shadow-inner flex flex-col justify-between">
+            
+            <!-- Pitch Markings (White Lines) -->
+            <!-- Halfway Line & Center Circle -->
+            <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 border-t-2 border-white/80 pointer-events-none"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 md:w-36 md:h-36 rounded-full border-2 border-white/80 pointer-events-none"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white pointer-events-none"></div>
+
+            <!-- Top Penalty Box (Opponent / Gawang Lawan) -->
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-48 md:w-64 h-16 md:h-24 border-b-2 border-x-2 border-white/80 pointer-events-none"></div>
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-24 md:w-32 h-6 md:h-10 border-b-2 border-x-2 border-white/80 pointer-events-none"></div>
+            <!-- Top Goal (Outside line) -->
+            <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-20 md:w-28 h-2 bg-white/90 rounded-b-xs pointer-events-none"></div>
+
+            <!-- Bottom Penalty Box (Our Team / SSB Galuh Putra) -->
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 md:w-64 h-16 md:h-24 border-t-2 border-x-2 border-white/80 pointer-events-none"></div>
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 md:w-32 h-6 md:h-10 border-t-2 border-x-2 border-white/80 pointer-events-none"></div>
+            <div class="absolute bottom-16 md:bottom-24 left-1/2 -translate-x-1/2 w-20 md:w-28 h-10 border-t-2 border-white/80 rounded-t-full pointer-events-none"></div>
+            <div class="absolute bottom-10 md:bottom-14 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-white pointer-events-none"></div>
+            <!-- Bottom Goal (Outside line) -->
+            <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-20 md:w-28 h-2 bg-white/90 rounded-t-xs pointer-events-none"></div>
+
+            <!-- Corner Arcs -->
+            <div class="absolute top-0 left-0 w-5 h-5 border-b-2 border-r-2 border-white/80 rounded-br-full pointer-events-none"></div>
+            <div class="absolute top-0 right-0 w-5 h-5 border-b-2 border-l-2 border-white/80 rounded-bl-full pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-5 h-5 border-t-2 border-r-2 border-white/80 rounded-tr-full pointer-events-none"></div>
+            <div class="absolute bottom-0 right-0 w-5 h-5 border-t-2 border-l-2 border-white/80 rounded-tl-full pointer-events-none"></div>
+
+            <!-- PLAYERS LAYER (7 ON PITCH) -->
+            <!-- 1. GK (Chandra #1) -->
+            <div id="token-gk" onclick="selectPlayer('gk', 'Chandra', 1, 'GK')" class="player-token absolute bottom-[6%] left-1/2 -translate-x-1/2 cursor-pointer flex flex-col items-center">
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-amber-400 border-2 border-white text-slate-950 font-black text-xs md:text-sm flex items-center justify-center shadow-lg">
+                1
+              </div>
+              <div class="mt-1 bg-black/75 backdrop-blur-xs px-2 py-0.5 rounded-md border border-white/30 text-center">
+                <span class="text-[10px] md:text-xs font-extrabold text-white block leading-none">Chandra</span>
+                <span class="text-[8px] font-bold text-amber-300 block uppercase">GK</span>
+              </div>
+            </div>
+
+            <!-- 2. DEFENDERS (2 CB) -->
+            <!-- CB Kiri (Hanif #5) -->
+            <div id="token-cb1" onclick="selectPlayer('cb1', 'Hanif', 5, 'CB')" class="player-token absolute bottom-[24%] left-[28%] -translate-x-1/2 cursor-pointer flex flex-col items-center">
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-600 border-2 border-white text-white font-black text-xs md:text-sm flex items-center justify-center shadow-lg">
+                5
+              </div>
+              <div class="mt-1 bg-black/75 backdrop-blur-xs px-2 py-0.5 rounded-md border border-white/30 text-center">
+                <span class="text-[10px] md:text-xs font-extrabold text-white block leading-none">Hanif</span>
+                <span class="text-[8px] font-bold text-blue-300 block uppercase">CB-L</span>
+              </div>
+            </div>
+
+            <!-- CB Kanan (Azril #4) -->
+            <div id="token-cb2" onclick="selectPlayer('cb2', 'Azril', 4, 'CB')" class="player-token absolute bottom-[24%] left-[72%] -translate-x-1/2 cursor-pointer flex flex-col items-center">
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-600 border-2 border-white text-white font-black text-xs md:text-sm flex items-center justify-center shadow-lg">
+                4
+              </div>
+              <div class="mt-1 bg-black/75 backdrop-blur-xs px-2 py-0.5 rounded-md border border-white/30 text-center">
+                <span class="text-[10px] md:text-xs font-extrabold text-white block leading-none">Azril</span>
+                <span class="text-[8px] font-bold text-blue-300 block uppercase">CB-R</span>
+              </div>
+            </div>
+
+            <!-- 3. MIDFIELDERS (3 MID: RW, CM, LW) -->
+            <!-- Sayap Kiri (Argyo #11) -->
+            <div id="token-lw" onclick="selectPlayer('lw', 'Argyo', 11, 'LW')" class="player-token absolute bottom-[48%] left-[18%] -translate-x-1/2 cursor-pointer flex flex-col items-center">
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-emerald-600 border-2 border-white text-white font-black text-xs md:text-sm flex items-center justify-center shadow-lg">
+                11
+              </div>
+              <div class="mt-1 bg-black/75 backdrop-blur-xs px-2 py-0.5 rounded-md border border-white/30 text-center">
+                <span class="text-[10px] md:text-xs font-extrabold text-white block leading-none">Argyo</span>
+                <span class="text-[8px] font-bold text-emerald-300 block uppercase">LW</span>
+              </div>
+            </div>
+
+            <!-- Gelandang Tengah / Playmaker (Athar #10 - Bintang Tim) -->
+            <div id="token-cm" onclick="selectPlayer('cm', 'Athar', 10, 'CM')" class="player-token absolute bottom-[46%] left-1/2 -translate-x-1/2 cursor-pointer flex flex-col items-center">
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-emerald-600 border-2 border-yellow-300 text-white font-black text-xs md:text-sm flex items-center justify-center shadow-lg relative">
+                10
+                <span class="absolute -top-1 -right-1 text-[9px] bg-yellow-400 text-slate-950 font-black px-1 rounded-full">★</span>
+              </div>
+              <div class="mt-1 bg-black/85 backdrop-blur-xs px-2 py-0.5 rounded-md border border-yellow-400/60 text-center">
+                <span class="text-[10px] md:text-xs font-extrabold text-yellow-300 block leading-none">Athar</span>
+                <span class="text-[8px] font-bold text-white block uppercase">CM / Playmaker</span>
+              </div>
+            </div>
+
+            <!-- Sayap Kanan (Argya #7) -->
+            <div id="token-rw" onclick="selectPlayer('rw', 'Argya', 7, 'RW')" class="player-token absolute bottom-[48%] left-[82%] -translate-x-1/2 cursor-pointer flex flex-col items-center">
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-emerald-600 border-2 border-white text-white font-black text-xs md:text-sm flex items-center justify-center shadow-lg">
+                7
+              </div>
+              <div class="mt-1 bg-black/75 backdrop-blur-xs px-2 py-0.5 rounded-md border border-white/30 text-center">
+                <span class="text-[10px] md:text-xs font-extrabold text-white block leading-none">Argya</span>
+                <span class="text-[8px] font-bold text-emerald-300 block uppercase">RW</span>
+              </div>
+            </div>
+
+            <!-- 4. STRIKER (Shiraj #9) -->
+            <div id="token-st" onclick="selectPlayer('st', 'Shiraj', 9, 'ST')" class="player-token absolute bottom-[72%] left-1/2 -translate-x-1/2 cursor-pointer flex flex-col items-center">
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-rose-600 border-2 border-white text-white font-black text-xs md:text-sm flex items-center justify-center shadow-lg">
+                9
+              </div>
+              <div class="mt-1 bg-black/75 backdrop-blur-xs px-2 py-0.5 rounded-md border border-white/30 text-center">
+                <span class="text-[10px] md:text-xs font-extrabold text-white block leading-none">Shiraj</span>
+                <span class="text-[8px] font-bold text-rose-300 block uppercase">ST / Targetman</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Pitch Quick Legend -->
+          <div class="mt-3 flex items-center justify-between text-[11px] text-slate-300 px-2">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Kiper</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> Bek</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span> Tengah</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-600"></span> Depan</span>
+            </div>
+            <span class="text-[10px] text-emerald-400 font-bold hidden sm:inline">💡 Klik pemain di lapangan lalu pilih pemain cadangan untuk rotasi</span>
+          </div>
+
+        </div>
+
+        <!-- FILANESIA COACHING INSTRUCTION CARD -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              <h3 class="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Pedoman Taktik Filanesia KU-10 (Prinsip 7v7)</h3>
+            </div>
+            <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400">Filosofi Sepak Bola Indonesia</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+            <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700/80">
+              <div class="font-extrabold text-emerald-600 dark:text-emerald-400 mb-1 flex items-center gap-1.5">
+                <span>⚽</span> 1. Menyerang (Attacking)
+              </div>
+              <p class="text-slate-600 dark:text-slate-300 text-[11px] leading-relaxed">
+                Wajib *Build-Up* dari kiper ke Hanif/Azril. Jangan tendang bola jauh sembarangan. Lebarkan sayap melalui Argyo & Argya.
+              </p>
+            </div>
+
+            <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700/80">
+              <div class="font-extrabold text-blue-600 dark:text-blue-400 mb-1 flex items-center gap-1.5">
+                <span>🛡️</span> 2. Bertahan (Defending)
+              </div>
+              <p class="text-slate-600 dark:text-slate-300 text-[11px] leading-relaxed">
+                Kompak di sepertiga tengah. Saat lawan menyerang, sayap turun menutup ruang koridor samping membentuk 4 bek sementara.
+              </p>
+            </div>
+
+            <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700/80">
+              <div class="font-extrabold text-amber-600 dark:text-amber-400 mb-1 flex items-center gap-1.5">
+                <span>⚡</span> 3. Transisi (Transition)
+              </div>
+              <p class="text-slate-600 dark:text-slate-300 text-[11px] leading-relaxed">
+                Rebut bola dalam 5 detik. Begitu bola direbut, langsung cari Athar (#10) untuk membagi bola terobosan ke Shiraj (#9).
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- COLUMN 2: BENCH & EQUAL PLAYTIME CALCULATOR (4 Cols) -->
+      <div class="xl:col-span-4 space-y-4">
+
+        <!-- EQUAL PLAYING TIME / ROTATION CALCULATOR -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">Aturan Fair Play Filanesia</span>
+              <h3 class="text-sm font-black text-slate-900 dark:text-white">Kalkulator Rotasi Menit Bermain</h3>
+            </div>
+            <div class="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+          </div>
+
+          <!-- Progress Target -->
+          <div class="space-y-2 p-3 bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-emerald-900 dark:text-emerald-300">Target Min. Bermain:</span>
+              <span class="font-black text-emerald-800 dark:text-emerald-300">20 Menit / Anak (50%)</span>
+            </div>
+            <div class="w-full bg-emerald-200 dark:bg-emerald-900 h-2 rounded-full overflow-hidden">
+              <div id="progress-fairplay" class="bg-emerald-600 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+            </div>
+            <p class="text-[10px] text-emerald-700 dark:text-emerald-400 font-medium">
+              ✓ Semua 14 anak yang dibawa ke match diproyeksikan mendapat waktu bermain seimbang (Babak 1: 7 anak, Babak 2: 7 anak rotasi).
+            </p>
+          </div>
+
+          <div class="mt-3.5 grid grid-cols-2 gap-2 text-center text-xs">
+            <div class="p-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <span class="text-[10px] text-slate-500 dark:text-slate-400 block">Total Durasi</span>
+              <span class="font-extrabold text-slate-900 dark:text-white">2 x 20 Menit</span>
+            </div>
+            <div class="p-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <span class="text-[10px] text-slate-500 dark:text-slate-400 block">Match Day Squad</span>
+              <span class="font-extrabold text-slate-900 dark:text-white">14 Pemain</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BENCH / SUBSTITUTES ROSTER (PEMAIN CADANGAN) -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+          <div class="flex items-center justify-between mb-3 border-b border-slate-100 dark:border-slate-800 pb-2.5">
+            <div>
+              <h3 class="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Bangku Cadangan (Bench)</h3>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400">Siap rotasi untuk Babak ke-2</p>
+            </div>
+            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+              7 Anak Siap
+            </span>
+          </div>
+
+          <!-- Substitutes List -->
+          <div class="space-y-2 max-h-[340px] overflow-y-auto pr-1 custom-scrollbar">
+            
+            <!-- Sub 1: Fathan (Mid) -->
+            <div onclick="swapWithBench('Fathan', 8, 'CM')" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 dark:hover:border-emerald-500 bg-slate-50 dark:bg-slate-800/60 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-all cursor-pointer flex items-center justify-between group">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-black text-xs flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                  8
+                </div>
+                <div>
+                  <span class="text-xs font-bold text-slate-900 dark:text-white block leading-tight">Fathan Al-Ghifari</span>
+                  <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Gelandang (CM)</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 block">Siap Babak 2</span>
+                <span class="text-[9px] text-slate-400">Proyeksi: 20'</span>
+              </div>
+            </div>
+
+            <!-- Sub 2: Bintang (CB) -->
+            <div onclick="swapWithBench('Bintang', 6, 'CB')" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 dark:hover:border-emerald-500 bg-slate-50 dark:bg-slate-800/60 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-all cursor-pointer flex items-center justify-between group">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-black text-xs flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                  6
+                </div>
+                <div>
+                  <span class="text-xs font-bold text-slate-900 dark:text-white block leading-tight">Bintang Pratama</span>
+                  <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Bek Tengah (CB)</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 block">Siap Babak 2</span>
+                <span class="text-[9px] text-slate-400">Proyeksi: 20'</span>
+              </div>
+            </div>
+
+            <!-- Sub 3: Dafa (GK Cadangan) -->
+            <div onclick="swapWithBench('Dafa', 12, 'GK')" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 dark:hover:border-emerald-500 bg-slate-50 dark:bg-slate-800/60 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-all cursor-pointer flex items-center justify-between group">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-black text-xs flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition-all">
+                  12
+                </div>
+                <div>
+                  <span class="text-xs font-bold text-slate-900 dark:text-white block leading-tight">Dafa Ramadhan</span>
+                  <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Kiper (GK-2)</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 block">Siap Babak 2</span>
+                <span class="text-[9px] text-slate-400">Proyeksi: 20'</span>
+              </div>
+            </div>
+
+            <!-- Sub 4: Kenzo (Striker) -->
+            <div onclick="swapWithBench('Kenzo', 19, 'ST')" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 dark:hover:border-emerald-500 bg-slate-50 dark:bg-slate-800/60 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-all cursor-pointer flex items-center justify-between group">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-black text-xs flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition-all">
+                  19
+                </div>
+                <div>
+                  <span class="text-xs font-bold text-slate-900 dark:text-white block leading-tight">Kenzo Narendra</span>
+                  <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Penyerang (ST)</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 block">Siap Babak 2</span>
+                <span class="text-[9px] text-slate-400">Proyeksi: 20'</span>
+              </div>
+            </div>
+
+            <!-- Sub 5: Radit (Sayap) -->
+            <div onclick="swapWithBench('Radit', 14, 'RW')" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 dark:hover:border-emerald-500 bg-slate-50 dark:bg-slate-800/60 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-all cursor-pointer flex items-center justify-between group">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-black text-xs flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                  14
+                </div>
+                <div>
+                  <span class="text-xs font-bold text-slate-900 dark:text-white block leading-tight">Raditya Pratama</span>
+                  <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Sayap Kanan (RW)</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 block">Siap Babak 2</span>
+                <span class="text-[9px] text-slate-400">Proyeksi: 20'</span>
+              </div>
+            </div>
+
+            <!-- Sub 6: Wildan (Bek) -->
+            <div onclick="swapWithBench('Wildan', 3, 'CB')" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 dark:hover:border-emerald-500 bg-slate-50 dark:bg-slate-800/60 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-all cursor-pointer flex items-center justify-between group">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-black text-xs flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all">
+                  3
+                </div>
+                <div>
+                  <span class="text-xs font-bold text-slate-900 dark:text-white block leading-tight">Wildan Kurnia</span>
+                  <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Bek Kiri (CB-L)</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 block">Siap Babak 2</span>
+                <span class="text-[9px] text-slate-400">Proyeksi: 20'</span>
+              </div>
+            </div>
+
+            <!-- Sub 7: Zaki (Sayap) -->
+            <div onclick="swapWithBench('Zaki', 17, 'LW')" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 dark:hover:border-emerald-500 bg-slate-50 dark:bg-slate-800/60 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-all cursor-pointer flex items-center justify-between group">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-black text-xs flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                  17
+                </div>
+                <div>
+                  <span class="text-xs font-bold text-slate-900 dark:text-white block leading-tight">Zaki Maulana</span>
+                  <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Sayap Kiri (LW)</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 block">Siap Babak 2</span>
+                <span class="text-[9px] text-slate-400">Proyeksi: 20'</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- PRINT / EXPORT LINEUP ACTION -->
+        <div class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-4 rounded-2xl shadow-sm flex items-center justify-between">
+          <div>
+            <h4 class="font-extrabold text-xs">Formulir Match Lineup</h4>
+            <p class="text-[11px] text-emerald-100">Siap cetak atau kirim PDF ke Pengawas Pertandingan</p>
+          </div>
+          <button onclick="alert('File Lineup Match 7v7 berhasil disiapkan untuk diunduh / dicetak!')" class="px-3 py-1.5 rounded-xl bg-white text-emerald-800 font-black text-xs shadow-sm hover:bg-emerald-50 transition-all">
+            Cetak PDF
+          </button>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 3. MOBILE BOTTOM NAVIGATION                                               -->
+  <!-- ========================================================================= -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-2 py-2 flex items-center justify-around shadow-lg">
+    <a href="dashboard.html" class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400 hover:text-emerald-600">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+      <span class="text-[10px] font-bold">Dashboard</span>
+    </a>
+
+    <a href="mockup-01-presensi.html" class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400 hover:text-emerald-600">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+      <span class="text-[10px] font-bold">Presensi</span>
+    </a>
+
+    <a href="papan-taktik.html" class="flex flex-col items-center gap-1 text-emerald-600 dark:text-emerald-400">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8-8h16M12 9a3 3 0 100 6 3 3 0 000-6z"></path></svg>
+      <span class="text-[10px] font-black">Taktik</span>
+    </a>
+
+    <a href="mockup-02-form-rapor.html" class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400 hover:text-emerald-600">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+      <span class="text-[10px] font-bold">Rapor</span>
+    </a>
+
+    <a href="mockup-03-rapor-ortu.html" class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400 hover:text-emerald-600">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"></path></svg>
+      <span class="text-[10px] font-bold">Ortu</span>
+    </a>
+  </nav>
+
+  <!-- INTERACTION SCRIPTS -->
+  <script>
+    let activeSelectedSlot = null;
+
+    function selectPlayer(slotId, name, number, pos) {
+      document.querySelectorAll('.player-token').forEach(el => el.classList.remove('selected'));
+      const target = document.getElementById('token-' + slotId);
+      if (target) {
+        target.classList.add('selected');
+        activeSelectedSlot = slotId;
+      }
+    }
+
+    function swapWithBench(benchName, benchNum, benchPos) {
+      if (!activeSelectedSlot) {
+        // If no slot selected, default swap into mid or alert
+        alert('Pilih dulu salah satu pemain di lapangan yang ingin digantikan dengan ' + benchName + ' (#' + benchNum + ')!');
+        return;
+      }
+      
+      const target = document.getElementById('token-' + activeSelectedSlot);
+      if (target) {
+        // Swap visual info
+        const numEl = target.querySelector('.rounded-full');
+        const nameEl = target.querySelector('span:first-child');
+        
+        const oldName = nameEl.innerText;
+        const oldNum = numEl.innerText;
+
+        numEl.innerText = benchNum;
+        nameEl.innerText = benchName;
+        target.classList.remove('selected');
+        
+        alert('Pemain berhasil diganti! ' + benchName + ' (#' + benchNum + ') masuk menggantikan ' + oldName + ' (#' + oldNum + ').');
+        activeSelectedSlot = null;
+      }
+    }
+
+    function setFormation(formasi) {
+      // Reset button styles
+      ['231', '321', '213'].forEach(f => {
+        const btn = document.getElementById('btn-formasi-' + f);
+        if (btn) {
+          btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all';
+        }
+      });
+
+      const activeBtn = document.getElementById('btn-formasi-' + formasi.replace(/-/g, ''));
+      if (activeBtn) {
+        activeBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-600 text-white shadow-sm transition-all';
+      }
+
+      const cb1 = document.getElementById('token-cb1');
+      const cb2 = document.getElementById('token-cb2');
+      const cm = document.getElementById('token-cm');
+      const lw = document.getElementById('token-lw');
+      const rw = document.getElementById('token-rw');
+      const st = document.getElementById('token-st');
+
+      if (formasi === '2-3-1') {
+        // Default Filanesia
+        cb1.style.bottom = '24%'; cb1.style.left = '28%';
+        cb2.style.bottom = '24%'; cb2.style.left = '72%';
+        lw.style.bottom = '48%'; lw.style.left = '18%';
+        cm.style.bottom = '46%'; cm.style.left = '50%';
+        rw.style.bottom = '48%'; rw.style.left = '82%';
+        st.style.bottom = '72%'; st.style.left = '50%';
+      } else if (formasi === '3-2-1') {
+        // 3 Defenders (Compact), 2 Midfielders, 1 ST
+        cb1.style.bottom = '22%'; cb1.style.left = '20%';
+        cb2.style.bottom = '22%'; cb2.style.left = '80%';
+        lw.style.bottom = '24%'; lw.style.left = '50%'; // Central Sweeper
+        cm.style.bottom = '50%'; cm.style.left = '35%';
+        rw.style.bottom = '50%'; rw.style.left = '65%';
+        st.style.bottom = '75%'; st.style.left = '50%';
+      } else if (formasi === '2-1-3') {
+        // 2 Defenders, 1 Holding Mid, 3 Attackers
+        cb1.style.bottom = '20%'; cb1.style.left = '30%';
+        cb2.style.bottom = '20%'; cb2.style.left = '70%';
+        cm.style.bottom = '40%'; cm.style.left = '50%';
+        lw.style.bottom = '68%'; lw.style.left = '20%';
+        st.style.bottom = '78%'; st.style.left = '50%';
+        rw.style.bottom = '68%'; rw.style.left = '80%';
+      }
+    }
+
+    function simulasiPergantianBabak() {
+      // Automatic mass rotation for 2nd half
+      const confirmRotasi = confirm("Lakukan Rotasi Otomatis Babak ke-2?\n\nSesuai standar Filanesia Grassroots KU-10, seluruh 7 pemain cadangan akan dimasukkan di babak ke-2 untuk memastikan 100% anak mendapatkan menit bermain yang adil.");
+      if (confirmRotasi) {
+        document.getElementById('token-gk').querySelector('.rounded-full').innerText = '12';
+        document.getElementById('token-gk').querySelector('span:first-child').innerText = 'Dafa';
+
+        document.getElementById('token-cb1').querySelector('.rounded-full').innerText = '3';
+        document.getElementById('token-cb1').querySelector('span:first-child').innerText = 'Wildan';
+
+        document.getElementById('token-cb2').querySelector('.rounded-full').innerText = '6';
+        document.getElementById('token-cb2').querySelector('span:first-child').innerText = 'Bintang';
+
+        document.getElementById('token-lw').querySelector('.rounded-full').innerText = '17';
+        document.getElementById('token-lw').querySelector('span:first-child').innerText = 'Zaki';
+
+        document.getElementById('token-cm').querySelector('.rounded-full').innerText = '8';
+        document.getElementById('token-cm').querySelector('span:first-child').innerText = 'Fathan';
+
+        document.getElementById('token-rw').querySelector('.rounded-full').innerText = '14';
+        document.getElementById('token-rw').querySelector('span:first-child').innerText = 'Radit';
+
+        document.getElementById('token-st').querySelector('.rounded-full').innerText = '19';
+        document.getElementById('token-st').querySelector('span:first-child').innerText = 'Kenzo';
+
+        alert("✓ Sukses! 7 Pemain baru telah masuk ke lapangan untuk Babak 2. Seluruh pemain KU-10 kini mencatatkan menit bermain seimbang (20 menit).");
+      }
+    }
+  </script>
+</body>
+</html>

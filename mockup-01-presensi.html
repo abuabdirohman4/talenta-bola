@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Presensi KU-10 (2016) · SSB Galuh Putra</title>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .status-pill {
+      touch-action: manipulation;
+      transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
+  </style>
+  <script>
+    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+  </script>
+</head>
+<body class="bg-[#F1F5F9] dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-full antialiased selection:bg-emerald-500 selection:text-white flex flex-col md:flex-row transition-colors duration-200">
+
+  <!-- ========================================================================= -->
+  <!-- 1. DESKTOP SIDEBAR NAVIGATION                                            -->
+  <!-- ========================================================================= -->
+  <aside class="hidden md:flex md:w-64 lg:w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex-col shrink-0 min-h-screen sticky top-0 z-30 shadow-sm">
+    
+    <!-- Brand Logo Header -->
+    <div class="p-5 border-b border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white flex items-center justify-center font-black text-sm shadow-sm tracking-wider">
+          GP
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="font-extrabold text-sm text-slate-900 dark:text-white tracking-tight">TalentaBola</span>
+            <span class="text-[9px] font-extrabold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-400 px-1.5 py-0.2 rounded border border-emerald-300 dark:border-emerald-800">PRO</span>
+          </div>
+          <p class="text-[11px] text-slate-600 dark:text-slate-400 font-medium">SSB Galuh Putra Tasikmalaya</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group Badge -->
+    <div class="p-3 mx-3 mt-3 bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/70 rounded-xl flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+        <div>
+          <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Grup Aktif</span>
+          <span class="text-xs font-extrabold text-slate-900 dark:text-slate-200">KU-10 (2016)</span>
+        </div>
+      </div>
+      <span class="text-[11px] text-slate-600 dark:text-slate-400 font-bold px-1.5 py-0.5 rounded bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600">40 Anak</span>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav class="p-3 space-y-1 flex-1 overflow-y-auto custom-scrollbar">
+      
+      <!-- MENU UTAMA -->
+      <div class="px-3 pt-2 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Menu Utama</div>
+      
+      <!-- Dashboard -->
+      <a href="dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+        </svg>
+        <span>Dashboard</span>
+      </a>
+
+      <!-- Presensi Lapangan (Active) -->
+      <a href="mockup-01-presensi.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold text-xs shadow-sm border border-emerald-300 dark:border-emerald-800/60">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+          </svg>
+          <span>Presensi Lapangan</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-200/80 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">Live</span>
+      </a>
+
+      <!-- Papan Taktik & Formasi 7v7 -->
+      <a href="papan-taktik.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8-8h16M12 9a3 3 0 100 6 3 3 0 000-6z"></path>
+          </svg>
+          <span>Papan Taktik & Formasi</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-300">7v7</span>
+      </a>
+
+      <!-- Form Rapor Coach -->
+      <a href="mockup-02-form-rapor.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+          </svg>
+          <span>Rapor & Evaluasi</span>
+        </div>
+        <span class="text-[10px] font-medium text-slate-500 dark:text-slate-400">28/40</span>
+      </a>
+
+      <!-- Rapor Digital Pemain -->
+      <a href="mockup-03-rapor-ortu.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"></path>
+          </svg>
+          <span>Rapor Digital Pemain</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800">Ortu</span>
+      </a>
+
+      <!-- TIM & PEMAIN -->
+      <div class="px-3 pt-3.5 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tim & Pemain</div>
+
+      <a href="roster.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <span>Data Siswa & Roster</span>
+        </div>
+        <span class="text-[10px] text-slate-500">40 anak</span>
+      </a>
+
+      <a href="jadwal.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <span>Jadwal & Agenda</span>
+      </a>
+
+      <!-- KEUANGAN & OPERASIONAL -->
+      <div class="px-3 pt-3.5 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Operasional</div>
+
+      <a href="spp.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>Iuran SPP Bulanan</span>
+        </div>
+        <span class="text-[10px] font-bold text-emerald-600">34 Lunas</span>
+      </a>
+
+      <a href="broadcast.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+        </svg>
+        <span>Broadcast WhatsApp</span>
+      </a>
+
+    </nav>
+
+    <!-- Coach Profile Footer with Dark Mode Toggle -->
+    <div class="p-3 border-t border-slate-200/80 dark:border-slate-800/80 m-2 space-y-2">
+      <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all border border-slate-200 dark:border-slate-700">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <span>Mode Tampilan</span>
+        </div>
+        <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">Dark / Light</span>
+      </button>
+
+      <div class="flex items-center gap-2.5 px-2 py-1.5">
+        <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+          CR
+        </div>
+        <div class="leading-tight overflow-hidden">
+          <p class="text-xs font-bold text-slate-900 dark:text-white truncate">Coach Riyandi</p>
+          <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Pelatih Kepala KU-10</p>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN WORKSPACE (Responsive: Mobile + Desktop)                         -->
+  <!-- ========================================================================= -->
+  <div class="flex-1 flex flex-col min-w-0 min-h-screen">
+    
+    <!-- DESKTOP TOP BAR (md: and up) -->
+    <div class="hidden md:flex items-center justify-between px-8 py-3.5 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-20 shadow-sm">
+      <div>
+        <div class="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+          <span>SSB Galuh Putra</span>
+          <span>/</span>
+          <span>KU 2016 (KU-10)</span>
+          <span>/</span>
+          <span class="text-slate-900 dark:text-white font-bold">Presensi Lapangan</span>
+        </div>
+        <h2 class="text-base font-black text-slate-900 dark:text-white tracking-tight mt-0.5">Sesi Latihan Minggu · Lapang Brigif 13</h2>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Live status -->
+        <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-xs font-bold text-emerald-800 dark:text-emerald-300">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span id="session-badge-d">Sesi Aktif (07:30 WIB)</span>
+        </div>
+
+        <!-- Dark Mode Toggle Button -->
+        <button onclick="toggleDarkMode()" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">
+          <svg class="w-4 h-4 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <svg class="w-4 h-4 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+
+        <!-- Salin Rekap CTA -->
+        <button onclick="copyWARekap()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs flex items-center gap-2 shadow-sm transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+          <span>Salin Format WhatsApp</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- MOBILE TOP BAR (Sticky on mobile only) -->
+    <header class="md:hidden sticky top-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 pt-3.5 pb-3 shadow-sm">
+      <div class="max-w-md mx-auto">
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-xs shadow-sm">
+              GP
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h1 class="text-sm font-extrabold tracking-tight text-slate-900 dark:text-white">SSB Galuh Putra</h1>
+                <span class="text-[9px] font-bold px-1.5 py-0.2 rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">KU 2016</span>
+              </div>
+              <p class="text-[11px] text-slate-600 dark:text-slate-400 font-medium">Minggu, 21 Sep · Lapang Brigif 13</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5">
+            <button onclick="toggleDarkMode()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+              <svg class="w-3.5 h-3.5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+              <svg class="w-3.5 h-3.5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+            <div class="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950 text-[10px] font-bold text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Live</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search & Filter (Mobile) -->
+        <div class="flex items-center gap-2">
+          <div class="relative flex-1">
+            <input type="text" id="searchInputMobile" oninput="filterPlayers('mobile')" placeholder="Cari nama atau nomor punggung..." 
+              class="w-full bg-slate-100 dark:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-emerald-500 rounded-lg px-3 py-1.5 pl-8 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none">
+            <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+
+          <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700 text-[10px] font-bold shrink-0">
+            <button onclick="setFilter('ALL')" id="tab-ALL-m" class="tab-btn px-2 py-1 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs">Semua</button>
+            <button onclick="setFilter('BELUM')" id="tab-BELUM-m" class="tab-btn px-2 py-1 rounded text-slate-500 dark:text-slate-400">Belum</button>
+            <button onclick="setFilter('HADIR')" id="tab-HADIR-m" class="tab-btn px-2 py-1 rounded text-slate-500 dark:text-slate-400">Hadir</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- WORKSPACE BODY (DESKTOP + MOBILE) -->
+    <main class="flex-1 p-3.5 md:p-8 space-y-5 max-w-6xl w-full mx-auto pb-24 md:pb-8">
+
+      <!-- ===================================================================== -->
+      <!-- SMART SESSION SWITCHER & EXCEPTION ACTIONS BAR (Reduced UX Journey)    -->
+      <!-- ===================================================================== -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-3.5">
+        
+        <!-- Sesi Selector Dropdown -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          </div>
+          <div>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">Jadwal Pertemuan Aktif</span>
+            <div class="flex items-center gap-2">
+              <select id="session-select" onchange="changeSession(this.value)" class="font-extrabold text-xs md:text-sm text-slate-900 dark:text-white bg-transparent border-0 focus:ring-0 p-0 cursor-pointer pr-4">
+                <option value="today" selected>Minggu, 21 Sep 2026 (07:30 WIB) · Hari Ini [Aktif]</option>
+                <option value="prev1">Minggu, 14 Sep 2026 (07:30 WIB) · Hadir 38/40 [Selesai]</option>
+                <option value="prev2">Minggu, 07 Sep 2026 (07:30 WIB) · Hadir 36/40 [Selesai]</option>
+                <option value="next1">Rabu, 24 Sep 2026 (15:30 WIB) · Lap. Bintang [Mendatang]</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Exception Action Buttons (Reduced Journey: 1-Tap Libur / Geser) -->
+        <div class="flex items-center gap-2 pt-1 md:pt-0 border-t md:border-t-0 border-slate-100 dark:border-slate-800">
+          <!-- Button: Liburkan Sesi -->
+          <button onclick="openLiburModal()" id="btn-libur" class="px-3 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900/60 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-300 font-bold text-xs flex items-center gap-1.5 transition-all active:scale-95">
+            <span>🌧️</span>
+            <span>Tandai Libur</span>
+          </button>
+
+          <!-- Button: Geser Jam / Reschedule -->
+          <button onclick="openRescheduleModal()" id="btn-reschedule" class="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center gap-1.5 transition-all active:scale-95">
+            <span>⏱️</span>
+            <span>Geser Jam</span>
+          </button>
+
+          <!-- 1-Tap Bulk "Semua Hadir" -->
+          <button onclick="markAllHadir()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all ml-auto md:ml-0">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            <span>Semua Hadir (40)</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- CANCELLATION BANNER (Hidden by default, shown if marked Libur) -->
+      <div id="cancellation-banner" class="hidden bg-rose-50 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-800 text-rose-900 dark:text-rose-200 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-rose-200 dark:bg-rose-900 text-rose-700 dark:text-rose-300 flex items-center justify-center font-black text-sm shrink-0">
+            ✕
+          </div>
+          <div>
+            <h4 class="font-extrabold text-xs">Sesi Latihan Hari Ini Diliburkan</h4>
+            <p class="text-[11px] text-rose-700 dark:text-rose-300" id="cancellation-reason">Alasan: Cuaca Hujan Lebat & Lapangan Tergenang Air.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="shareWALibur()" class="px-3 py-1.5 rounded-xl bg-rose-600 text-white font-bold text-xs shadow-sm hover:bg-rose-700 transition-all">
+            📲 Broadcast Info Libur ke Ortu
+          </button>
+          <button onclick="restoreSession()" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-bold text-xs hover:bg-slate-50 transition-all">
+            Batalkan & Aktifkan Lagi
+          </button>
+        </div>
+      </div>
+
+      <!-- DESKTOP TOP STATS ROW -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 md:p-5 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="text-xs font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Rekap Kehadiran Sesi Lapangan</h3>
+            <div class="text-sm font-black text-slate-900 dark:text-white mt-0.5">
+              <span id="stat-recorded-d">18</span> dari 40 Pemain Sudah Terdata (<span id="stat-pct-d">45%</span>)
+            </div>
+          </div>
+
+          <span class="text-xs font-bold text-slate-500 dark:text-slate-400">
+            Standar Evaluasi Filanesia KU-10
+          </span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="h-2.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden flex gap-1 mb-4">
+          <div id="bar-hadir-d" class="bg-emerald-500 h-full transition-all duration-300" style="width: 35%"></div>
+          <div id="bar-izin-d" class="bg-amber-500 h-full transition-all duration-300" style="width: 7.5%"></div>
+          <div id="bar-sakit-d" class="bg-purple-500 h-full transition-all duration-300" style="width: 2.5%"></div>
+        </div>
+
+        <!-- 4 Stat Badges (High Contrast Light Mode) -->
+        <div class="grid grid-cols-4 gap-2.5 md:gap-3 text-center">
+          <div class="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300/80 dark:border-emerald-800/80">
+            <span class="text-[10px] font-extrabold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider block">Hadir</span>
+            <span class="text-lg font-black text-emerald-900 dark:text-emerald-200" id="stat-hadir-d">14</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300/80 dark:border-amber-800/80">
+            <span class="text-[10px] font-extrabold text-amber-800 dark:text-amber-400 uppercase tracking-wider block">Izin</span>
+            <span class="text-lg font-black text-amber-900 dark:text-amber-200" id="stat-izin-d">3</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-300/80 dark:border-purple-800/80">
+            <span class="text-[10px] font-extrabold text-purple-800 dark:text-purple-400 uppercase tracking-wider block">Sakit</span>
+            <span class="text-lg font-black text-purple-900 dark:text-purple-200" id="stat-sakit-d">1</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-100/90 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <span class="text-[10px] font-extrabold text-slate-600 dark:text-slate-400 uppercase tracking-wider block">Belum Diisi</span>
+            <span class="text-lg font-black text-slate-800 dark:text-slate-200" id="stat-sisa-d">22</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TWO-COLUMN WORKSPACE ON DESKTOP (Roster List Left + WA Live Preview Right) -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- LEFT 2 COLUMNS: ROSTER LIST -->
+        <div class="lg:col-span-2 space-y-3">
+          
+          <!-- Desktop Toolbar: Search & Position Filter -->
+          <div class="hidden md:flex items-center justify-between gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-sm">
+            <div class="relative flex-1">
+              <input type="text" id="searchInputDesktop" oninput="filterPlayers('desktop')" placeholder="Cari nama atau nomor punggung siswa..." 
+                class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 pl-9 text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+
+            <!-- Filter Status -->
+            <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-bold shrink-0">
+              <button onclick="setFilter('ALL')" id="tab-ALL-d" class="tab-btn-d px-3 py-1.5 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm">Semua (40)</button>
+              <button onclick="setFilter('BELUM')" id="tab-BELUM-d" class="tab-btn-d px-3 py-1.5 rounded-md text-slate-600 dark:text-slate-400 hover:text-slate-900">Belum (<span id="count-belum-d">22</span>)</button>
+              <button onclick="setFilter('HADIR')" id="tab-HADIR-d" class="tab-btn-d px-3 py-1.5 rounded-md text-slate-600 dark:text-slate-400 hover:text-slate-900">Hadir (<span id="count-hadir-d">14</span>)</button>
+            </div>
+          </div>
+
+          <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-1 flex items-center justify-between">
+            <span>Daftar Siswa KU-10 (<span id="visible-count">40</span> Siswa)</span>
+            <span class="text-[10px] font-medium lowercase text-slate-500 dark:text-slate-400">Tuts tombol: H (Hadir), I (Izin), S (Sakit), A (Alpa)</span>
+          </div>
+
+          <!-- PLAYERS CONTAINER -->
+          <div id="player-list" class="space-y-2">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- RIGHT 1 COLUMN (DESKTOP ONLY): LIVE WHATSAPP REKAP PREVIEW -->
+        <div class="hidden lg:block space-y-4">
+          
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm sticky top-24">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 mb-3">
+              <div class="flex items-center gap-2">
+                <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+                <h4 class="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">Preview Pesan WhatsApp</h4>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Auto-Draft</span>
+            </div>
+
+            <!-- WhatsApp Chat Bubble Simulated -->
+            <div class="bg-[#EFEAE2] dark:bg-slate-950/80 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto custom-scrollbar" id="wa-preview-box">
+              Memuat format WhatsApp...
+            </div>
+
+            <!-- Copy Button -->
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
+              <button onclick="copyWARekap()" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-extrabold py-3 px-4 rounded-xl shadow-sm flex items-center justify-center gap-2 text-xs transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                <span>Salin ke WhatsApp Grup</span>
+              </button>
+              <button onclick="directWhatsAppShare()" class="w-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-2 px-3 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-1.5 text-xs transition-all">
+                <span>📲 Buka Aplikasi WhatsApp</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- MOBILE FLOATING ACTION BAR: REKAP WA (Mobile only) -->
+    <footer class="md:hidden fixed bottom-14 inset-x-0 z-30 max-w-md mx-auto px-4 pointer-events-none">
+      <div class="bg-slate-900/95 dark:bg-slate-900 backdrop-blur-md text-white rounded-2xl p-2.5 shadow-xl border border-slate-800 flex items-center justify-between pointer-events-auto gap-3">
+        <div class="pl-2">
+          <div class="text-[10px] text-slate-400 font-medium">Terdata</div>
+          <div class="text-xs font-black text-emerald-400">
+            <span id="footer-recorded-m">18</span> / 40 (<span id="footer-pct-m">45%</span>)
+          </div>
+        </div>
+
+        <button onclick="copyWARekap()" class="bg-emerald-500 hover:bg-emerald-600 active:scale-[0.98] text-white font-bold py-2.5 px-4 rounded-xl shadow-sm flex items-center gap-2 text-xs transition-all shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+          </svg>
+          <span>Salin Format WA</span>
+        </button>
+      </div>
+    </footer>
+
+    <!-- MOBILE BOTTOM NAVIGATION (Fixed at bottom on mobile) -->
+    <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 shadow-lg px-2 py-1.5 flex items-center justify-around">
+      <a href="dashboard.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Home</span>
+      </a>
+      <a href="mockup-01-presensi.html" class="flex flex-col items-center py-1 px-3 text-emerald-600 dark:text-emerald-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+        <span class="text-[10px] font-extrabold mt-0.5">Presensi</span>
+      </a>
+      <a href="papan-taktik.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8-8h16M12 9a3 3 0 100 6 3 3 0 000-6z"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Taktik</span>
+      </a>
+      <a href="mockup-02-form-rapor.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Rapor</span>
+      </a>
+      <a href="mockup-03-rapor-ortu.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Ortu</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODALS (LIBURKAN SESI & RESCHEDULE)                                       -->
+  <!-- ========================================================================= -->
+  
+  <!-- MODAL: LIBURKAN SESI -->
+  <div id="modal-libur" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-sm w-full p-5 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🌧️</span>
+          <h3 class="text-sm font-extrabold text-slate-900 dark:text-white">Tandai Sesi Diliburkan</h3>
+        </div>
+        <button onclick="closeLiburModal()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <label class="text-xs font-bold text-slate-700 dark:text-slate-300 block">Pilih Alasan Libur:</label>
+        <div class="space-y-2">
+          <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 cursor-pointer text-xs font-semibold">
+            <input type="radio" name="libur_reason" value="Cuaca Hujan Lebat & Lapangan Tergenang" checked class="text-emerald-600">
+            <span>Cuaca Hujan Lebat / Lapangan Banjir</span>
+          </label>
+          <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 cursor-pointer text-xs font-semibold">
+            <input type="radio" name="libur_reason" value="Libur Nasional / Tanggal Merah" class="text-emerald-600">
+            <span>Libur Nasional / Kalender SSB</span>
+          </label>
+          <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 cursor-pointer text-xs font-semibold">
+            <input type="radio" name="libur_reason" value="Lapangan Sedang Dalam Renovasi Rumput" class="text-emerald-600">
+            <span>Perbaikan Rumput / Lapangan Ditutup</span>
+          </label>
+        </div>
+
+        <div class="pt-2">
+          <label class="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400 cursor-pointer">
+            <input type="checkbox" id="check-auto-wa" checked class="rounded text-emerald-600">
+            <span>Siapkan draft pengumuman ke grup WA ortu</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 pt-2">
+        <button onclick="closeLiburModal()" class="w-1/2 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300">
+          Batal
+        </button>
+        <button onclick="confirmLiburkanSesi()" class="w-1/2 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black shadow-sm">
+          Konfirmasi Libur
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: RESCHEDULE / GESER JAM -->
+  <div id="modal-reschedule" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-sm w-full p-5 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">⏱️</span>
+          <h3 class="text-sm font-extrabold text-slate-900 dark:text-white">Geser Jam / Reschedule</h3>
+        </div>
+        <button onclick="closeRescheduleModal()" class="text-slate-400 hover:text-slate-600 font-bold text-sm">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Pilih Jam Baru Hari Ini:</label>
+          <select id="new-hour-select" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold text-slate-800 dark:text-white">
+            <option value="15:30 - 17:30 WIB (Sore Hari)">Diundur ke 15:30 - 17:30 WIB (Sore)</option>
+            <option value="16:00 - 18:00 WIB (Sore Hari)">Diundur ke 16:00 - 18:00 WIB (Sore)</option>
+            <option value="08:30 - 10:30 WIB (Mundur 1 Jam)">Mundur 1 Jam (08:30 WIB)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Lokasi:</label>
+          <input type="text" value="Lapang Brigif 13 Galuh Tasikmalaya" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-medium text-slate-800 dark:text-white">
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 pt-2">
+        <button onclick="closeRescheduleModal()" class="w-1/2 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300">
+          Batal
+        </button>
+        <button onclick="confirmReschedule()" class="w-1/2 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black shadow-sm">
+          Simpan & Update
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATION TOAST -->
+  <div id="toast" class="fixed top-4 inset-x-0 mx-auto max-w-xs bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-xl text-center transition-all duration-300 opacity-0 pointer-events-none z-50 transform -translate-y-2 border border-slate-700">
+    Rekap kehadiran disalin ke clipboard!
+  </div>
+
+  <script>
+    const players = [
+      { id: 1, name: "Athar Razka Pratama", no: 10, pos: "CM", status: "HADIR", note: "Izin ortu diajukan" },
+      { id: 2, name: "Argya", no: 7, pos: "RW", status: "HADIR" },
+      { id: 3, name: "Argyo", no: 11, pos: "LW", status: "BELUM" },
+      { id: 4, name: "Azril", no: 4, pos: "CB", status: "HADIR" },
+      { id: 5, name: "Arsyadan", no: 8, pos: "CM", status: "BELUM" },
+      { id: 6, name: "Chandra", no: 1, pos: "GK", status: "HADIR" },
+      { id: 7, name: "Shiraj", no: 9, pos: "ST", status: "IZIN", note: "Acara keluarga Ciamis" },
+      { id: 8, name: "Hanif", no: 5, pos: "CB", status: "HADIR" },
+      { id: 9, name: "Hibat", no: 6, pos: "LB", status: "BELUM" },
+      { id: 10, name: "Kenzie", no: 14, pos: "RB", status: "IZIN", note: "Ujian sekolah" },
+      { id: 11, name: "Harlan", no: 17, pos: "CM", status: "HADIR" },
+      { id: 12, name: "Mahrez", no: 26, pos: "RW", status: "HADIR" },
+      { id: 13, name: "Nazriel", no: 20, pos: "GK", status: "BELUM" },
+      { id: 14, name: "Hasan", no: 18, pos: "ST", status: "HADIR" },
+      { id: 15, name: "Kasatria", no: 22, pos: "CB", status: "BELUM" },
+      { id: 16, name: "Abidzar", no: 23, pos: "CM", status: "HADIR" },
+      { id: 17, name: "Sakha", no: 19, pos: "LW", status: "BELUM" },
+      { id: 18, name: "Abiyan", no: 24, pos: "RB", status: "HADIR" },
+      { id: 19, name: "Izzul", no: 25, pos: "LB", status: "BELUM" },
+      { id: 20, name: "Raz", no: 15, pos: "CM", status: "HADIR" },
+      { id: 21, name: "Fatih", no: 12, pos: "ST", status: "BELUM" },
+      { id: 22, name: "Najwan", no: 28, pos: "RW", status: "BELUM" },
+      { id: 23, name: "Nabil", no: 30, pos: "LW", status: "HADIR" },
+      { id: 24, name: "Reza", no: 31, pos: "CB", status: "BELUM" },
+      { id: 25, name: "Rafandra", no: 32, pos: "CM", status: "BELUM" },
+      { id: 26, name: "Rhehan", no: 33, pos: "RB", status: "BELUM" },
+      { id: 27, name: "Tristan", no: 34, pos: "LB", status: "HADIR" },
+      { id: 28, name: "Zuhud", no: 35, pos: "GK", status: "BELUM" },
+      { id: 29, name: "Khalifah", no: 37, pos: "ST", status: "HADIR" },
+      { id: 30, name: "Gilby", no: 38, pos: "RW", status: "BELUM" },
+      { id: 31, name: "Kelvin", no: 39, pos: "LW", status: "BELUM" },
+      { id: 32, name: "Raditya", no: 40, pos: "CB", status: "BELUM" },
+      { id: 33, name: "Adlian", no: 41, pos: "CM", status: "BELUM" },
+      { id: 34, name: "Mulki", no: 42, pos: "RB", status: "BELUM" },
+      { id: 35, name: "Rangga", no: 43, pos: "LB", status: "SAKIT", note: "Demam panas" },
+      { id: 36, name: "M. Radika", no: 44, pos: "ST", status: "IZIN", note: "Acara keluarga" },
+      { id: 37, name: "M. Gibran", no: 45, pos: "RW", status: "BELUM" },
+      { id: 38, name: "Ardan", no: 46, pos: "LW", status: "BELUM" },
+      { id: 39, name: "Ibrahim", no: 47, pos: "CB", status: "BELUM" },
+      { id: 40, name: "Alfatar", no: 48, pos: "CM", status: "BELUM" },
+    ];
+
+    let currentFilter = 'ALL';
+
+    function renderPlayerList() {
+      const container = document.getElementById('player-list');
+      const searchVal = ((document.getElementById('searchInputDesktop') ? document.getElementById('searchInputDesktop').value : '') || 
+                         (document.getElementById('searchInputMobile') ? document.getElementById('searchInputMobile').value : '')).toLowerCase().trim();
+      
+      let list = players.filter(p => {
+        const matchesSearch = p.name.toLowerCase().includes(searchVal) || String(p.no).includes(searchVal);
+        if (!matchesSearch) return false;
+        if (currentFilter === 'BELUM') return p.status === 'BELUM';
+        if (currentFilter === 'HADIR') return p.status === 'HADIR';
+        return true;
+      });
+
+      document.getElementById('visible-count').innerText = list.length;
+      container.innerHTML = '';
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 text-slate-500 text-xs bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+            Tidak ada siswa yang cocok dengan filter atau pencarian.
+          </div>
+        `;
+        return;
+      }
+
+      list.forEach((p, idx) => {
+        const row = document.createElement('div');
+        row.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 shadow-sm flex items-center justify-between gap-2.5 transition-all hover:border-slate-300 dark:hover:border-slate-700";
+
+        // Left: Jersey Badge + Name + Position
+        const leftHtml = `
+          <div class="flex items-center gap-2.5 min-w-0 flex-1">
+            <div class="w-8 h-8 rounded-lg ${p.status === 'HADIR' ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800' : 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700'} font-black text-xs flex items-center justify-center shrink-0">
+              ${p.no || (idx + 1)}
+            </div>
+            <div class="truncate">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs font-bold text-slate-900 dark:text-white truncate block">${p.name}</span>
+                ${p.note ? `<span class="shrink-0 text-[9px] font-semibold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800 px-1.5 py-0.2 rounded leading-tight">${p.note}</span>` : ''}
+              </div>
+              <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block">${p.pos} · KU-10</span>
+            </div>
+          </div>
+        `;
+
+        // Right: Compact Inline Micro-Pills (H / I / S / A) with tactile container
+        const rightHtml = `
+          <div class="flex items-center gap-1 shrink-0 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700">
+            <button onclick="setStatus(${p.id}, 'HADIR')" title="Hadir"
+              class="status-pill w-7 h-7 rounded-md font-bold text-xs flex items-center justify-center ${p.status === 'HADIR' ? 'bg-emerald-600 text-white shadow-sm font-black' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">
+              H
+            </button>
+            <button onclick="setStatus(${p.id}, 'IZIN')" title="Izin"
+              class="status-pill w-7 h-7 rounded-md font-bold text-xs flex items-center justify-center ${p.status === 'IZIN' ? 'bg-amber-500 text-white shadow-sm font-black' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">
+              I
+            </button>
+            <button onclick="setStatus(${p.id}, 'SAKIT')" title="Sakit"
+              class="status-pill w-7 h-7 rounded-md font-bold text-xs flex items-center justify-center ${p.status === 'SAKIT' ? 'bg-purple-600 text-white shadow-sm font-black' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">
+              S
+            </button>
+            <button onclick="setStatus(${p.id}, 'ALPA')" title="Alpa"
+              class="status-pill w-7 h-7 rounded-md font-bold text-xs flex items-center justify-center ${p.status === 'ALPA' ? 'bg-rose-600 text-white shadow-sm font-black' : 'text-slate-400 dark:text-slate-500 hover:text-rose-600'}">
+              A
+            </button>
+          </div>
+        `;
+
+        row.innerHTML = leftHtml + rightHtml;
+        container.appendChild(row);
+      });
+
+      updateStats();
+    }
+
+    function setStatus(id, newStatus) {
+      const p = players.find(x => x.id === id);
+      if (!p) return;
+      p.status = (p.status === newStatus) ? 'BELUM' : newStatus;
+      renderPlayerList();
+    }
+
+    function markAllHadir() {
+      players.forEach(p => {
+        if (p.status === 'BELUM') p.status = 'HADIR';
+      });
+      renderPlayerList();
+      showToast("✓ 40 Siswa KU-10 berhasil ditandai Hadir!");
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.tab-btn, .tab-btn-d').forEach(btn => {
+        btn.classList.remove('bg-white', 'dark:bg-slate-700', 'text-slate-900', 'dark:text-white', 'shadow-sm');
+        btn.classList.add('text-slate-600', 'dark:text-slate-400');
+      });
+      ['tab-' + filter + '-m', 'tab-' + filter + '-d'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.classList.add('bg-white', 'dark:bg-slate-700', 'text-slate-900', 'dark:text-white', 'shadow-sm');
+          el.classList.remove('text-slate-600', 'dark:text-slate-400');
+        }
+      });
+      renderPlayerList();
+    }
+
+    function filterPlayers(source) {
+      if (source === 'mobile' && document.getElementById('searchInputDesktop')) {
+        document.getElementById('searchInputDesktop').value = document.getElementById('searchInputMobile').value;
+      } else if (source === 'desktop' && document.getElementById('searchInputMobile')) {
+        document.getElementById('searchInputMobile').value = document.getElementById('searchInputDesktop').value;
+      }
+      renderPlayerList();
+    }
+
+    function generateWAText() {
+      const hadirList = players.filter(p => p.status === 'HADIR').map(p => `• ${p.name} (#${p.no})`);
+      const izinList = players.filter(p => p.status === 'IZIN').map(p => `• ${p.name} (#${p.no}) - ${p.note || 'Izin'}`);
+      const sakitList = players.filter(p => p.status === 'SAKIT').map(p => `• ${p.name} (#${p.no}) - ${p.note || 'Sakit'}`);
+      const alpaList = players.filter(p => p.status === 'ALPA').map(p => `• ${p.name} (#${p.no})`);
+
+      return `⚽ *REKAP PRESENSI SSB GALUH PUTRA*\n` +
+        `📅 Tanggal: Minggu, 21 September 2026\n` +
+        `🏆 Kelompok Usia: KU-10 (Kelahiran 2016)\n` +
+        `📍 Lokasi: Lapang Brigif 13 Galuh Tasikmalaya\n\n` +
+        `📊 *RINGKASAN KEHADIRAN:*\n` +
+        `✅ Hadir: ${hadirList.length} siswa\n` +
+        `🟡 Izin: ${izinList.length} siswa\n` +
+        `🟣 Sakit: ${sakitList.length} siswa\n` +
+        `🔴 Tanpa Keterangan: ${alpaList.length} siswa\n` +
+        `👥 Total Siswa: ${players.length} siswa\n\n` +
+        (hadirList.length > 0 ? `*DAFTAR HADIR:*\n${hadirList.join('\n')}\n\n` : '') +
+        (izinList.length > 0 ? `*DAFTAR IZIN:*\n${izinList.join('\n')}\n\n` : '') +
+        (sakitList.length > 0 ? `*DAFTAR SAKIT:*\n${sakitList.join('\n')}\n\n` : '') +
+        `_Dicatat via TalentaBola App_`;
+    }
+
+    function updateStats() {
+      const hadir = players.filter(p => p.status === 'HADIR').length;
+      const izin = players.filter(p => p.status === 'IZIN').length;
+      const sakit = players.filter(p => p.status === 'SAKIT').length;
+      const alpa = players.filter(p => p.status === 'ALPA').length;
+      const total = players.length;
+      const recorded = hadir + izin + sakit + alpa;
+      const sisa = total - recorded;
+      const pct = Math.round((recorded / total) * 100);
+
+      const pHadir = Math.round((hadir / total) * 100);
+      const pIzin = Math.round((izin / total) * 100);
+      const pSakit = Math.round((sakit / total) * 100);
+
+      // Update Desktop Elements
+      if (document.getElementById('stat-hadir-d')) document.getElementById('stat-hadir-d').innerText = hadir;
+      if (document.getElementById('stat-izin-d')) document.getElementById('stat-izin-d').innerText = izin;
+      if (document.getElementById('stat-sakit-d')) document.getElementById('stat-sakit-d').innerText = sakit;
+      if (document.getElementById('stat-sisa-d')) document.getElementById('stat-sisa-d').innerText = sisa;
+      if (document.getElementById('stat-recorded-d')) document.getElementById('stat-recorded-d').innerText = recorded;
+      if (document.getElementById('stat-pct-d')) document.getElementById('stat-pct-d').innerText = pct + '%';
+      if (document.getElementById('count-belum-d')) document.getElementById('count-belum-d').innerText = sisa;
+      if (document.getElementById('count-hadir-d')) document.getElementById('count-hadir-d').innerText = hadir;
+
+      if (document.getElementById('bar-hadir-d')) document.getElementById('bar-hadir-d').style.width = pHadir + '%';
+      if (document.getElementById('bar-izin-d')) document.getElementById('bar-izin-d').style.width = pIzin + '%';
+      if (document.getElementById('bar-sakit-d')) document.getElementById('bar-sakit-d').style.width = pSakit + '%';
+
+      // Update Mobile Elements
+      if (document.getElementById('footer-recorded-m')) document.getElementById('footer-recorded-m').innerText = recorded;
+      if (document.getElementById('footer-pct-m')) document.getElementById('footer-pct-m').innerText = pct + '%';
+
+      // Update WA Box
+      const waBox = document.getElementById('wa-preview-box');
+      if (waBox) waBox.innerText = generateWAText();
+    }
+
+    function copyWARekap() {
+      const text = generateWAText();
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("Format WhatsApp berhasil disalin!");
+      }).catch(() => {
+        showToast("Gagal menyalin otomatis, silakan pilih teks manual.");
+      });
+    }
+
+    function directWhatsAppShare() {
+      const text = encodeURIComponent(generateWAText());
+      window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+      }, 2500);
+    }
+
+    // Modal Exception Functions
+    function openLiburModal() {
+      document.getElementById('modal-libur').classList.remove('hidden');
+    }
+    function closeLiburModal() {
+      document.getElementById('modal-libur').classList.add('hidden');
+    }
+    function confirmLiburkanSesi() {
+      const selected = document.querySelector('input[name="libur_reason"]:checked').value;
+      closeLiburModal();
+      document.getElementById('cancellation-banner').classList.remove('hidden');
+      document.getElementById('cancellation-reason').innerText = 'Alasan: ' + selected;
+      document.getElementById('session-badge-d').innerText = 'Diliburkan';
+      document.getElementById('session-badge-d').parentElement.className = 'flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-800 text-xs font-bold text-rose-800 dark:text-rose-300';
+      showToast("✓ Sesi berhasil ditandai Libur!");
+    }
+    function restoreSession() {
+      document.getElementById('cancellation-banner').classList.add('hidden');
+      document.getElementById('session-badge-d').innerText = 'Sesi Aktif (07:30 WIB)';
+      document.getElementById('session-badge-d').parentElement.className = 'flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-xs font-bold text-emerald-800 dark:text-emerald-300';
+      showToast("Sesi latihan aktif kembali!");
+    }
+    function shareWALibur() {
+      const reason = document.getElementById('cancellation-reason').innerText;
+      const text = encodeURIComponent(`📢 *PEMBERITAHUAN LATIHAN SSB GALUH PUTRA*\n\nKepada Ayah/Bunda Siswa KU-10 (2016),\n\nSehubungan dengan situasi terkini, sesi latihan hari *Minggu, 21 September 2026* *DILIBURKAN*.\n${reason}.\n\nTetap jaga kesehatan adik-adik di rumah. Terima kasih!\n\n_Coach Riyandi - SSB Galuh Putra_`);
+      window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+    }
+
+    function openRescheduleModal() {
+      document.getElementById('modal-reschedule').classList.remove('hidden');
+    }
+    function closeRescheduleModal() {
+      document.getElementById('modal-reschedule').classList.add('hidden');
+    }
+    function confirmReschedule() {
+      const newHour = document.getElementById('new-hour-select').value;
+      closeRescheduleModal();
+      document.getElementById('session-badge-d').innerText = 'Digeser (' + newHour.split(' ')[0] + ')';
+      showToast("Jadwal latihan digeser menjadi " + newHour);
+    }
+
+    function changeSession(val) {
+      if (val !== 'today') {
+        showToast("Membuka arsip pertemuan " + val + "...");
+      } else {
+        restoreSession();
+      }
+    }
+
+    // Init Render
+    renderPlayerList();
+  </script>
+</body>
+</html>

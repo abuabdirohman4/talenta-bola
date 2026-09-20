@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Form Rapor Pelatih · SSB Galuh Putra</title>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+    .star-btn { touch-action: manipulation; transition: transform 0.12s ease; }
+    .star-btn:active { transform: scale(1.25); }
+    .chip-btn { touch-action: manipulation; transition: all 0.12s ease; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
+  </style>
+  <script>
+    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+  </script>
+</head>
+<body class="bg-[#F1F5F9] dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-full antialiased selection:bg-emerald-500 selection:text-white flex flex-col md:flex-row transition-colors duration-200">
+
+  <!-- ========================================================================= -->
+  <!-- 1. DESKTOP SIDEBAR (Visible on md:, hidden on mobile)                    -->
+  <!-- ========================================================================= -->
+  <aside class="hidden md:flex md:w-64 lg:w-72 bg-white dark:bg-slate-900 border-r border-slate-200/80 dark:border-slate-800 flex-col shrink-0 min-h-screen sticky top-0 z-30 shadow-xs">
+    
+    <!-- Brand Logo Header -->
+    <div class="p-5 border-b border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-linear-to-br from-emerald-500 to-emerald-700 text-white flex items-center justify-center font-black text-sm shadow-xs tracking-wider">
+          GP
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="font-extrabold text-sm text-slate-900 dark:text-white tracking-tight">TalentaBola</span>
+            <span class="text-[9px] font-extrabold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-400 px-1.5 py-0.2 rounded border border-emerald-200/60 dark:border-emerald-800">PRO</span>
+          </div>
+          <p class="text-[11px] text-slate-400 font-medium">SSB Galuh Putra</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active KU Info -->
+    <div class="p-3 mx-3 mt-3 bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/70 rounded-xl flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+        <div>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Grup Evaluasi</span>
+          <span class="text-xs font-extrabold text-slate-800 dark:text-slate-200">KU-10 (2016)</span>
+        </div>
+      </div>
+      <span class="text-[11px] text-slate-500 dark:text-slate-400 font-bold px-1.5 py-0.5 rounded bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600">40 Anak</span>
+    </div>
+
+    <!-- Nav Links -->
+    <nav class="p-3 space-y-1 flex-1 overflow-y-auto custom-scrollbar">
+      <div class="px-3 pt-2 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Menu Utama</div>
+      
+      <a href="dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+        </svg>
+        <span>Dashboard</span>
+      </a>
+
+      <a href="mockup-01-presensi.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+          </svg>
+          <span>Presensi Lapangan</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">Live</span>
+      </a>
+
+      <!-- Papan Taktik & Formasi -->
+      <a href="papan-taktik.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8-8h16M12 9a3 3 0 100 6 3 3 0 000-6z"></path>
+          </svg>
+          <span>Papan Taktik & Formasi</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-300">7v7</span>
+      </a>
+
+      <!-- Active: Form Rapor Coach -->
+      <a href="mockup-02-form-rapor.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 font-bold text-xs shadow-sm border border-blue-300 dark:border-blue-800/60">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+          </svg>
+          <span>Rapor & Evaluasi</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-blue-200/80 dark:bg-blue-900 text-blue-800 dark:text-blue-200">28/40</span>
+      </a>
+
+      <a href="mockup-03-rapor-ortu.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"></path>
+          </svg>
+          <span>Rapor Digital Pemain</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800">Ortu</span>
+      </a>
+
+      <!-- TIM & PEMAIN -->
+      <div class="px-3 pt-3.5 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tim & Pemain</div>
+
+      <a href="roster.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <span>Data Siswa & Roster</span>
+        </div>
+        <span class="text-[10px] text-slate-500">40 anak</span>
+      </a>
+
+      <a href="jadwal.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <span>Jadwal & Agenda</span>
+      </a>
+
+      <!-- OPERASIONAL & KEUANGAN -->
+      <div class="px-3 pt-3.5 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Operasional</div>
+
+      <a href="spp.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>Iuran SPP Bulanan</span>
+        </div>
+        <span class="text-[10px] font-bold text-emerald-600">34 Lunas</span>
+      </a>
+
+      <a href="broadcast.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+        </svg>
+        <span>Broadcast WhatsApp</span>
+      </a>
+    </nav>
+
+    <!-- Footer Profile with Dark Mode Toggle -->
+    <div class="p-3 border-t border-slate-100 dark:border-slate-800/80 m-2 space-y-2">
+      <div class="flex items-center justify-between px-1">
+        <span class="text-[11px] font-bold text-slate-400">Mode Tampilan</span>
+        <button onclick="toggleDarkMode()" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs flex items-center gap-1.5 transition-all">
+          <svg class="w-3.5 h-3.5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <svg class="w-3.5 h-3.5 block dark:hidden text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          <span class="text-[10px] font-bold">Tema</span>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700">
+        <div class="w-9 h-9 rounded-xl bg-slate-800 dark:bg-blue-950 text-blue-400 font-black text-xs flex items-center justify-center shrink-0 border border-blue-500/20">
+          RY
+        </div>
+        <div class="truncate flex-1">
+          <span class="text-xs font-bold text-slate-900 dark:text-white truncate block">Coach Riyandi</span>
+          <span class="text-[10px] text-slate-400 font-medium block">Pelatih KU-10</span>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN WORKSPACE (Master-Detail on Desktop, Stepper on Mobile)           -->
+  <!-- ========================================================================= -->
+  <div class="flex-1 flex flex-col min-w-0 min-h-screen">
+    
+    <!-- DESKTOP TOP BAR -->
+    <div class="hidden md:flex items-center justify-between px-8 py-4 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800 sticky top-0 z-20 shadow-xs">
+      <div>
+        <div class="flex items-center gap-2 text-xs text-slate-400 font-medium">
+          <span>SSB Galuh Putra</span>
+          <span>/</span>
+          <span>KU-10</span>
+          <span>/</span>
+          <span class="text-slate-800 dark:text-slate-200 font-bold">Evaluasi & Rapor Pelatih</span>
+        </div>
+        <h2 class="text-lg font-black text-slate-900 dark:text-white tracking-tight mt-0.5">Penilaian Semester Ganjil 2025/2026</h2>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Progress Stepper -->
+        <span class="text-xs font-extrabold px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+          <span id="completed-count-d">28</span> / 40 Siswa Selesai (70%)
+        </span>
+
+        <!-- Autosave Badge -->
+        <span class="text-xs text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-3 py-1.5 rounded-xl" id="save-status-d">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Tersimpan Otomatis
+        </span>
+
+        <!-- Dark Mode Button -->
+        <button onclick="toggleDarkMode()" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">
+          <svg class="w-4 h-4 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <svg class="w-4 h-4 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- MOBILE STICKY TOP BAR -->
+    <header class="md:hidden sticky top-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 px-4 py-3 flex items-center justify-between shadow-xs">
+      <div class="flex items-center gap-2">
+        <a href="dashboard.html" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </a>
+        <div>
+          <h1 class="text-xs font-extrabold text-slate-900 dark:text-white tracking-tight">Evaluasi Rapor Coach</h1>
+          <p class="text-[10px] text-slate-400 font-medium">SSB Galuh Putra · KU-10</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="toggleDarkMode()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+          <svg class="w-3.5 h-3.5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <svg class="w-3.5 h-3.5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+        <span class="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-full" id="save-status-m">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          Tersimpan
+        </span>
+      </div>
+    </header>
+
+    <!-- MASTER-DETAIL CONTAINER (DESKTOP: ROSTER LIST LEFT + FORM RIGHT) -->
+    <main class="flex-1 p-4 md:p-8 max-w-6xl pb-24 md:pb-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- LEFT PANE (lg:col-span-4): 40-STUDENT SELECTOR LIST (Desktop Only) -->
+        <div class="hidden lg:block lg:col-span-4 space-y-3">
+          <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-xs sticky top-24">
+            
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 mb-3">
+              <div>
+                <h3 class="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">Roster KU-10 (40 Siswa)</h3>
+                <p class="text-[11px] text-slate-400">Pilih siswa untuk menilai</p>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300">28 Selesai</span>
+            </div>
+
+            <!-- Search input -->
+            <div class="relative mb-3">
+              <input type="text" id="rosterSearch" oninput="filterRoster()" placeholder="Cari nama siswa..." 
+                class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-1.5 pl-8 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+
+            <!-- Student List Container -->
+            <div class="space-y-1.5 max-h-[580px] overflow-y-auto custom-scrollbar pr-1" id="desktop-roster-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT PANE (lg:col-span-8): ACTIVE STUDENT EVALUATION FORM -->
+        <div class="lg:col-span-8 space-y-4">
+          
+          <!-- ACTIVE PLAYER BANNER -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 md:p-5 shadow-xs">
+            <div class="flex items-center justify-between gap-3">
+              
+              <!-- Previous Button (Mobile) -->
+              <button onclick="prevStudent()" class="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center transition-all shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+              </button>
+
+              <!-- Center: Avatar & Info -->
+              <div class="flex items-center gap-3.5 min-w-0">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 font-black text-base flex items-center justify-center shrink-0 shadow-xs" id="active-avatar">
+                  #9
+                </div>
+                <div class="truncate">
+                  <div class="flex items-center gap-2">
+                    <h2 class="text-base font-extrabold text-slate-900 dark:text-white truncate" id="active-name">Shiraj</h2>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700" id="active-pos">Striker (ST)</span>
+                  </div>
+                  <p class="text-xs text-slate-400 font-medium mt-0.5">
+                    Presensi: <strong class="text-emerald-600 dark:text-emerald-400 font-bold" id="active-att">92%</strong> (11/12 sesi) · KU-10 (2016)
+                  </p>
+                </div>
+              </div>
+
+              <!-- Next Button -->
+              <button onclick="nextStudent()" class="w-9 h-9 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/80 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-400 flex items-center justify-center transition-all shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+              </button>
+            </div>
+
+            <!-- Score Summary Bar -->
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+              <span class="text-slate-500 dark:text-slate-400 font-medium">Rata-rata Skor Penilaian Saat Ini</span>
+              <div class="flex items-center gap-2">
+                <span class="text-base font-black text-emerald-600 dark:text-emerald-400" id="current-avg">4.1</span>
+                <span class="text-xs text-slate-400">/ 5.0</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">Baik Sekali</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- EVALUATION PILLARS (TEKNIK, TAKTIK, FISIK, MENTAL) -->
+          <div class="space-y-4">
+            
+            <!-- 1. KETERAMPILAN TEKNIK -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                <div class="flex items-center gap-2">
+                  <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                  <h3 class="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">1. Keterampilan Teknik</h3>
+                </div>
+                <span class="text-[10px] font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">Bobot 35%</span>
+              </div>
+
+              <div class="space-y-2 text-xs">
+                <div class="py-1 flex items-center justify-between">
+                  <span class="font-semibold text-slate-800 dark:text-slate-200">Ball Mastery & Kontrol Sentuhan</span>
+                  <div class="flex gap-1" data-rate="4">
+                    <button onclick="setRate(this, 1)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 2)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 3)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 4)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 5)" class="star-btn text-slate-200 dark:text-slate-700 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                  </div>
+                </div>
+
+                <div class="py-1 flex items-center justify-between border-t border-slate-50 dark:border-slate-800">
+                  <span class="font-semibold text-slate-800 dark:text-slate-200">Passing Akurat & Visi</span>
+                  <div class="flex gap-1" data-rate="4">
+                    <button onclick="setRate(this, 1)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 2)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 3)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 4)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 5)" class="star-btn text-slate-200 dark:text-slate-700 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                  </div>
+                </div>
+
+                <div class="py-1 flex items-center justify-between border-t border-slate-50 dark:border-slate-800">
+                  <span class="font-semibold text-slate-800 dark:text-slate-200">Finishing & Tendangan Kaki Kuat</span>
+                  <div class="flex gap-1" data-rate="5">
+                    <button onclick="setRate(this, 1)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 2)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 3)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 4)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 5)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. TAKTIK & VISI -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                <div class="flex items-center gap-2">
+                  <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                  <h3 class="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">2. Taktik & Pemahaman Posisi</h3>
+                </div>
+                <span class="text-[10px] font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">Bobot 25%</span>
+              </div>
+
+              <div class="space-y-2 text-xs">
+                <div class="py-1 flex items-center justify-between">
+                  <span class="font-semibold text-slate-800 dark:text-slate-200">Penempatan Posisi Tanpa Bola</span>
+                  <div class="flex gap-1" data-rate="4">
+                    <button onclick="setRate(this, 1)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 2)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 3)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 4)" class="star-btn text-amber-400 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                    <button onclick="setRate(this, 5)" class="star-btn text-slate-200 dark:text-slate-700 p-0.5"><svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. CATATAN & BANK KALIMAT PELATIH -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                <h3 class="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">Catatan Narasi Pelatih Kepala</h3>
+                <span class="text-[10px] text-slate-400 font-medium">Bintang utama rapor ortu</span>
+              </div>
+
+              <!-- Bank Kalimat Chips -->
+              <div>
+                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Bank Narasi Cepat (Klik untuk tambah)</label>
+                <div class="flex flex-wrap gap-1.5">
+                  <button onclick="addNarrative(this)" class="chip-btn text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded-lg flex items-center gap-1">
+                    <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <span>Naluri mencetak gol sangat tajam</span>
+                  </button>
+                  <button onclick="addNarrative(this)" class="chip-btn text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded-lg flex items-center gap-1">
+                    <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <span>First touch tenang di kotak penalti</span>
+                  </button>
+                  <button onclick="addNarrative(this)" class="chip-btn text-[11px] font-semibold bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 px-2.5 py-1 rounded-lg flex items-center gap-1">
+                    <svg class="w-3 h-3 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <span>Tingkatkan akurasi kaki kiri</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Textarea -->
+              <textarea id="notes" rows="3" placeholder="Tuliskan catatan khusus pelatih untuk siswa ini..." 
+                class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">Shiraj memiliki naluri mencetak gol yang luar biasa di depan gawang lawan. Tingkatkan lagi kekuatan tendangan kaki kiri agar lebih seimbang.</textarea>
+            </div>
+
+            <!-- ACTION FOOTER -->
+            <div class="flex items-center justify-between gap-3 pt-2">
+              <button onclick="saveDraft()" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all">
+                Simpan Draft
+              </button>
+
+              <button onclick="nextStudent()" class="flex-1 max-w-xs bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold py-2.5 px-4 rounded-xl shadow-xs flex items-center justify-center gap-2 text-xs transition-all">
+                <span>Simpan & Siswa Berikutnya</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 shadow-lg px-2 py-1.5 flex items-center justify-around">
+      <a href="dashboard.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Home</span>
+      </a>
+      <a href="mockup-01-presensi.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Presensi</span>
+      </a>
+      <a href="papan-taktik.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8-8h16M12 9a3 3 0 100 6 3 3 0 000-6z"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Taktik</span>
+      </a>
+      <a href="mockup-02-form-rapor.html" class="flex flex-col items-center py-1 px-3 text-blue-600 dark:text-blue-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+        <span class="text-[10px] font-extrabold mt-0.5">Rapor</span>
+      </a>
+      <a href="mockup-03-rapor-ortu.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Ortu</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <script>
+    const roster = [
+      { id: 1, name: "Athar Razka Pratama", no: 10, pos: "CM", status: "SELESAI", score: "4.4", att: "100%" },
+      { id: 2, name: "Argya", no: 7, pos: "RW", status: "SELESAI", score: "4.2", att: "92%" },
+      { id: 3, name: "Argyo", no: 11, pos: "LW", status: "DRAFT", score: "3.9", att: "83%" },
+      { id: 4, name: "Azril", no: 4, pos: "CB", status: "SELESAI", score: "4.0", att: "92%" },
+      { id: 5, name: "Arsyadan", no: 8, pos: "CM", status: "BELUM", score: "-", att: "75%" },
+      { id: 6, name: "Chandra", no: 1, pos: "GK", status: "SELESAI", score: "4.5", att: "100%" },
+      { id: 7, name: "Shiraj", no: 9, pos: "ST", status: "DRAFT", score: "4.1", att: "92%" },
+      { id: 8, name: "Hanif", no: 5, pos: "CB", status: "SELESAI", score: "4.3", att: "92%" },
+      { id: 9, name: "Hibat", no: 6, pos: "LB", status: "BELUM", score: "-", att: "83%" },
+      { id: 10, name: "Kenzie", no: 14, pos: "RB", status: "BELUM", score: "-", att: "83%" },
+      { id: 11, name: "Harlan", no: 17, pos: "CM", status: "SELESAI", score: "4.0", att: "92%" },
+      { id: 12, name: "Mahrez", no: 26, pos: "RW", status: "SELESAI", score: "4.2", att: "92%" },
+      { id: 13, name: "Nazriel", no: 20, pos: "GK", status: "BELUM", score: "-", att: "75%" },
+      { id: 14, name: "Hasan", no: 18, pos: "ST", status: "SELESAI", score: "4.1", att: "83%" },
+      { id: 15, name: "Kasatria", no: 22, pos: "CB", status: "BELUM", score: "-", att: "75%" },
+    ];
+
+    let currentIndex = 6; // Shiraj (index 6, id 7)
+
+    function renderDesktopRoster() {
+      const container = document.getElementById('desktop-roster-list');
+      if (!container) return;
+      const search = (document.getElementById('rosterSearch')?.value || '').toLowerCase().trim();
+
+      container.innerHTML = '';
+      roster.forEach((s, idx) => {
+        if (search && !s.name.toLowerCase().includes(search) && !String(s.no).includes(search)) return;
+
+        const item = document.createElement('div');
+        const isActive = idx === currentIndex;
+        item.className = `p-2.5 rounded-xl border cursor-pointer transition-all flex items-center justify-between gap-2 ${
+          isActive 
+            ? 'bg-blue-50 dark:bg-blue-950/80 border-blue-400 dark:border-blue-600 shadow-xs' 
+            : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200/70 dark:border-slate-700/70 hover:border-slate-300 dark:hover:border-slate-600'
+        }`;
+
+        item.onclick = () => selectStudent(idx);
+
+        let statusBadge = '';
+        if (s.status === 'SELESAI') {
+          statusBadge = `<span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">${s.score} ★</span>`;
+        } else if (s.status === 'DRAFT') {
+          statusBadge = `<span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300">Draft</span>`;
+        } else {
+          statusBadge = `<span class="text-[9px] font-medium px-1.5 py-0.2 rounded bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400">Belum</span>`;
+        }
+
+        item.innerHTML = `
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-7 h-7 rounded-lg ${isActive ? 'bg-blue-600 text-white font-black' : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600'} font-extrabold text-xs flex items-center justify-center shrink-0">
+              ${s.no}
+            </div>
+            <div class="truncate">
+              <span class="text-xs font-bold text-slate-900 dark:text-white truncate block ${isActive ? 'text-blue-900 dark:text-blue-300' : ''}">${s.name}</span>
+              <span class="text-[10px] text-slate-400 font-medium block">${s.pos} · Att: ${s.att}</span>
+            </div>
+          </div>
+          <div class="shrink-0">
+            ${statusBadge}
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function selectStudent(idx) {
+      currentIndex = idx;
+      const s = roster[idx];
+      document.getElementById('active-avatar').innerText = '#' + s.no;
+      document.getElementById('active-name').innerText = s.name;
+      document.getElementById('active-pos').innerText = `${s.pos} · KU-10`;
+      document.getElementById('active-att').innerText = s.att;
+      if (s.score !== '-') document.getElementById('current-avg').innerText = s.score;
+      renderDesktopRoster();
+      triggerAutosave();
+    }
+
+    function nextStudent() {
+      if (currentIndex < roster.length - 1) {
+        selectStudent(currentIndex + 1);
+      } else {
+        selectStudent(0);
+      }
+    }
+
+    function prevStudent() {
+      if (currentIndex > 0) {
+        selectStudent(currentIndex - 1);
+      } else {
+        selectStudent(roster.length - 1);
+      }
+    }
+
+    function filterRoster() {
+      renderDesktopRoster();
+    }
+
+    function setRate(btn, score) {
+      const parent = btn.parentElement;
+      parent.setAttribute('data-rate', score);
+      const buttons = parent.querySelectorAll('button');
+      buttons.forEach((b, idx) => {
+        if (idx < score) {
+          b.className = "star-btn text-amber-400 p-0.5";
+        } else {
+          b.className = "star-btn text-slate-200 dark:text-slate-700 p-0.5";
+        }
+      });
+      triggerAutosave();
+    }
+
+    function addNarrative(btn) {
+      const text = btn.querySelector('span').innerText;
+      const textarea = document.getElementById('notes');
+      if (textarea.value.trim().length > 0) {
+        textarea.value += `. ${text}`;
+      } else {
+        textarea.value = text;
+      }
+      triggerAutosave();
+    }
+
+    function triggerAutosave() {
+      ['save-status-m', 'save-status-d'].forEach(id => {
+        const status = document.getElementById(id);
+        if (status) {
+          status.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-spin"></span> Menyimpan...`;
+          setTimeout(() => {
+            status.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Tersimpan`;
+          }, 400);
+        }
+      });
+    }
+
+    function saveDraft() {
+      triggerAutosave();
+    }
+
+    // Initial render
+    renderDesktopRoster();
+  </script>
+</body>
+</html>

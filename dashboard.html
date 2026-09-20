@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Dashboard Pelatih · TalentaBola (SSB Galuh Putra)</title>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
+  </style>
+  <script>
+    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+  </script>
+</head>
+<body class="bg-[#F1F5F9] dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-full antialiased selection:bg-emerald-500 selection:text-white flex flex-col md:flex-row transition-colors duration-200">
+
+  <!-- ========================================================================= -->
+  <!-- 1. DESKTOP SIDEBAR (Full App Navigation Menus)                           -->
+  <!-- ========================================================================= -->
+  <aside class="hidden md:flex md:w-64 lg:w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex-col shrink-0 min-h-screen sticky top-0 z-30 shadow-sm">
+    
+    <!-- Brand Logo Header -->
+    <div class="p-5 border-b border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white flex items-center justify-center font-black text-sm shadow-sm tracking-wider">
+          GP
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="font-extrabold text-sm text-slate-900 dark:text-white tracking-tight">TalentaBola</span>
+            <span class="text-[9px] font-extrabold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-400 px-1.5 py-0.2 rounded border border-emerald-300 dark:border-emerald-800">PRO</span>
+          </div>
+          <p class="text-[11px] text-slate-600 dark:text-slate-400 font-medium">SSB Galuh Putra Tasikmalaya</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kelompok Usia (KU) Selector Dropdown -->
+    <div class="p-3 mx-3 mt-3 bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/70 rounded-xl flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+        <div>
+          <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Kelompok Usia Aktif</span>
+          <span class="text-xs font-extrabold text-slate-900 dark:text-slate-200">KU-10 (Kelahiran 2016)</span>
+        </div>
+      </div>
+      <span class="text-[11px] text-slate-600 dark:text-slate-400 font-bold px-1.5 py-0.5 rounded bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600">40 Anak</span>
+    </div>
+
+    <!-- Main Navigation Links -->
+    <nav class="p-3 space-y-1 flex-1 overflow-y-auto custom-scrollbar">
+      
+      <!-- MENU UTAMA -->
+      <div class="px-3 pt-2 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Menu Utama</div>
+      
+      <!-- Dashboard (Active) -->
+      <a href="dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold text-xs shadow-sm border border-emerald-300 dark:border-emerald-800/60">
+        <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+        </svg>
+        <span>Dashboard</span>
+      </a>
+
+      <!-- Presensi Lapangan -->
+      <a href="mockup-01-presensi.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+          </svg>
+          <span>Presensi Lapangan</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">Live</span>
+      </a>
+
+      <!-- Papan Taktik & Formasi 7v7 (Filanesia) -->
+      <a href="papan-taktik.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8-8h16M12 9a3 3 0 100 6 3 3 0 000-6z"></path>
+          </svg>
+          <span>Papan Taktik & Formasi</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-300">7v7</span>
+      </a>
+
+      <!-- Rapor & Evaluasi -->
+      <a href="mockup-02-form-rapor.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+          </svg>
+          <span>Rapor & Evaluasi</span>
+        </div>
+        <span class="text-[10px] font-medium text-slate-500 dark:text-slate-400">28/40</span>
+      </a>
+
+      <!-- Rapor Digital Pemain -->
+      <a href="mockup-03-rapor-ortu.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all group">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"></path>
+          </svg>
+          <span>Rapor Digital Pemain</span>
+        </div>
+        <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800">Ortu</span>
+      </a>
+
+      <!-- TIM & PEMAIN -->
+      <div class="px-3 pt-3.5 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tim & Pemain</div>
+
+      <a href="roster.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <span>Data Siswa & Roster</span>
+        </div>
+        <span class="text-[10px] text-slate-500">40 anak</span>
+      </a>
+
+      <a href="jadwal.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <span>Jadwal & Agenda</span>
+      </a>
+
+      <!-- OPERASIONAL & KEUANGAN -->
+      <div class="px-3 pt-3.5 pb-1 text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Operasional</div>
+
+      <a href="spp.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>Iuran SPP Bulanan</span>
+        </div>
+        <span class="text-[10px] font-bold text-emerald-600">34 Lunas</span>
+      </a>
+
+      <a href="broadcast.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-all">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+        </svg>
+        <span>Broadcast WhatsApp</span>
+      </a>
+
+    </nav>
+
+    <!-- Sidebar Footer with Dark Mode Toggle & Coach Profile -->
+    <div class="p-3 border-t border-slate-200/80 dark:border-slate-800/80 m-2 space-y-2">
+      <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all border border-slate-200 dark:border-slate-700">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <span>Mode Tampilan</span>
+        </div>
+        <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">Dark / Light</span>
+      </button>
+
+      <div class="flex items-center gap-2.5 px-2 py-1.5">
+        <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+          CR
+        </div>
+        <div class="leading-tight overflow-hidden">
+          <p class="text-xs font-bold text-slate-900 dark:text-white truncate">Coach Riyandi</p>
+          <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Pelatih Kepala KU-10</p>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN WORKSPACE CONTENT                                                -->
+  <!-- ========================================================================= -->
+  <div class="flex-1 flex flex-col min-w-0 min-h-screen">
+    
+    <!-- MOBILE TOP BAR -->
+    <header class="md:hidden sticky top-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-3 shadow-sm flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-black text-xs shadow-sm">
+          GP
+        </div>
+        <div>
+          <h1 class="text-xs font-black text-slate-900 dark:text-white tracking-tight leading-none">SSB Galuh Putra</h1>
+          <span class="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold">KU-10 (2016) · Coach Riyandi</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="toggleDarkMode()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+          <svg class="w-3.5 h-3.5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <svg class="w-3.5 h-3.5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- DESKTOP TOP BAR -->
+    <div class="hidden md:flex items-center justify-between px-8 py-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-20 shadow-sm">
+      <div>
+        <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-medium">
+          <span>SSB Galuh Putra Tasikmalaya</span>
+          <span>/</span>
+          <span class="text-slate-900 dark:text-slate-200 font-bold">Dashboard Pelatih</span>
+        </div>
+        <h2 class="text-base font-black text-slate-900 dark:text-white tracking-tight mt-0.5">Ringkasan Sesi, Taktik & Roster Pemain</h2>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button onclick="toggleDarkMode()" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">
+          <svg class="w-4 h-4 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <svg class="w-4 h-4 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+
+        <a href="mockup-01-presensi.html" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-xs font-bold text-white flex items-center gap-2 shadow-sm transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+          <span>Catat Presensi Hari Ini</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- MAIN DASHBOARD BODY (Scrollable) -->
+    <main class="flex-1 p-4 md:p-8 space-y-6 max-w-6xl w-full mx-auto pb-24 md:pb-8">
+
+      <!-- HERO SPOTLIGHT CARD: NEXT SESSION -->
+      <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-5 md:p-6 shadow-md relative overflow-hidden border border-slate-700/80">
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-400">Jadwal Sesi Berikutnya</span>
+              <span class="text-[10px] font-bold px-2 py-0.2 rounded-full bg-slate-800 border border-slate-700 text-slate-300">KU-10 (2016)</span>
+            </div>
+            <h3 class="text-base md:text-xl font-black tracking-tight text-white">
+              Latihan Teknik Dasar, Passing, & SSG 4v4
+            </h3>
+            <div class="flex flex-wrap items-center gap-3 text-xs text-slate-300 font-medium pt-1">
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                Minggu, 21 Sep 2026
+              </span>
+              <span>·</span>
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                07:30 - 09:30 WIB
+              </span>
+              <span>·</span>
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                Lapang Brigif 13 Galuh Tasikmalaya
+              </span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2.5 shrink-0 pt-2 md:pt-0">
+            <a href="mockup-01-presensi.html" class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-black px-4 py-2.5 rounded-xl shadow-sm text-xs flex items-center justify-center gap-2 transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+              <span>Presensi Lapangan</span>
+            </a>
+            <a href="papan-taktik.html" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2.5 rounded-xl border border-slate-600 text-xs flex items-center justify-center gap-2 transition-all">
+              <span>📋 Papan Taktik 7v7</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 KEY KPI METRICS -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+        
+        <!-- CARD 1: SISWA AKTIF -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+          <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider">Total Siswa KU-10</span>
+            <div class="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            </div>
+          </div>
+          <div class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">40</div>
+          <div class="text-[11px] text-emerald-700 dark:text-emerald-400 font-bold mt-1">
+            +2 anak baru bulan ini
+          </div>
+        </div>
+
+        <!-- CARD 2: PRESENSI RATARATA -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+          <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider">Rata-rata Presensi</span>
+            <div class="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-400 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            </div>
+          </div>
+          <div class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">89.4%</div>
+          <div class="text-[11px] text-slate-600 dark:text-slate-400 font-medium mt-1">
+            Target standar SSB: >85%
+          </div>
+        </div>
+
+        <!-- CARD 3: STATUS RAPOR -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+          <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider">Progres Rapor</span>
+            <div class="w-7 h-7 rounded-lg bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-400 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            </div>
+          </div>
+          <div class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">28 <span class="text-sm font-semibold text-slate-500">/ 40</span></div>
+          <div class="text-[11px] text-amber-700 dark:text-amber-400 font-bold mt-1">
+            12 siswa belum dinilai
+          </div>
+        </div>
+
+        <!-- CARD 4: IURAN / SPP -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+          <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider">Iuran SPP Sep</span>
+            <div class="w-7 h-7 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-400 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            </div>
+          </div>
+          <div class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">34 <span class="text-sm font-semibold text-slate-500">/ 40</span></div>
+          <div class="text-[11px] text-emerald-700 dark:text-emerald-400 font-bold mt-1">
+            Rp 4.080.000 (85% Lunas)
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TWO COLUMN WORKSPACE -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- LEFT 2 COLUMNS: RECENT ATTENDANCE & ROSTER SPOTLIGHT -->
+        <div class="lg:col-span-2 space-y-6">
+          
+          <!-- ROSTER HIGHLIGHT / PERLU PERHATIAN -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <div>
+                <h4 class="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">Performa Roster & Presensi Terakhir</h4>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Sesi Minggu, 14 September 2026 (Sesi Lalu)</p>
+              </div>
+              <a href="mockup-01-presensi.html" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700">
+                Lihat Semua &rarr;
+              </a>
+            </div>
+
+            <!-- Mini List -->
+            <div class="space-y-2">
+              
+              <!-- Siswa 1: Athar -->
+              <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-black text-xs flex items-center justify-center">
+                    #10
+                  </div>
+                  <div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white block">Athar Razka Pratama</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">CM (Playmaker) · KU-10 · Rapor: Siap (4.4)</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">100% Hadir</span>
+                  <a href="mockup-03-rapor-ortu.html" class="text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white px-2.5 py-1 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600">Kartu Rapor</a>
+                </div>
+              </div>
+
+              <!-- Siswa 2: Shiraj -->
+              <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-300 font-black text-xs flex items-center justify-center">
+                    #9
+                  </div>
+                  <div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white block">Shiraj</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">ST · KU-10 · Rapor: Draft (3.8)</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">1 Izin</span>
+                  <a href="mockup-02-form-rapor.html" class="text-xs font-bold text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800">Isi Rapor</a>
+                </div>
+              </div>
+
+              <!-- Siswa 3: Rangga -->
+              <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-300 font-black text-xs flex items-center justify-center">
+                    #43
+                  </div>
+                  <div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white block">Rangga</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">LB · KU-10 · Sakit Demam</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800">2x Sakit</span>
+                  <span class="text-[10px] font-semibold text-slate-500">Pantau Fisik</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- JADWAL MINGGUAN SSB -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-3">
+            <h4 class="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">Jadwal Agenda Latihan & Tanding</h4>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+              <div class="p-3 rounded-xl border border-emerald-300 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-950/30">
+                <span class="text-[10px] font-bold text-emerald-800 dark:text-emerald-400 uppercase">Minggu Pagi (Hari Ini)</span>
+                <div class="font-extrabold text-slate-900 dark:text-white mt-1">Latihan Reguler</div>
+                <p class="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">07:30 WIB · Lap. Brigif</p>
+              </div>
+              <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40">
+                <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase">Rabu Sore</span>
+                <div class="font-extrabold text-slate-900 dark:text-white mt-1">Latihan Fisik & Taktik</div>
+                <p class="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">15:30 WIB · Lap. Dadaha</p>
+              </div>
+              <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40">
+                <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase">Sabtu Depan</span>
+                <div class="font-extrabold text-slate-900 dark:text-white mt-1">Uji Coba vs Sukapura</div>
+                <p class="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">08:00 WIB · Lap. Brigif</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT 1 COLUMN: JALAN PINTAS & PENGUMUMAN -->
+        <div class="space-y-6">
+          
+          <!-- QUICK ACTION SHORTCUTS -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-3">
+            <h4 class="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">Fitur Pelatih & Manajemen</h4>
+            <div class="grid grid-cols-2 gap-2.5">
+              
+              <a href="mockup-01-presensi.html" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 border border-slate-200 dark:border-slate-700 hover:border-emerald-300 dark:hover:border-emerald-800 text-center transition-all group">
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 mx-auto flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                </div>
+                <span class="text-xs font-extrabold text-slate-800 dark:text-slate-200 block">Presensi</span>
+                <span class="text-[10px] text-slate-500">Catat lapangan</span>
+              </a>
+
+              <a href="papan-taktik.html" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 border border-slate-200 dark:border-slate-700 hover:border-emerald-300 dark:hover:border-emerald-800 text-center transition-all group">
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 mx-auto flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8-8h16M12 9a3 3 0 100 6 3 3 0 000-6z"></path></svg>
+                </div>
+                <span class="text-xs font-extrabold text-slate-800 dark:text-slate-200 block">Taktik 7v7</span>
+                <span class="text-[10px] text-slate-500">Filanesia Formasi</span>
+              </a>
+
+              <a href="mockup-02-form-rapor.html" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/50 border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-800 text-center transition-all group">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 mx-auto flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                </div>
+                <span class="text-xs font-extrabold text-slate-800 dark:text-slate-200 block">Isi Rapor</span>
+                <span class="text-[10px] text-slate-500">4 Pilar PSSI</span>
+              </a>
+
+              <a href="mockup-03-rapor-ortu.html" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-amber-50 dark:hover:bg-amber-950/50 border border-slate-200 dark:border-slate-700 hover:border-amber-300 dark:hover:border-amber-800 text-center transition-all group">
+                <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400 mx-auto flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                </div>
+                <span class="text-xs font-extrabold text-slate-800 dark:text-slate-200 block">Rapor Ortu</span>
+                <span class="text-[10px] text-slate-500">Kartu Pemain EA</span>
+              </a>
+
+            </div>
+          </div>
+
+          <!-- PENGUMUMAN / INFO SSB -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-2.5">
+            <h4 class="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">Catatan Pengurus SSB</h4>
+            <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs space-y-1">
+              <span class="text-[10px] font-bold text-emerald-700 dark:text-emerald-400">Manajemen Galuh Putra KU 2016</span>
+              <p class="text-slate-600 dark:text-slate-300 text-[11px] leading-relaxed">
+                "Uji coba awal fokus pada KU 2016 (40 anak). Fitur presensi lapangan cepat, papan rotasi formasi 7v7, dan rekap WhatsApp otomatis yang paling ditunggu para pelatih dan orang tua."
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 shadow-lg px-2 py-1.5 flex items-center justify-around">
+      <a href="dashboard.html" class="flex flex-col items-center py-1 px-3 text-emerald-600 dark:text-emerald-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        <span class="text-[10px] font-extrabold mt-0.5">Home</span>
+      </a>
+
+      <a href="mockup-01-presensi.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Presensi</span>
+      </a>
+
+      <a href="papan-taktik.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8-8h16M12 9a3 3 0 100 6 3 3 0 000-6z"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Taktik</span>
+      </a>
+
+      <a href="mockup-02-form-rapor.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Rapor</span>
+      </a>
+
+      <a href="mockup-03-rapor-ortu.html" class="flex flex-col items-center py-1 px-3 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"></path></svg>
+        <span class="text-[10px] font-bold mt-0.5">Ortu</span>
+      </a>
+    </nav>
+
+  </div>
+
+</body>
+</html>
