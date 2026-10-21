@@ -4,3 +4,5 @@ mockups
 e2e
 test-results
 playwright-report
+index.html
+.nojekyll
