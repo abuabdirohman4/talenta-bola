@@ -1,0 +1,18 @@
+/node_modules
+/.next/
+/out/
+/coverage
+/test-results
+/playwright-report
+.DS_Store
+*.pem
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+.env*
+!.env.example
+# Beads / Dolt
+.beads/dolt/
+.beads/beads.db
+# Daftar nama anak asli (data di bawah umur) — tidak masuk repo publik
+src/db/roster.local.txt

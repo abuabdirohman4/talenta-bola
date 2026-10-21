@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+/* Palet dari design brief TalentaBola: hijau lapangan, latar hangat, kontras tinggi untuk layar HP di bawah matahari. */
+@theme {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
+
+  --color-primary: #2f6b3f;
+  --color-primary-dark: #24552f;
+  --color-primary-soft: #e8f0e6;
+  --color-ink: #1c2119;
+  --color-muted: #5a6355;
+  --color-ground: #f7f6f3;
+  --color-line: #e3e1da;
+  --color-card: #ffffff;
+
+  /* Status presensi: dibedakan warna + ikon, bukan merah-hijau saja. */
+  --color-hadir: #2f6b3f;
+  --color-izin: #b26d21;
+  --color-sakit: #7b5ea7;
+  --color-alpa: #a6402e;
+  --color-belum: #8a8a80;
+  --color-warn: #8a5a12;
+  --color-warn-soft: #fbf1df;
+}
+
+/* Warna klub bisa diganti (ssb_profiles.primary_color): wrapper .brand mengisi --color-primary, turunannya dihitung ulang di sini. */
+:root,
+.brand {
+  --color-primary-dark: color-mix(in srgb, var(--color-primary) 80%, black);
+  --color-primary-soft: color-mix(in srgb, var(--color-primary) 12%, white);
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--color-ground);
+  color: var(--color-ink);
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+}
