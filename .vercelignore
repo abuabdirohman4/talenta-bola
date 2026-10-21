@@ -1,0 +1,6 @@
+.env*
+src/db/roster.local.txt
+mockups
+e2e
+test-results
+playwright-report
