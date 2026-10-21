@@ -1,0 +1,8 @@
+{
+  "projectName": "TalentaBola",
+  "projectDescription": "Presensi lapangan satu tap dan rapor perkembangan pemain untuk Sekolah Sepak Bola.",
+  "versionFile": "package.json",
+  "artifacts": { "changelog": "CHANGELOG.md", "features": "docs/features.md", "readme": null, "social": null },
+  "language": "en",
+  "rilisKonten": false
+}
