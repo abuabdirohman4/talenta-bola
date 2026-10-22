@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@500;700;800&display=block">
+<style>
+:root{--em:#059669;--em2:#047857;--mint:#a7f3d0;--neon:#34d399;--ink:#0f172a;--yel:#facc15;--orange:#f97316}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#04140d;font-family:"Plus Jakarta Sans",sans-serif;color:#fff}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden}
+/* lapangan: rumput bergaris + garis putih; malam di hook, lampu stadion menyala saat reveal */
+#pitch{position:absolute;inset:0;background:repeating-linear-gradient(180deg,#0b6a44 0 160px,#0e7a4f 160px 320px)}
+#lines{position:absolute;inset:0}
+#lines *{fill:none;stroke:#fff;stroke-opacity:.3;stroke-width:6}
+#lines .spot{fill:#fff;fill-opacity:.3;stroke:none}
+#night{position:absolute;inset:0;background:radial-gradient(1100px 900px at 50% 45%,rgba(2,10,6,.55),rgba(2,8,5,.86))}
+#lights{position:absolute;inset:0;background:radial-gradient(900px 700px at 15% -5%,rgba(255,255,255,.28),transparent 70%),radial-gradient(900px 700px at 85% -5%,rgba(255,255,255,.28),transparent 70%),linear-gradient(180deg,rgba(4,20,13,.0),rgba(4,20,13,.55))}
+#flash{position:absolute;inset:0;background:#fff;opacity:0}
+.scene{position:absolute;inset:0;opacity:0}
+.top{position:absolute;left:80px;right:80px;top:210px}
+.big{font-family:Anton,sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:1px;line-height:.98}
+.pill{display:inline-block;font-size:30px;font-weight:800;letter-spacing:3px;text-transform:uppercase;background:var(--ink);color:var(--neon);padding:12px 26px;transform:skewX(-12deg)}
+.pill b{display:inline-block;transform:skewX(12deg);font-weight:800}
+.num{position:absolute;right:40px;top:150px;font-family:Anton,sans-serif;font-size:420px;line-height:1;color:transparent;-webkit-text-stroke:5px rgba(255,255,255,.22)}
+
+/* phone */
+.phone{position:absolute;left:290px;top:820px;width:500px;border-radius:64px;padding:12px;background:#0b0f1a;box-shadow:0 60px 140px rgba(0,0,0,.6),0 0 0 4px rgba(255,255,255,.85)}
+.phone .scr{position:relative;border-radius:54px;overflow:hidden;aspect-ratio:780/1688;background:#f1f5f9}
+.phone .scr img{position:absolute;left:0;top:0;width:100%;display:block}
+
+/* s1 hook */
+#s1 h1{position:absolute;left:80px;right:60px;top:560px;font-size:168px}
+#s1 .hl{display:inline-block;background:var(--yel);color:var(--ink);padding:0 24px;transform:skewX(-10deg);margin-top:18px}
+#s1 .hl span{display:inline-block;transform:skewX(10deg)}
+
+/* s2 kartu kuning */
+#s2 h2{font-size:104px;margin-top:26px}
+.foul{position:absolute;left:80px;right:70px;display:flex;gap:40px;align-items:center}
+.card{flex:none;width:118px;height:165px;border-radius:14px;background:var(--yel);box-shadow:0 24px 50px rgba(0,0,0,.45)}
+.foul h3{font-family:Anton,sans-serif;font-weight:400;font-size:62px;text-transform:uppercase;line-height:1.02;letter-spacing:1px}
+.foul p{font-size:32px;line-height:1.35;color:#d1fae5;margin-top:8px}
+
+/* s3 reveal */
+.brand{display:flex;align-items:center;gap:26px}
+.brand img{width:120px;height:120px;border-radius:30px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.brand span{font-family:Anton,sans-serif;font-size:96px;letter-spacing:2px;text-transform:uppercase}
+#s3 h2{font-size:96px;margin-top:46px}
+.acc{color:var(--neon)}
+.score{position:absolute;background:var(--ink);border:4px solid #fff;border-radius:18px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.45);text-align:center}
+.score .hd{background:#fff;color:var(--ink);font-size:24px;font-weight:800;letter-spacing:3px;padding:10px 22px;text-transform:uppercase}
+.score .v{font-family:Anton,sans-serif;font-size:118px;color:var(--neon);line-height:1.1;padding:6px 26px 0}
+.score .ft{font-size:24px;font-weight:700;color:#94a3b8;letter-spacing:2px;padding:0 0 16px;text-transform:uppercase}
+
+/* fitur */
+.feat h2{font-size:112px;margin-top:30px}
+.feat p.sub{font-size:38px;line-height:1.4;color:#d1fae5;margin-top:26px;font-weight:700}
+.tag{position:absolute;background:#fff;color:var(--ink);font-size:34px;font-weight:800;padding:18px 30px 18px 34px;transform:skewX(-12deg);box-shadow:0 20px 50px rgba(0,0,0,.35);white-space:nowrap;border-left:14px solid var(--em)}
+.tag span{display:inline-block;transform:skewX(12deg)}
+.tag.dark{background:var(--ink);color:#fff;border-left-color:var(--yel)}
+.tap{position:absolute;width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;border:8px solid #fff;box-shadow:0 0 0 6px rgba(250,204,21,.6),0 10px 30px rgba(0,0,0,.35)}
+.row{clip-path:inset(var(--a) 0 calc(100% - var(--b)) 0)}
+
+/* cta */
+#s8{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 40px}
+#form{position:absolute;left:140px;top:300px;width:800px;height:1200px;opacity:.5}
+#form line{stroke:#fff;stroke-opacity:.35;stroke-width:4;stroke-dasharray:10 12}
+#form circle{fill:#fff;fill-opacity:.12;stroke:#fff;stroke-opacity:.6;stroke-width:4}
+#s8 .lg{position:relative;width:200px;height:200px;border-radius:48px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+#s8 .nm{position:relative;font-family:Anton,sans-serif;font-size:84px;margin-top:26px;letter-spacing:2px;text-transform:uppercase}
+#s8 h2{position:relative;font-size:90px;margin:50px 0 70px}
+.bw{position:relative}
+.btn{font-size:46px;font-weight:800;background:#fff;color:var(--em2);padding:30px 64px;transform:skewX(-12deg);box-shadow:0 24px 70px rgba(0,0,0,.4);text-transform:uppercase;letter-spacing:2px}
+.btn span{display:inline-block;transform:skewX(12deg)}
+.url{position:relative;font-size:46px;font-weight:800;margin-top:56px}
+.fine{position:relative;font-size:32px;color:#d1fae5;margin-top:18px;line-height:1.4;font-weight:700}
+
+/* transisi sapuan miring */
+.wipe{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.wipe i{position:absolute;top:-240px;height:2400px;transform:translateX(-2400px) skewX(-14deg)}
+.wipe .w1{left:-60px;width:120px;background:var(--yel)}
+.wipe .w2{left:-420px;width:1920px;background:var(--ink)}
+.wipe .w3{left:-60px;width:140px;background:var(--neon)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="pitch"></div>
+  <svg id="lines" viewBox="0 0 1080 1920" width="1080" height="1920">
+    <rect x="50" y="50" width="980" height="1820"/>
+    <line x1="50" y1="960" x2="1030" y2="960"/>
+    <circle cx="540" cy="960" r="190"/>
+    <circle class="spot" cx="540" cy="960" r="12"/>
+    <rect x="230" y="50" width="620" height="330"/>
+    <rect x="390" y="50" width="300" height="130"/>
+    <path d="M400 380 A170 170 0 0 0 680 380"/>
+    <rect x="230" y="1540" width="620" height="330"/>
+    <rect x="390" y="1740" width="300" height="130"/>
+    <path d="M400 1540 A170 170 0 0 1 680 1540"/>
+  </svg>
+  <div id="lights"></div>
+  <div id="night"></div>
+  <div id="flash"></div>
+
+  <section class="scene" id="s1">
+    <h1 class="big"><div class="l1">Presensi latihan</div><div class="l2">masih lewat</div><div class="l3"><div class="hl"><span>grup WA?</span></div></div></h1>
+  </section>
+
+  <section class="scene" id="s2">
+    <div class="top"><div class="pill"><b>Pelanggaran</b></div><h2 class="big">3 kartu kuning<br>untuk grup WA.</h2></div>
+    <div class="foul" style="top:720px"><div class="card"></div><div><h3>Daftar diisi ramai-ramai</h3><p>Notasinya campur aduk, rekapnya dihitung manual.</p></div></div>
+    <div class="foul" style="top:1030px"><div class="card"></div><div><h3>Izin tenggelam di chat</h3><p>Pesan orang tua tertimbun ratusan pesan lain.</p></div></div>
+    <div class="foul" style="top:1340px"><div class="card"></div><div><h3>Perkembangan tak terlihat</h3><p>Orang tua hanya tahu anaknya hadir atau tidak.</p></div></div>
+  </section>
+
+  <section class="scene" id="s3">
+    <div class="top">
+      <div class="brand"><img src="assets/icon-512.png"><span>TalentaBola</span></div>
+      <h2 class="big">Presensi satu tap &amp;<br><span class="acc">rapor perkembangan</span><br>untuk SSB.</h2>
+    </div>
+    <div class="phone" style="left:530px;top:900px"><div class="scr"><img src="assets/home.jpg"></div></div>
+    <div class="score" style="left:70px;top:1150px"><div class="hd">Rata-rata presensi</div><div class="v" id="pct">0%</div><div class="ft">8 sesi tercatat</div></div>
+  </section>
+
+  <section class="scene feat" id="s4">
+    <div class="num">01</div>
+    <div class="top"><div class="pill"><b>Presensi lapangan</b></div><h2 class="big">40 anak, beres<br>sebelum<br>pemanasan.</h2></div>
+    <div class="phone" style="left:530px;top:800px"><div class="scr">
+      <img src="assets/sheet-rows-0.jpg">
+      <img class="row r1" src="assets/sheet-rows-1.jpg" style="--a:9.5%;--b:25%">
+      <img class="row r2" src="assets/sheet-rows-1.jpg" style="--a:25%;--b:40.6%">
+      <img class="row r3" src="assets/sheet-rows-1.jpg" style="--a:40.6%;--b:56.3%">
+      <img class="row r4" src="assets/sheet-rows-1.jpg" style="--a:56.3%;--b:72%">
+      <img class="b" src="assets/sheet-rows-1.jpg">
+      <div class="tap" style="left:17.3%;top:19.8%"></div>
+      <div class="tap" style="left:17.3%;top:35.5%"></div>
+      <div class="tap" style="left:17.3%;top:51.2%"></div>
+      <div class="tap" style="left:39.1%;top:66.8%"></div>
+    </div></div>
+    <div class="tag" style="left:60px;top:1060px"><span>Satu tap per anak</span></div>
+    <div class="tag dark" style="left:60px;top:1200px"><span>Jalan tanpa sinyal</span></div>
+  </section>
+
+  <section class="scene feat" id="s5">
+    <div class="num">02</div>
+    <div class="top"><div class="pill"><b>Rapor perkembangan</b></div><h2 class="big">22 aspek,<br>cukup tap<br>bintang.</h2></div>
+    <div class="phone" style="left:530px;top:800px"><div class="scr"><img src="assets/form.jpg"><img class="b" src="assets/form-2.jpg"></div></div>
+    <div class="tag" style="left:60px;top:1020px"><span>Teknik</span></div>
+    <div class="tag" style="left:60px;top:1150px"><span>Taktik</span></div>
+    <div class="tag" style="left:60px;top:1280px"><span>Fisik &amp; mental</span></div>
+    <div class="tag dark" style="left:60px;top:1410px"><span>Catatan pelatih</span></div>
+  </section>
+
+  <section class="scene feat" id="s6">
+    <div class="num">03</div>
+    <div class="top"><div class="pill"><b>Rapor resmi klub</b></div><h2 class="big">Berkop klub,<br>siap<br>dibagikan.</h2></div>
+    <div class="phone" style="left:530px;top:800px"><div class="scr"><img class="long" src="assets/rapor-full.jpg"></div></div>
+    <div class="tag" style="left:60px;top:1060px"><span>Simpan PDF</span></div>
+    <div class="tag dark" style="left:60px;top:1200px"><span>Bagikan ke WA</span></div>
+  </section>
+
+  <section class="scene feat" id="s7">
+    <div class="num">04</div>
+    <div class="top"><div class="pill"><b>Link orang tua</b></div><h2 class="big">Orang tua<br>pantau sendiri.</h2><p class="sub">Jadwal, kehadiran, rapor, dan izin sakit dari satu link.</p></div>
+    <div class="phone" style="left:530px;top:880px"><div class="scr"><img src="assets/ortu.jpg"><img class="b" src="assets/ortu-kehadiran.jpg"><img class="c" src="assets/ortu-profil.jpg"></div></div>
+    <div class="tag" style="left:60px;top:1140px"><span>Izin tanpa chat</span></div>
+    <div class="tag dark" style="left:60px;top:1280px"><span>Tanpa login</span></div>
+  </section>
+
+  <section class="scene" id="s8">
+    <svg id="form" viewBox="0 0 400 600"></svg>
+    <img class="lg" src="assets/icon-512.png">
+    <div class="nm">TalentaBola</div>
+    <h2 class="big">Latihan tercatat,<br>perkembangan terlihat,<br>orang tua <span class="acc">tenang.</span></h2>
+    <div class="bw"><div class="btn"><span>Coba sekarang</span></div></div>
+    <div class="url">talenta-bola.vercel.app</div>
+    <div class="fine">Dibuka dari browser HP, tanpa install</div>
+  </section>
+
+  <div class="wipe"><i class="w1"></i><i class="w2"></i><i class="w3"></i></div>
+</div>
+<script>
+// VO timing from render.py: #{"s":[8 scene starts],"dur":N}
+const H=location.hash?JSON.parse(decodeURIComponent(location.hash.slice(1))):null;
+const A=[],EASE='cubic-bezier(.16,1,.3,1)',DUR=H?H.dur:50;
+function an(sel,kf,start,dur,opt={}){
+  const els=typeof sel==='string'?[...document.querySelectorAll(sel)]:[sel];
+  els.forEach((el,i)=>{const a=el.animate(kf,{delay:(start+(opt.stagger||0)*i)*1000,duration:dur*1000,fill:opt.fill||'both',easing:opt.easing||EASE});a.pause();A.push(a)});
+}
+const up=(d=50)=>[{opacity:0,transform:`translateY(${d}px)`},{opacity:1,transform:'none'}];
+const pop=[{opacity:0,transform:'scale(.8) translateY(30px)'},{opacity:1,transform:'none'}];
+const rise=[{opacity:0,transform:'translateY(320px) scale(.95)'},{opacity:1,transform:'none'}];
+const slide=[{opacity:0,transform:'translateX(-140px)'},{opacity:1,transform:'none'}];
+const fade=[{opacity:0},{opacity:1}];
+// adegan berganti dengan potongan tepat di tengah sapuan (fill none: terlihat hanya selama jendelanya)
+function scene(id,t0,t1){an('#'+id,[{opacity:1},{opacity:1}],t0,t1-t0,{fill:'none',easing:'linear'});}
+const S0=H?H.s:[0,4.5,10.5,16.5,23.5,29.5,36,43],T={};
+S0.forEach((a,i)=>T['s'+(i+1)]=[a,S0[i+1]??DUR+1]);
+Object.entries(T).forEach(([k,[a,b]])=>scene(k,a,b));
+const t=k=>T[k][0];
+S0.slice(1).forEach(b=>an('.wipe i',[{transform:'translateX(-2400px) skewX(-14deg)'},{transform:'translateX(2400px) skewX(-14deg)'}],b-.42,.84,{easing:'cubic-bezier(.65,0,.35,1)',stagger:.03,fill:'none'}));
+// garis lapangan tergambar di hook; lampu stadion menyala saat reveal
+document.querySelectorAll('#lines rect,#lines line,#lines circle:not(.spot),#lines path').forEach(el=>{const L=el.getTotalLength();el.style.strokeDasharray=L;
+  an(el,[{strokeDashoffset:L},{strokeDashoffset:0}],.1,2.6,{easing:'cubic-bezier(.45,0,.2,1)'});});
+an('#night',[{opacity:1},{opacity:0}],t('s3')-.05,.5,{easing:'ease-out'});
+an('#flash',[{opacity:0},{opacity:.55,offset:.15},{opacity:0}],t('s3')-.05,.9,{easing:'ease-out'});
+// s1
+an('#s1 .l1',slide,.4,.6); an('#s1 .l2',slide,1.0,.6);
+an('#s1 .hl',[{opacity:0,transform:'skewX(-10deg) scale(1.6)'},{opacity:1,transform:'skewX(-10deg) scale(1)'}],1.7,.45,{easing:'cubic-bezier(.2,1.4,.4,1)'});
+// s2: kartu diangkat seperti wasit
+an('#s2 .pill',up(20),t('s2')+.15,.5); an('#s2 h2',up(30),t('s2')+.3,.6);
+an('#s2 .card',[{opacity:0,transform:'translateY(160px) rotate(-35deg)'},{opacity:1,transform:'rotate(-8deg)'}],t('s2')+1.1,.5,{stagger:1.2,easing:'cubic-bezier(.2,1.5,.4,1)'});
+an('#s2 .foul div:last-child',slide,t('s2')+1.25,.6,{stagger:1.2});
+// s3
+an('#s3 .brand img',[{opacity:0,transform:'scale(.3) rotate(-90deg)'},{opacity:1,transform:'none'}],t('s3')+.35,.8,{easing:'cubic-bezier(.2,1.3,.4,1)'});
+an('#s3 .brand span',slide,t('s3')+.6,.7);
+an('#s3 h2',up(40),t('s3')+1.0,.8);
+an('#s3 .phone',rise,t('s3')+1.5,1.1);
+an('#s3 .score',[{opacity:0,transform:'scaleY(0)'},{opacity:1,transform:'none'}],t('s3')+2.6,.5);
+// fitur: angka besar, pil, judul, HP
+const head=s=>{an(`#${s} .num`,[{opacity:0,transform:'translateX(200px)'},{opacity:1,transform:'none'}],t(s)+.1,.9);
+  an(`#${s} .pill`,slide,t(s)+.2,.5); an(`#${s} h2`,slide,t(s)+.35,.6); an(`#${s} .phone`,rise,t(s)+.5,1.1);};
+['s4','s5','s6','s7'].forEach(head);
+// s4 presensi: tiap tap membuka baris yang sudah terisi
+[1,2,3,4].forEach(i=>{const at=t('s4')+1.6+i*.75;
+  an(`#s4 .r${i}`,fade,at+.15,.2,{easing:'linear'});
+  an(`#s4 .tap:nth-of-type(${i})`,[{opacity:0,transform:'scale(1.6)'},{opacity:1,transform:'scale(1)',offset:.35},{opacity:0,transform:'scale(.9)'}],at,.7,{easing:'ease-out'});});
+an('#s4 .scr .b',fade,t('s4')+5.1,.4,{easing:'linear'});
+an('#s4 .tag',slide,t('s4')+2.4,.5,{stagger:2.2});
+// s5 rapor
+an('#s5 .scr .b',fade,t('s5')+3.4,.6,{easing:'ease-in-out'});
+an('#s5 .tag',slide,t('s5')+1.5,.45,{stagger:.45});
+// s6 rapor resmi: gulir pelan
+an('#s6 .long',[{transform:'translateY(0)'},{transform:'translateY(-48%)'}],t('s6')+1.9,4.2,{easing:'ease-in-out'});
+an('#s6 .tag',slide,t('s6')+2.6,.5,{stagger:1.2});
+// s7 ortu: jadwal -> kehadiran -> profil
+an('#s7 .sub',up(24),t('s7')+.8,.6);
+an('#s7 .scr .b',fade,t('s7')+3.0,.5,{easing:'ease-in-out'});
+an('#s7 .scr .c',fade,t('s7')+5.0,.5,{easing:'ease-in-out'});
+an('#s7 .tag',slide,t('s7')+2.0,.5,{stagger:1.4});
+// s8: formasi line-up halaman login di belakang logo
+const LINEUP=[[200,525],[125,425],[275,425],[85,305],[200,330],[315,305],[200,205]],LINKS=[[0,1],[0,2],[1,3],[1,4],[2,4],[2,5],[4,6],[3,6],[5,6]];
+const NS='http://www.w3.org/2000/svg',form=document.getElementById('form');
+LINKS.forEach(([a,b],i)=>{const l=document.createElementNS(NS,'line');[['x1',LINEUP[a][0]],['y1',LINEUP[a][1]],['x2',LINEUP[b][0]],['y2',LINEUP[b][1]]].forEach(([k,v])=>l.setAttribute(k,v));form.appendChild(l);an(l,fade,t('s8')+.6+i*.08,.5);});
+LINEUP.forEach(([x,y],i)=>{const c=document.createElementNS(NS,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',22);form.appendChild(c);an(c,pop,t('s8')+.3+i*.08,.5);});
+an('#s8 .lg',[{opacity:0,transform:'scale(.3) rotate(-90deg)'},{opacity:1,transform:'none'}],t('s8')+.3,.8,{easing:'cubic-bezier(.2,1.3,.4,1)'});
+an('#s8 .nm',up(20),t('s8')+.7,.6); an('#s8 h2',up(40),t('s8')+1.1,.8);
+an('#s8 .bw',pop,t('s8')+2.0,.6); an('#s8 .url',up(20),t('s8')+2.6,.6); an('#s8 .fine',up(20),t('s8')+3.0,.6);
+an('#s8 .btn',[{transform:'skewX(-12deg) scale(1)'},{transform:'skewX(-12deg) scale(1.06)'},{transform:'skewX(-12deg) scale(1)'}],t('s8')+4,1.4,{easing:'ease-in-out'});
+
+// angka papan skor naik
+const pct=document.getElementById('pct');
+function dyn(tt){
+  const c0=t('s3')+2.9,c1=c0+1.6;let q=Math.max(0,Math.min(1,(tt-c0)/(c1-c0)));q=1-Math.pow(1-q,3);
+  pct.textContent=(85.4*q).toLocaleString('id-ID',{minimumFractionDigits:1,maximumFractionDigits:1})+'%';
+}
+window.seek=tt=>{A.forEach(a=>a.currentTime=tt*1000);dyn(tt)};
+seek(0);
+</script>
+</body>
+</html>

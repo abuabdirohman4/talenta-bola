@@ -1,0 +1,42 @@
+// Potret aset video dari dev server yang memakai DB demo (nama fiktif). Pakai: node video/shoot.cjs <base> <kode> <periodId> <playerId> <rapor token> <ortu token>
+const { chromium } = require("@playwright/test");
+const [B, CODE, PERIOD, PLAYER, RTOK, OTOK] = process.argv.slice(2);
+const OUT = __dirname + "/assets/";
+(async () => {
+  const b = await chromium.launch();
+  const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, colorScheme: "light", locale: "id-ID" });
+  const page = await ctx.newPage();
+  const shot = async (name, opt = {}) => {
+    await page.addStyleTag({ content: "nextjs-portal{display:none!important}" });
+    await page.waitForTimeout(900);
+    await page.screenshot({ path: OUT + name + ".jpg", type: "jpeg", quality: 90, ...opt });
+    console.log(name);
+  };
+  await page.goto(B + "/masuk");
+  await shot("masuk");
+  await page.fill("input[name=code]", CODE);
+  await page.click("button[type=submit]");
+  await page.waitForURL(B + "/", { timeout: 60000 });
+  await shot("home");
+  await page.goto(B + "/pemain"); await shot("pemain");
+  await page.goto(B + "/presensi");
+  await page.click("text=Mulai presensi hari ini");
+  await page.waitForURL(/\/presensi\/[0-9a-f-]{36}/, { timeout: 60000 });
+  await page.waitForSelector('button[aria-label^="Hadir —"]');
+  await shot("sheet-empty");
+  const hadir = await page.$$('button[aria-label^="Hadir —"]');
+  for (const i of [0, 1, 2, 4, 5, 6, 7, 9, 10, 11]) await hadir[i].click();
+  (await page.$$('button[aria-label^="Izin —"]'))[3].click();
+  (await page.$$('button[aria-label^="Sakit —"]'))[8].click();
+  await page.waitForTimeout(1500);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await shot("sheet-marked");
+  await page.goto(`${B}/rapor/${PERIOD}`); await shot("periode");
+  await page.goto(`${B}/rapor/${PERIOD}/${PLAYER}`); await shot("form");
+  await page.evaluate(() => window.scrollBy(0, 700)); await shot("form-2");
+  await page.goto(`${B}/r/${RTOK}`); await shot("rapor"); await shot("rapor-full", { fullPage: true });
+  await page.goto(`${B}/ortu/${OTOK}`); await shot("ortu");
+  await page.goto(`${B}/ortu/${OTOK}#kehadiran`); await page.reload(); await shot("ortu-kehadiran");
+  await page.goto(`${B}/ortu/${OTOK}#profil`); await page.reload(); await shot("ortu-profil");
+  await b.close();
+})().catch((e) => { console.error("FAIL", e.message); process.exit(1); });
