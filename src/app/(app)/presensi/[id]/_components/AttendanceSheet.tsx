@@ -1,7 +1,6 @@
 "use client";
 
-import { ArrowLeft, CalendarDays, Check, CloudOff, Copy, Hand, Minus, Plus, Search, Send, Settings2, X } from "lucide-react";
-import Link from "next/link";
+import { CalendarDays, Check, CloudOff, Copy, Hand, Minus, Plus, Search, Send, Settings2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -196,10 +195,6 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
 
   return (
     <div className="space-y-4">
-      <Link href="/presensi" className="inline-flex min-h-11 items-center gap-1 text-[15px] font-semibold text-muted hover:text-ink">
-        <ArrowLeft size={18} aria-hidden /> Semua sesi
-      </Link>
-
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-6">
         <div className="min-w-0 space-y-4 pb-24 lg:pb-0">
           <section className={cn(card, "p-4 md:p-5")}>
@@ -295,7 +290,7 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
               <ul className="space-y-2">
                 {visible.map((r) => (
                   <li key={r.id} className={cn(card, "p-2.5")}>
-                    {/* Nama panjang (> 18 huruf) di layar sempit → tombol turun ke baris sendiri selebar kartu. */}
+                    {/* HP: tombol selalu di baris sendiri selebar kartu (nama panjang/pendek tampil sama); layar lebar: satu baris. */}
                     <div className="flex flex-wrap items-center gap-2.5">
                       <span
                         className={cn(
@@ -305,7 +300,7 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
                       >
                         {r.jerseyNumber ?? "–"}
                       </span>
-                      <div className={cn("flex-[999_1_0%]", r.fullName.length > 18 ? "min-w-[12rem]" : "min-w-[5.5rem]")}>
+                      <div className="min-w-0 flex-1">
                         <p className="flex flex-wrap items-center gap-x-1.5 text-[15px] leading-tight font-bold [overflow-wrap:anywhere]">
                           {r.fullName}
                           {r.source === "parent" && r.status !== "BELUM" && (
@@ -318,7 +313,7 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
                           {[positionLabel(r.position), session.groupCode].filter(Boolean).join(" · ")}
                         </p>
                       </div>
-                      <div className="flex flex-[1_0_auto] gap-1">
+                      <div className="flex w-full gap-1 sm:w-auto">
                         {BUTTONS.map((b) => {
                           const on = r.status === b.status && r.source === "coach";
                           const fromParent = r.status === b.status && r.source === "parent";
@@ -330,7 +325,7 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
                               aria-label={`${STATUS_LABEL[b.status]} — ${r.fullName}`}
                               className={cn(
                                 // Minimal 44 × 56 px; melebar sendiri saat tombol pindah ke baris bawah.
-                                "flex h-14 w-11 grow flex-col items-center justify-center gap-0.5 rounded-xl border-2 font-extrabold transition-transform active:scale-95 min-[400px]:w-14",
+                                "flex h-14 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl border-2 font-extrabold transition-transform active:scale-95 sm:w-14 sm:flex-none",
                                 on
                                   ? TONE[b.status].solid
                                   : fromParent

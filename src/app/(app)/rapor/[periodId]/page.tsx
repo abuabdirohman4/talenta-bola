@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/Avatar";
-import { BackLink } from "@/components/BackLink";
 import { buttonClass } from "@/components/ui/Button";
 import { db } from "@/db";
 import { players, reportPeriods, reports } from "@/db/schema";
@@ -42,7 +41,6 @@ export default async function PeriodPage({ params }: { params: Promise<{ periodI
   return (
     <div className="space-y-5">
       <div>
-        <BackLink href={`/rapor?ku=${period.ageGroupId}`}>Semua periode</BackLink>
         <p className="eyebrow">Periode rapor</p>
         <h2 className="text-xl font-black tracking-tight">{period.name}</h2>
         <p className="mt-1 text-sm text-muted">

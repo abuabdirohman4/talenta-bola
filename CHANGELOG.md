@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.2] — 2026-10-22
+
+### Improved
+- **Back button on every inner page**: profile, add/import player, attendance session, report period and report form now show a back arrow next to the page title (phone header and desktop top bar) instead of a small link inside the page.
+- **Attendance rows look the same for every child**: on phones the H/I/S/A buttons always sit on their own full-width row under the name, so long and short names line up and the buttons are bigger.
+- **"Hubungi pengurus klub" on the parent page**: the club WhatsApp number from Settings now appears as a contact button for parents.
+- **Login panel**: a 7-a-side line-up of shirts on the pitch.
+- **Brand gradient**: brighter, no longer washed out in dark mode.
+
 ## [1.1.1] — 2026-10-22
 
 ### Improved

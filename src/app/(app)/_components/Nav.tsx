@@ -1,8 +1,9 @@
 "use client";
 
-import { ClipboardCheck, House, NotebookPen, Settings, Users } from "lucide-react";
+import { ArrowLeft, ClipboardCheck, House, NotebookPen, Settings, Users } from "lucide-react";
 import Link, { useLinkStatus } from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { ThemeToggle, toggleTheme } from "@/components/ThemeToggle";
 import { Spinner } from "@/components/ui/Spinner";
 import { cn } from "@/lib/utils";
@@ -36,6 +37,43 @@ const TITLES: [RegExp, string, string][] = [
 function useActive() {
   const path = usePathname();
   return (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
+}
+
+/** Halaman bertingkat (/pemain/x, /rapor/x/y) → induknya; halaman menu utama → null. */
+function useParent() {
+  const seg = usePathname().split("/").filter(Boolean);
+  return seg.length > 1 ? "/" + seg.slice(0, -1).join("/") : null;
+}
+
+function useTitle() {
+  const path = usePathname();
+  const [, crumb, title] = TITLES.find(([re]) => re.test(path)) ?? [null, "", ""];
+  return { crumb, title };
+}
+
+function BackButton({ href, className }: { href: string; className?: string }) {
+  return (
+    <Link
+      href={href}
+      aria-label="Kembali"
+      className={cn("grid size-10 shrink-0 place-items-center rounded-xl border border-line bg-subtle text-ink hover:bg-ground", className)}
+    >
+      <NavIcon icon={ArrowLeft} size={18} />
+    </Link>
+  );
+}
+
+/** Header HP: halaman bertingkat dapat tombol kembali + judul; halaman menu utama menampilkan klub (children). */
+export function MobileHeaderLead({ children }: { children: React.ReactNode }) {
+  const parent = useParent();
+  const { title } = useTitle();
+  if (!parent) return <>{children}</>;
+  return (
+    <div className="flex min-w-0 items-center gap-2.5">
+      <BackButton href={parent} className="size-9" />
+      <p className="truncate text-sm font-black tracking-tight">{title}</p>
+    </div>
+  );
 }
 
 function useActiveGroup(groups: NavGroup[]) {
@@ -119,26 +157,37 @@ export function ThemeRow() {
 
 export function TopBar({ ssbName, groups }: { ssbName: string; groups: NavGroup[] }) {
   const path = usePathname();
-  const g = useActiveGroup(groups);
-  const [, crumb, title] = TITLES.find(([re]) => re.test(path)) ?? [null, "", ""];
+  const parent = useParent();
+  const { crumb, title } = useTitle();
   return (
     <div className="no-print sticky top-0 z-20 hidden items-center justify-between gap-4 border-b border-line bg-card px-8 py-4 shadow-sm md:flex">
-      <div className="min-w-0">
+      <div className="flex min-w-0 items-center gap-3">
+        {parent && <BackButton href={parent} />}
+        <div className="min-w-0">
         <p className="flex items-center gap-2 truncate text-xs font-medium text-muted">
           <span>{ssbName}</span>
           <span>/</span>
           <span className="font-bold text-ink">{crumb}</span>
         </p>
         <h1 className="mt-0.5 truncate text-base font-black tracking-tight">{title}</h1>
+        </div>
       </div>
       <div className="flex shrink-0 items-center gap-3">
         <ThemeToggle />
-        {g && !path.startsWith("/presensi/") && (
-          <StartTodayButton ageGroupId={g.id} size="md" label="Catat Presensi Hari Ini" className="mt-0 w-auto" />
+        {!path.startsWith("/presensi/") && (
+          <Suspense>
+            <TopBarAction groups={groups} />
+          </Suspense>
         )}
       </div>
     </div>
   );
+}
+
+/** Satu-satunya bagian top bar yang membaca ?ku — dibungkus Suspense sendiri supaya judul & tombol kembali hydrate bersama layout. */
+function TopBarAction({ groups }: { groups: NavGroup[] }) {
+  const g = useActiveGroup(groups);
+  return g ? <StartTodayButton ageGroupId={g.id} size="md" label="Catat Presensi Hari Ini" className="mt-0 w-auto" /> : null;
 }
 
 export function BottomNav() {

@@ -37,7 +37,8 @@
 :root,
 .brand {
   --color-primary-dark: color-mix(in srgb, var(--color-primary) 80%, black);
-  --color-primary-2: color-mix(in oklch, var(--color-primary), white 22%);
+  /* Lebih terang + geser sedikit ke teal, kroma tetap — campur putih membuatnya pucat di mode gelap. */
+  --color-primary-2: oklch(from var(--color-primary) calc(l + 0.1) c calc(h + 18));
   --color-primary-soft: color-mix(in srgb, var(--color-primary) 10%, white);
 }
 

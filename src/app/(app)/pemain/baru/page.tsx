@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { BackLink } from "@/components/BackLink";
 import { getActiveGroup } from "@/lib/data";
 import { PlayerForm } from "../_components/PlayerForm";
 
@@ -11,8 +10,6 @@ export default async function NewPlayerPage({ searchParams }: { searchParams: Pr
 
   return (
     <>
-      <BackLink href={`/pemain?ku=${group.id}`}>Daftar pemain</BackLink>
-      <h2 className="mb-4 text-xl font-extrabold tracking-tight md:hidden">Tambah siswa</h2>
       <PlayerForm
         groups={groups}
         initial={{

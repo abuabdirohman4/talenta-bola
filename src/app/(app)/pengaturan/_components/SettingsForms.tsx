@@ -40,7 +40,7 @@ export function SsbForm({ initial }: { initial: Ssb }) {
         <Field label="Lapangan latihan utama">
           <input value={f.homeGround} onChange={(e) => set("homeGround", e.target.value)} className={inputClass} />
         </Field>
-        <Field label="WA pengurus">
+        <Field label="WA pengurus / admin klub" hint="Muncul sebagai tombol “Hubungi pengurus klub” di halaman orang tua. Kosongkan kalau tidak mau ditampilkan.">
           <input type="tel" value={f.phoneWa} onChange={(e) => set("phoneWa", e.target.value)} className={inputClass} />
         </Field>
         <Field label="Warna klub">

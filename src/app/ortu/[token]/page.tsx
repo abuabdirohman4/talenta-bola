@@ -1,5 +1,5 @@
 import { and, asc, desc, eq, gte, inArray, isNotNull, isNull, lte } from "drizzle-orm";
-import { FileText } from "lucide-react";
+import { FileText, MessageCircle } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -11,7 +11,7 @@ import { ageGroups, parentPermissions, players, reportPeriods, reports, ssbProfi
 import { STATUS_LABEL } from "@/lib/attendance";
 import { addDays, formatDateId, formatTimeId, dateWib } from "@/lib/format";
 import { getAttendanceSummary } from "@/lib/queries";
-import { cn } from "@/lib/utils";
+import { cn, waLink } from "@/lib/utils";
 import { IzinForm } from "./_components/IzinForm";
 
 export const metadata: Metadata = { title: "Halaman orang tua" };
@@ -150,6 +150,17 @@ export default async function ParentPage({ params }: { params: Promise<{ token: 
           <p className="mt-1 text-[15px] text-muted">Rapor akan muncul di sini setelah pelatih menerbitkannya.</p>
         )}
       </section>
+
+      {ssb.phoneWa && (
+        <a
+          href={waLink(`Halo pengurus ${ssb.name}, saya orang tua ${p.fullName}. `, ssb.phoneWa)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-line bg-card text-sm font-bold text-ink shadow-sm hover:bg-ground"
+        >
+          <MessageCircle size={18} className="text-primary" aria-hidden /> Hubungi pengurus klub
+        </a>
+      )}
 
       <p className="pt-2 text-center text-xs text-muted">Link ini khusus untuk keluarga {p.nickname || p.fullName}. Mohon tidak dibagikan ke grup.</p>
     </main>

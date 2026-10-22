@@ -6,7 +6,7 @@ import { players } from "@/db/schema";
 import { requireCoachPage } from "@/lib/auth/require-user";
 import { getAgeGroups, getSsb } from "@/lib/data";
 import { clubInitials, initials } from "@/lib/format";
-import { BottomNav, KuPanel, MobileKuLine, type NavGroup, SideNav, ThemeRow, TopBar } from "./_components/Nav";
+import { BottomNav, KuPanel, MobileHeaderLead, MobileKuLine, type NavGroup, SideNav, ThemeRow, TopBar } from "./_components/Nav";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   await requireCoachPage();
@@ -58,21 +58,21 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
       <div className="flex min-h-dvh min-w-0 flex-col md:ml-64 lg:ml-72">
         <header className="no-print sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-line bg-card/95 px-4 py-3 shadow-sm backdrop-blur-md md:hidden">
-          <div className="flex min-w-0 items-center gap-2.5">
-            <Logo name={ssb.name} logoUrl={ssb.logoUrl} small />
-            <div className="min-w-0 leading-tight">
-              <p className="truncate text-sm font-black tracking-tight">{ssb.name}</p>
-              <Suspense>
-                <MobileKuLine groups={groups} coach={ssb.headCoachName} />
-              </Suspense>
-            </div>
-          </div>
+          <MobileHeaderLead>
+              <div className="flex min-w-0 items-center gap-2.5">
+                <Logo name={ssb.name} logoUrl={ssb.logoUrl} small />
+                <div className="min-w-0 leading-tight">
+                  <p className="truncate text-sm font-black tracking-tight">{ssb.name}</p>
+                  <Suspense>
+                    <MobileKuLine groups={groups} coach={ssb.headCoachName} />
+                  </Suspense>
+                </div>
+              </div>
+          </MobileHeaderLead>
           <ThemeToggle className="size-9" />
         </header>
 
-        <Suspense>
-          <TopBar ssbName={ssb.name} groups={groups} />
-        </Suspense>
+        <TopBar ssbName={ssb.name} groups={groups} />
 
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 pt-4 pb-28 md:px-8 md:pt-8 md:pb-12">{children}</main>
       </div>
