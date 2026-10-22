@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.0] — 2026-10-22
+
+### Added
+- **Child profile for parents**: a "Profil" tab on the parent page shows name, nickname, age group, shirt number, position, dominant foot, birth date and age, height, weight and guardian — with a note to tell the coach if something is missing.
+
+### Improved
+- **Parent page tabs**: Schedule & leave · Attendance · Report · Profile as large tabs joined to the content box (remembered in the link, e.g. `#rapor`).
+- **Parent page header in club colours**: the child card now uses the club's green with a white avatar, matching the logo and the light page.
+- **Clickable things look clickable**: every button, tab, toggle and choice shows the hand cursor on desktop.
+
 ## [1.2.0] — 2026-10-22
 
 ### Added

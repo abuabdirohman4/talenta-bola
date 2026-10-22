@@ -73,6 +73,20 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Tailwind v4 mengembalikan cursor tombol ke default — semua yang bisa diklik kembali jadi pointer. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary,
+  label:has(input[type="radio"], input[type="checkbox"]),
+  select {
+    cursor: pointer;
+  }
+  :disabled {
+    cursor: not-allowed;
+  }
+}
+
 body {
   background: var(--color-ground);
   color: var(--color-ink);

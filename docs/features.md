@@ -30,7 +30,7 @@ Step-by-step guide in Indonesian for the club: [`panduan-demo.md`](panduan-demo.
 
 **How to use:**
 1. **Pemain → child → Kirim ke WA ortu**.
-2. Parents see the upcoming schedule, their child's attendance history and published report cards.
+2. Parents see four tabs: **Jadwal & izin**, **Kehadiran**, **Rapor**, and **Profil** (the child's data as the club has it).
 3. To send leave: pick a scheduled session, choose Izin or Sakit, write a short reason.
 
 **Notes:**
