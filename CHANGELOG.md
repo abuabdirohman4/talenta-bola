@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.0] — 2026-10-22
+
+### Added
+- **Training schedule page (Jadwal & Agenda)**: weekly routine slots generate the next 4 weeks of sessions automatically; add one-off sessions; cancel with a reason and reactivate.
+- **Landing page**: visitors who are not signed in see what TalentaBola does, how it differs from a WhatsApp list, and a WhatsApp contact button; coaches still get their dashboard.
+
+### Improved
+- **Cancelled sessions explain themselves**: parents see the reason and that no leave is needed.
+
 ## [1.3.0] — 2026-10-22
 
 ### Added

@@ -18,11 +18,16 @@ Step-by-step guide in Indonesian for the club: [`panduan-demo.md`](panduan-demo.
 
 ## Training schedule
 
-> Plan sessions ahead so parents can send leave before training day.
+> Set the weekly routine once; sessions for the next 4 weeks appear by themselves and parents see them on their link.
 
 **How to use:**
-1. **Presensi → Buat jadwal rutin mingguan**: choose weekdays, time, place and 2–12 weeks.
-2. Single dates: **Jadwalkan sesi tanggal lain**. Rain: open the session → **Atur sesi → Tandai libur**.
+1. **Jadwal & Agenda** (desktop sidebar, or **Atur Jadwal** on the home page / the link on Presensi): **Tambah jadwal rutin** — weekday, time, place, focus.
+2. One-off dates: **Tambah sesi**. Rain or field repairs: **Tandai libur** and write the reason; **Aktifkan kembali** undoes it.
+
+**Notes:**
+- One routine slot per weekday per age group.
+- Changing a routine moves future sessions that have no attendance and no parent leave yet; sessions with leave keep their time so the leave is not lost.
+- Parents see a cancelled session as "Latihan diliburkan: <reason> — tidak perlu izin."
 
 ## Parent link
 
@@ -76,3 +81,12 @@ Step-by-step guide in Indonesian for the club: [`panduan-demo.md`](panduan-demo.
 
 **Notes:**
 - Printed / PDF report cards are always light.
+
+## Landing page
+
+> Visitors who are not signed in see a product page at the root address; signed-in coaches still land on their dashboard.
+
+**Notes:**
+- Screenshots come from demo data with fictional names.
+- The WhatsApp button uses `NEXT_PUBLIC_CONTACT_WA`; without it only "Masuk pelatih" is shown.
+- Only this page is indexed by search engines; app, parent and report pages stay `noindex`.
