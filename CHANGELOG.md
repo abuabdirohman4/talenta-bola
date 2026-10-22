@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.0] — 2026-10-22
+
+### Added
+- **Parent page: training schedule and quick menu**: parents now see the next training sessions (date, time, place, "cancelled" or "leave sent"), plus shortcuts to Schedule, Leave, Attendance history and Report.
+
+### Improved
+- **Attendance history for parents**: a clear dated list instead of small chips, and a training the coach has not recorded yet no longer counts against the child (no more "0%" right after a session is scheduled).
+- **Report card link for parents**: shows the period, publication date and an "Open" action.
+- **Tagline**: "Latihan tercatat, perkembangan terlihat, orang tua tenang." — covers reports and the parent link, not only attendance.
+
 ## [1.1.3] — 2026-10-22
 
 ### Improved

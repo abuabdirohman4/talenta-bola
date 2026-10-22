@@ -73,8 +73,8 @@ export default async function MasukPage() {
           ))}
         </svg>
         <div className="absolute inset-x-12 top-12 text-white">
-          <p className="text-3xl leading-tight font-extrabold">Presensi 40 anak, beres sebelum pemanasan.</p>
-          <p className="mt-3 text-white/80">Satu tap per anak, rekap langsung siap ditempel ke grup WA wali murid.</p>
+          <p className="text-3xl leading-tight font-extrabold">Latihan tercatat, perkembangan terlihat, orang tua tenang.</p>
+          <p className="mt-3 text-white/80">Presensi satu tap, rapor perkembangan, dan link orang tua — semuanya dari HP pelatih.</p>
         </div>
       </aside>
     </main>

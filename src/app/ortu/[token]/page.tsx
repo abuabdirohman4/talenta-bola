@@ -1,5 +1,5 @@
 import { and, asc, desc, eq, gte, inArray, isNotNull, isNull, lte } from "drizzle-orm";
-import { FileText, MessageCircle } from "lucide-react";
+import { CalendarDays, ChevronRight, Clock, FileText, MapPin, MessageCircle } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -52,7 +52,7 @@ export default async function ParentPage({ params }: { params: Promise<{ token: 
       .orderBy(asc(trainingSessions.sessionDate)),
     getAttendanceSummary(p.id, p.ageGroupId),
     db
-      .select({ token: reports.publicToken, periodName: reportPeriods.name })
+      .select({ token: reports.publicToken, periodName: reportPeriods.name, publishedAt: reports.publishedAt })
       .from(reports)
       .innerJoin(reportPeriods, eq(reportPeriods.id, reports.periodId))
       .where(and(eq(reports.playerId, p.id), isNotNull(reports.publishedAt)))
@@ -90,29 +90,57 @@ export default async function ParentPage({ params }: { params: Promise<{ token: 
         )}
       </section>
 
-      <section className="rounded-2xl border border-line bg-card p-5 shadow-sm">
-        <h2 className="text-xs font-extrabold tracking-wider uppercase">Kehadiran latihan</h2>
-        {attendance.held ? (
-          <>
-            <p className="mt-1 text-[15px]">
-              Hadir <b>{attendance.hadir}</b> dari {attendance.held} sesi
-              {attendance.rate != null && <span className="text-muted"> ({attendance.rate}%)</span>}
-            </p>
-            <ul className="mt-3 flex flex-wrap gap-2" aria-label="Kehadiran sesi terakhir">
-              {attendance.recent.map((s) => (
-                <li key={s.date} className="flex items-center gap-1.5 rounded-lg border border-line bg-subtle px-2.5 py-1 text-xs font-semibold">
-                  <span className={cn("size-2.5 rounded-full", s.status ? DOT[s.status] : "bg-belum")} aria-hidden />
-                  {formatDateId(s.date, { weekday: false }).replace(/ \d{4}$/, "")} · {s.status ? STATUS_LABEL[s.status] : "Belum diisi"}
-                </li>
-              ))}
-            </ul>
-          </>
+      <nav className="flex gap-2 overflow-x-auto text-xs font-bold" aria-label="Isi halaman">
+        {[
+          ["#jadwal", "Jadwal"],
+          ["#izin", "Izin / sakit"],
+          ["#riwayat", "Riwayat hadir"],
+          ["#rapor", "Rapor"],
+        ].map(([href, label]) => (
+          <a key={href} href={href} className="shrink-0 rounded-full border border-line bg-card px-3 py-1.5 text-ink shadow-sm hover:bg-ground">
+            {label}
+          </a>
+        ))}
+      </nav>
+
+      <section id="jadwal" className="scroll-mt-4 rounded-2xl border border-line bg-card p-5 shadow-sm">
+        <h2 className="text-xs font-extrabold tracking-wider uppercase">Jadwal latihan</h2>
+        {upcoming.length ? (
+          <ul className="mt-3 space-y-2">
+            {upcoming.slice(0, 4).map((s) => (
+              <li key={s.id} className="flex items-center justify-between gap-3 rounded-xl border border-line bg-subtle p-3">
+                <span className="min-w-0">
+                  <span className="flex items-center gap-1.5 text-sm font-bold">
+                    <CalendarDays size={15} className="shrink-0 text-primary" aria-hidden />
+                    {formatDateId(s.sessionDate)}
+                  </span>
+                  <span className="mt-0.5 flex flex-wrap items-center gap-x-3 text-xs text-muted">
+                    <span className="flex items-center gap-1">
+                      <Clock size={13} aria-hidden /> {formatTimeId(s.startTime)} WIB
+                    </span>
+                    {s.location && (
+                      <span className="flex items-center gap-1">
+                        <MapPin size={13} aria-hidden /> {s.location}
+                      </span>
+                    )}
+                  </span>
+                </span>
+                {s.status === "CANCELLED" ? (
+                  <span className="shrink-0 rounded-md border border-alpa/30 bg-alpa/10 px-2 py-0.5 text-[11px] font-bold text-alpa">Libur</span>
+                ) : permBy.get(s.id) ? (
+                  <span className="shrink-0 rounded-md border border-izin/30 bg-izin/10 px-2 py-0.5 text-[11px] font-bold text-izin">
+                    {STATUS_LABEL[permBy.get(s.id)!.type]} terkirim
+                  </span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
         ) : (
-          <p className="mt-1 text-muted">Belum ada sesi latihan yang tercatat.</p>
+          <p className="mt-1 text-[15px] text-muted">Belum ada jadwal latihan dalam 3 minggu ke depan.</p>
         )}
       </section>
 
-      <section className="rounded-2xl border border-line bg-card p-5 shadow-sm">
+      <section id="izin" className="scroll-mt-4 rounded-2xl border border-line bg-card p-5 shadow-sm">
         <h2 className="text-xs font-extrabold tracking-wider uppercase">Izin / sakit</h2>
         {upcoming.filter((s) => s.status !== "CANCELLED").length === 0 ? (
           <p className="mt-1 text-[15px] text-muted">
@@ -131,7 +159,32 @@ export default async function ParentPage({ params }: { params: Promise<{ token: 
         )}
       </section>
 
-      <section className="rounded-2xl border border-line bg-card p-5 shadow-sm">
+      <section id="riwayat" className="scroll-mt-4 rounded-2xl border border-line bg-card p-5 shadow-sm">
+        <h2 className="text-xs font-extrabold tracking-wider uppercase">Riwayat kehadiran</h2>
+        {attendance.held ? (
+          <>
+            <p className="mt-1 text-[15px]">
+              Hadir <b>{attendance.hadir}</b> dari {attendance.held} latihan yang sudah dicatat
+              {attendance.rate != null && <span className="text-muted"> ({attendance.rate}%)</span>}
+            </p>
+            <ul className="mt-3 divide-y divide-line rounded-xl border border-line" aria-label="Kehadiran latihan terakhir">
+              {[...attendance.recent].reverse().map((s) => (
+                <li key={s.date} className="flex items-center justify-between gap-3 px-3 py-2.5 text-sm">
+                  <span className="font-semibold">{formatDateId(s.date)}</span>
+                  <span className="flex items-center gap-1.5 text-xs font-bold">
+                    <span className={cn("size-2.5 rounded-full", s.status ? DOT[s.status] : "bg-belum")} aria-hidden />
+                    {s.status ? STATUS_LABEL[s.status] : "Belum dicatat"}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <p className="mt-1 text-[15px] text-muted">Belum ada latihan yang dicatat pelatih. Riwayat muncul setelah presensi pertama.</p>
+        )}
+      </section>
+
+      <section id="rapor" className="scroll-mt-4 rounded-2xl border border-line bg-card p-5 shadow-sm">
         <h2 className="text-xs font-extrabold tracking-wider uppercase">Rapor perkembangan</h2>
         {published.length ? (
           <ul className="mt-2 space-y-2">
@@ -139,9 +192,18 @@ export default async function ParentPage({ params }: { params: Promise<{ token: 
               <li key={r.token}>
                 <Link
                   href={`/r/${r.token}`}
-                  className="flex min-h-12 items-center gap-2 rounded-xl border border-primary/30 bg-primary-soft px-3 text-sm font-bold text-primary"
+                  className="flex min-h-14 items-center gap-3 rounded-xl border border-primary/30 bg-primary-soft px-3 text-primary"
                 >
-                  <FileText size={18} aria-hidden /> {r.periodName}
+                  <FileText size={20} className="shrink-0" aria-hidden />
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-bold">{r.periodName}</span>
+                    {r.publishedAt && (
+                      <span className="block text-xs text-muted">Terbit {formatDateId(dateWib(r.publishedAt), { weekday: false })}</span>
+                    )}
+                  </span>
+                  <span className="flex shrink-0 items-center text-xs font-bold">
+                    Buka <ChevronRight size={16} aria-hidden />
+                  </span>
                 </Link>
               </li>
             ))}

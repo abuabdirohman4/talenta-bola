@@ -1,10 +1,10 @@
 import "server-only";
-import { and, eq, gte, isNull, lte, ne } from "drizzle-orm";
+import { and, eq, gte, inArray, isNull, lte, ne } from "drizzle-orm";
 import { db } from "@/db";
 import { attendances, trainingSessions } from "@/db/schema";
 import { dateWib } from "./format";
 
-/** Kehadiran satu anak di sesi yang sudah berlangsung (tidak libur, tanggal ≤ hari ini) dalam rentang tanggal. */
+/** Kehadiran satu anak di sesi yang sudah dicatat pelatih (tidak libur, tanggal ≤ hari ini, ada isian presensi) dalam rentang tanggal. */
 export async function getAttendanceSummary(playerId: string, ageGroupId: string, from?: string, to?: string) {
   const today = dateWib();
   const end = to && to < today ? to : today;
@@ -21,7 +21,9 @@ export async function getAttendanceSummary(playerId: string, ageGroupId: string,
         isNull(trainingSessions.deletedAt),
         ne(trainingSessions.status, "CANCELLED"),
         lte(trainingSessions.sessionDate, end),
-        from ? gte(trainingSessions.sessionDate, from) : undefined
+        from ? gte(trainingSessions.sessionDate, from) : undefined,
+        // Sesi yang belum dibuka pelatih bukan "tidak hadir" — jangan menurunkan persentase anak.
+        inArray(trainingSessions.id, db.selectDistinct({ id: attendances.sessionId }).from(attendances))
       )
     )
     .orderBy(trainingSessions.sessionDate);
