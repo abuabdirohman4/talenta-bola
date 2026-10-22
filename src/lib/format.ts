@@ -36,3 +36,6 @@ export function initials(name: string): string {
     .map((w) => w[0]!.toUpperCase())
     .join("");
 }
+
+/** Inisial logo klub: "SSB Galuh Putra" → "GP" (awalan SSB tidak ikut). */
+export const clubInitials = (name: string) => initials(name.replace(/^SSB\s+/i, ""));

@@ -18,7 +18,7 @@ export function SsbForm({ initial }: { initial: Ssb }) {
 
   return (
     <form
-      className="space-y-4 rounded-2xl border border-line bg-card p-4"
+      className="space-y-4 rounded-2xl border border-line bg-card p-5 shadow-sm"
       onSubmit={(e) => {
         e.preventDefault();
         start(async () => {
@@ -28,7 +28,7 @@ export function SsbForm({ initial }: { initial: Ssb }) {
         });
       }}
     >
-      <h3 className="font-bold">Profil SSB</h3>
+      <h3 className="text-xs font-extrabold tracking-wider uppercase">Profil SSB</h3>
       <ImagePicker name={f.name} value={f.logoUrl} onChange={(v) => set("logoUrl", v)} label="Logo" />
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Nama SSB" required>
@@ -70,7 +70,7 @@ export function AgeGroupForm() {
 
   return (
     <form
-      className="mt-3 grid gap-3 border-t border-line pt-3 sm:grid-cols-4"
+      className="mt-3 grid gap-3 border-t border-line pt-3"
       onSubmit={(e) => {
         e.preventDefault();
         start(async () => {
@@ -104,7 +104,7 @@ export function LogoutButton() {
   return (
     <Button
       variant="ghost"
-      className="mt-6 text-alpa"
+      className="mt-4 text-alpa"
       loading={pending}
       onClick={() =>
         start(async () => {

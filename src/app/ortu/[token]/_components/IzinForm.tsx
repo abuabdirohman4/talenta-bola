@@ -31,14 +31,14 @@ export function IzinForm({ token, sessions }: { token: string; sessions: Session
       }}
     >
       <fieldset>
-        <legend className="mb-1.5 text-sm font-semibold">Untuk latihan</legend>
+        <legend className="eyebrow mb-1.5">Untuk latihan</legend>
         <div className="space-y-2">
           {sessions.map((s) => (
             <label
               key={s.id}
               className={cn(
-                "flex min-h-12 items-start gap-3 rounded-xl border px-3 py-2.5",
-                s.cancelled ? "border-line opacity-60" : sessionId === s.id ? "border-primary bg-primary-soft" : "border-line",
+                "flex min-h-12 items-start gap-3 rounded-xl border px-3 py-2.5 text-sm",
+                s.cancelled ? "border-line bg-subtle opacity-60" : sessionId === s.id ? "border-primary bg-primary-soft" : "border-line bg-subtle",
                 !s.cancelled && "cursor-pointer"
               )}
             >
@@ -62,7 +62,7 @@ export function IzinForm({ token, sessions }: { token: string; sessions: Session
       </fieldset>
 
       <fieldset>
-        <legend className="mb-1.5 text-sm font-semibold">Keterangan</legend>
+        <legend className="eyebrow mb-1.5">Keterangan</legend>
         <div className="grid grid-cols-2 gap-2">
           {(
             [
@@ -77,7 +77,7 @@ export function IzinForm({ token, sessions }: { token: string; sessions: Session
               onClick={() => setType(value)}
               className={cn(
                 "flex min-h-14 items-center justify-center gap-2 rounded-xl border-2 text-base font-bold",
-                type === value ? `${on} text-white` : "border-line bg-card"
+                type === value ? `${on} text-white` : "border-line bg-subtle"
               )}
             >
               <Icon size={20} aria-hidden /> {label}
@@ -87,7 +87,7 @@ export function IzinForm({ token, sessions }: { token: string; sessions: Session
       </fieldset>
 
       <label className="block">
-        <span className="mb-1.5 block text-sm font-semibold">Alasan</span>
+        <span className="eyebrow mb-1.5 block">Alasan</span>
         <textarea
           value={reason}
           onChange={(e) => setReason(e.target.value)}

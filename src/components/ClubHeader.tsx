@@ -1,4 +1,4 @@
-import { initials } from "@/lib/format";
+import { clubInitials } from "@/lib/format";
 
 /** Kop klub untuk halaman publik (ortu & rapor): terasa milik SSB, tanpa "Powered by". */
 export function ClubHeader({ name, logoUrl, subtitle }: { name: string; logoUrl: string | null; subtitle?: string }) {
@@ -9,12 +9,12 @@ export function ClubHeader({ name, logoUrl, subtitle }: { name: string; logoUrl:
         <img src={logoUrl} alt="" className="size-12 rounded-xl object-cover" />
       ) : (
         <span className="grid size-12 place-items-center rounded-xl bg-primary text-lg font-extrabold text-white">
-          {initials(name)}
+          {clubInitials(name)}
         </span>
       )}
       <div>
-        <p className="text-lg leading-tight font-extrabold">{name}</p>
-        {subtitle && <p className="text-sm text-muted">{subtitle}</p>}
+        <p className="text-base leading-tight font-black tracking-tight">{name}</p>
+        {subtitle && <p className="text-xs font-medium text-muted">{subtitle}</p>}
       </div>
     </header>
   );

@@ -1,12 +1,13 @@
 "use client";
 
-import { ChevronRight, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { inputClass } from "@/components/ui/Field";
-import { Avatar } from "@/components/Avatar";
 import { missingFields, POSITIONS, positionLabel } from "@/lib/players";
 import { cn } from "@/lib/utils";
+
+export type ReportState = "PUBLISHED" | "DRAFT" | "NONE";
 
 type Row = {
   id: string;
@@ -15,12 +16,17 @@ type Row = {
   jerseyNumber: number | null;
   position: string | null;
   birthDate: string | null;
+  parentName: string | null;
   parentPhoneWa: string | null;
-  photoUrl: string | null;
   isActive: boolean;
+  /** Persen hadir 30 hari terakhir; null = belum ada sesi tercatat. */
+  rate: number | null;
+  /** null = tidak ada periode rapor yang sedang berjalan. */
+  report: ReportState | null;
 };
 
-const FILTERS = [{ value: "", label: "Semua" }, ...POSITIONS, { value: "_kurang", label: "Data kurang" }];
+const SHORT: Record<string, string> = { GK: "Kiper", DF: "Bek", MF: "Tengah", FW: "Depan" };
+const REPORT_LABEL: Record<ReportState, string> = { PUBLISHED: "Terbit", DRAFT: "Draft", NONE: "Belum" };
 
 // Daftar master puluhan baris: cari & saring di browser, tanpa bolak-balik ke server.
 export function PlayerList({ players, importHref }: { players: Row[]; importHref: string }) {
@@ -42,66 +48,107 @@ export function PlayerList({ players, importHref }: { players: Row[]; importHref
     );
   }
 
+  const filters = [
+    { value: "", label: "Semua", n: players.length },
+    ...POSITIONS.map((p) => ({ value: p.value, label: SHORT[p.value], n: players.filter((r) => r.position === p.value).length })),
+    { value: "_kurang", label: "Data kurang", n: players.filter((r) => missingFields(r).length > 0).length },
+  ];
+
   const term = q.trim().toLowerCase();
   const shown = players.filter(
     (p) =>
-      (!term || p.fullName.toLowerCase().includes(term) || p.nickname?.toLowerCase().includes(term) || String(p.jerseyNumber) === term) &&
+      (!term ||
+        p.fullName.toLowerCase().includes(term) ||
+        p.nickname?.toLowerCase().includes(term) ||
+        p.parentName?.toLowerCase().includes(term) ||
+        String(p.jerseyNumber) === term) &&
       (!pos || (pos === "_kurang" ? missingFields(p).length > 0 : p.position === pos))
   );
 
   return (
     <>
-      <label className="relative block">
-        <Search size={18} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted" />
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Cari nama, panggilan, atau nomor punggung"
-          className={inputClass + " pl-10"}
-          aria-label="Cari pemain"
-        />
-      </label>
-      <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:px-0">
-        {FILTERS.map((f) => (
-          <button
-            key={f.value}
-            onClick={() => setPos(f.value)}
-            className={cn(
-              "min-h-10 shrink-0 rounded-full border px-4 text-sm font-semibold",
-              pos === f.value ? "border-primary bg-primary text-white" : "border-line bg-card"
-            )}
-          >
-            {f.label}
-          </button>
-        ))}
+      <div className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-3 shadow-sm lg:flex-row lg:items-center lg:justify-between">
+        <label className="relative block lg:w-80 lg:shrink-0">
+          <Search size={18} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted" />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Cari nama, nomor punggung, atau nama ortu"
+            className={inputClass + " bg-subtle pl-10"}
+            aria-label="Cari pemain"
+          />
+        </label>
+        <div className="-mx-3 flex gap-2 overflow-x-auto px-3 pb-0.5 lg:mx-0 lg:flex-wrap lg:justify-end lg:overflow-visible lg:px-0 lg:pb-0">
+          {filters.map((f) => (
+            <button
+              key={f.value}
+              onClick={() => setPos(f.value)}
+              className={cn(
+                "min-h-10 shrink-0 rounded-full border px-4 text-sm font-bold",
+                pos === f.value ? "border-primary bg-primary text-white" : "border-line bg-subtle text-ink hover:border-muted/40"
+              )}
+            >
+              {f.label} ({f.n})
+            </button>
+          ))}
+        </div>
       </div>
 
-      <ul className="mt-3 divide-y divide-line overflow-hidden rounded-2xl border border-line bg-card">
+      <ul className="grid grid-cols-1 gap-3.5 md:grid-cols-2 xl:grid-cols-3">
         {shown.map((p) => {
-          const missing = missingFields(p);
+          const missing = p.isActive ? missingFields(p) : [];
           return (
             <li key={p.id}>
-              <Link href={`/pemain/${p.id}`} className={cn("flex min-h-16 items-center gap-3 px-4 py-3 hover:bg-ground", !p.isActive && "opacity-60")}>
-                <Avatar name={p.fullName} photoUrl={p.photoUrl} />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate font-bold">
-                    {p.fullName}
-                    {p.jerseyNumber ? <span className="font-semibold text-muted"> #{p.jerseyNumber}</span> : null}
-                  </p>
-                  <p className="truncate text-sm text-muted">
-                    {!p.isActive
-                      ? "Nonaktif"
-                      : missing.length
-                        ? <span className="text-warn">Lengkapi: {missing.join(", ")}</span>
-                        : positionLabel(p.position)}
-                  </p>
+              <Link
+                href={`/pemain/${p.id}`}
+                className={cn(
+                  "block rounded-2xl border border-line bg-card p-4 shadow-sm hover:border-primary/40",
+                  !p.isActive && "opacity-60"
+                )}
+              >
+                <div className="flex items-start gap-3">
+                  <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-ground text-lg font-black">
+                    {p.jerseyNumber != null ? `#${p.jerseyNumber}` : "–"}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-bold">{p.fullName}</p>
+                    <p className="truncate text-xs font-medium text-muted">
+                      {[positionLabel(p.position), p.parentName && `Ortu: ${p.parentName}`].filter(Boolean).join(" · ") || "Posisi belum ditentukan"}
+                    </p>
+                    {missing.length > 0 && <p className="text-[11px] font-semibold text-warn">Lengkapi: {missing.join(", ")}</p>}
+                  </div>
+                  <span
+                    className={cn(
+                      "shrink-0 rounded-md border px-2 py-0.5 text-[11px] font-bold",
+                      !p.isActive
+                        ? "border-line bg-subtle text-muted"
+                        : missing.length
+                          ? "border-izin/30 bg-warn-soft text-warn"
+                          : "border-hadir/30 bg-hadir/10 text-hadir"
+                    )}
+                  >
+                    {!p.isActive ? "Nonaktif" : missing.length ? "Belum lengkap" : "Lengkap"}
+                  </span>
                 </div>
-                <ChevronRight size={18} className="text-muted" />
+                <div className="mt-3 flex items-center justify-between border-t border-line pt-2.5 text-xs text-muted">
+                  <span>
+                    Hadir: <b className="text-ink">{p.rate == null ? "—" : `${p.rate}%`}</b>
+                  </span>
+                  {p.report && (
+                    <span>
+                      Rapor: <b className={p.report === "PUBLISHED" ? "text-hadir" : "text-ink"}>{REPORT_LABEL[p.report]}</b>
+                    </span>
+                  )}
+                </div>
               </Link>
             </li>
           );
         })}
-        {shown.length === 0 && <li className="p-6 text-center text-muted">Tidak ada pemain yang cocok.</li>}
+        {shown.length === 0 && (
+          <li className="rounded-2xl border border-dashed border-line bg-card p-6 text-center text-muted md:col-span-2 xl:col-span-3">
+            Tidak ada pemain yang cocok.
+          </li>
+        )}
       </ul>
     </>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Check, CloudOff, Copy, Hand, Minus, Plus, Search, Send, Settings2, X } from "lucide-react";
+import { ArrowLeft, CalendarDays, Check, CloudOff, Copy, Hand, Minus, Plus, Search, Send, Settings2, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
@@ -19,6 +19,7 @@ import {
   type Status,
 } from "@/lib/attendance";
 import { formatDateId, formatTimeId } from "@/lib/format";
+import { positionLabel } from "@/lib/players";
 import { buildRekap } from "@/lib/rekap";
 import { cn, waLink } from "@/lib/utils";
 import { resolvePermission, setSessionCancelled, updateSessionInfo } from "../../actions";
@@ -33,8 +34,9 @@ type Props = {
     topic: string | null;
     cancelled: boolean;
     groupName: string;
+    groupCode: string;
   };
-  roster: { id: string; fullName: string; nickname: string | null; jerseyNumber: number | null }[];
+  roster: { id: string; fullName: string; nickname: string | null; jerseyNumber: number | null; position: string | null }[];
   serverMarks: Record<string, Mark>;
   permissions: Record<string, Permission>;
 };
@@ -47,13 +49,33 @@ const BUTTONS: { status: Status; letter: string; icon: typeof Check }[] = [
 ];
 
 // Kelas lengkap ditulis eksplisit supaya ikut dipindai Tailwind.
-const TONE: Record<SheetStatus, { solid: string; text: string; border: string }> = {
-  HADIR: { solid: "bg-hadir border-hadir text-white", text: "text-hadir", border: "border-l-hadir" },
-  IZIN: { solid: "bg-izin border-izin text-white", text: "text-izin", border: "border-l-izin" },
-  SAKIT: { solid: "bg-sakit border-sakit text-white", text: "text-sakit", border: "border-l-sakit" },
-  ALPA: { solid: "bg-alpa border-alpa text-white", text: "text-alpa", border: "border-l-alpa" },
-  BELUM: { solid: "bg-belum border-belum text-white", text: "text-belum", border: "border-l-transparent" },
+const TONE: Record<Status, { solid: string; soft: string; text: string }> = {
+  HADIR: { solid: "bg-hadir border-hadir text-white", soft: "bg-hadir/15 border-hadir/50 text-hadir", text: "text-hadir" },
+  IZIN: { solid: "bg-izin border-izin text-white", soft: "bg-izin/15 border-izin/50 text-izin", text: "text-izin" },
+  SAKIT: { solid: "bg-sakit border-sakit text-white", soft: "bg-sakit/15 border-sakit/50 text-sakit", text: "text-sakit" },
+  ALPA: { solid: "bg-alpa border-alpa text-white", soft: "bg-alpa/15 border-alpa/50 text-alpa", text: "text-alpa" },
 };
+const BADGE: Record<Status, string> = {
+  HADIR: "bg-hadir/15 text-hadir",
+  IZIN: "bg-izin/15 text-izin",
+  SAKIT: "bg-sakit/15 text-sakit",
+  ALPA: "bg-alpa/15 text-alpa",
+};
+const PILL: Record<Status, string> = {
+  HADIR: "bg-hadir/10 text-hadir border-hadir/30",
+  IZIN: "bg-izin/10 text-izin border-izin/30",
+  SAKIT: "bg-sakit/10 text-sakit border-sakit/30",
+  ALPA: "bg-alpa/10 text-alpa border-alpa/30",
+};
+const BAR: Record<Status, string> = { HADIR: "bg-hadir", IZIN: "bg-izin", SAKIT: "bg-sakit", ALPA: "bg-alpa" };
+const BOX: Record<SheetStatus, string> = {
+  HADIR: "border-hadir/30 bg-hadir/10 text-hadir",
+  IZIN: "border-izin/30 bg-izin/10 text-izin",
+  SAKIT: "border-sakit/30 bg-sakit/10 text-sakit",
+  ALPA: "border-alpa/30 bg-alpa/10 text-alpa",
+  BELUM: "border-line bg-subtle text-muted",
+};
+const card = "rounded-2xl border border-line bg-card shadow-sm";
 
 type Sync = "saved" | "saving" | "offline" | "error";
 const PAGE_CACHE = "talenta-bola-pages";
@@ -63,7 +85,7 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
   const [local, setLocal] = useState<Record<string, Mark>>({});
   const [sync, setSync] = useState<Sync>("saved");
   const [queued, setQueued] = useState(0);
-  const [filter, setFilter] = useState<"all" | "belum">("all");
+  const [filter, setFilter] = useState<"all" | "belum" | "hadir">("all");
   const [query, setQuery] = useState("");
   const [confirmBulk, setConfirmBulk] = useState(false);
   const flushing = useRef(false);
@@ -160,163 +182,235 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
   const q = query.trim().toLowerCase();
   const visible = rows.filter(
     (r) =>
-      (filter === "all" || r.status === "BELUM") &&
-      (!q || r.fullName.toLowerCase().includes(q) || r.nickname?.toLowerCase().includes(q) || String(r.no) === q)
+      (filter === "all" || (filter === "belum" ? r.status === "BELUM" : r.status === "HADIR")) &&
+      (!q || r.fullName.toLowerCase().includes(q) || r.nickname?.toLowerCase().includes(q) || String(r.jerseyNumber) === q)
+  );
+  const total = rows.length;
+  const filled = total - counts.BELUM;
+  const pct = total ? Math.round((filled / total) * 100) : 0;
+  const bulk = counts.BELUM > 0 && (
+    <Button size="md" className="col-span-2 sm:col-span-1" onClick={() => setConfirmBulk(true)}>
+      <Check size={18} aria-hidden /> Sisanya Hadir ({counts.BELUM})
+    </Button>
   );
 
   return (
-    <div className="-mx-4 lg:mx-0">
-      <div className="px-4 lg:px-0">
-        <Link href="/presensi" className="mb-2 inline-flex min-h-11 items-center gap-1 text-[15px] font-semibold text-muted">
-          <ArrowLeft size={18} /> Semua sesi
-        </Link>
-        <h2 className="text-2xl font-extrabold tracking-tight">{formatDateId(session.date)}</h2>
-        <p className="text-muted">
-          {session.groupName} · {formatTimeId(session.startTime)}
-          {session.location ? ` · ${session.location}` : ""}
-          {session.topic ? ` · ${session.topic}` : ""}
-        </p>
-        <SessionSettings session={session} />
-      </div>
+    <div className="space-y-4">
+      <Link href="/presensi" className="inline-flex min-h-11 items-center gap-1 text-[15px] font-semibold text-muted hover:text-ink">
+        <ArrowLeft size={18} aria-hidden /> Semua sesi
+      </Link>
 
-      {session.cancelled ? (
-        <div className="mx-4 mt-4 rounded-2xl border border-izin/40 bg-warn-soft p-4 text-warn lg:mx-0">
-          <p className="font-bold">Sesi ini ditandai libur.</p>
-          <p className="mt-1 text-[15px]">Presensi tidak diisi dan ortu tidak bisa mengajukan izin untuk tanggal ini.</p>
-        </div>
-      ) : (
-        <>
-          {/* Hitungan berjalan menempel di atas: pelatih tahu sisa berapa tanpa scroll. */}
-          <div className="sticky top-[61px] z-20 mt-4 border-y border-line bg-card/95 px-4 py-2.5 backdrop-blur lg:top-0 lg:rounded-2xl lg:border">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex flex-wrap gap-x-3 gap-y-1 text-[15px] font-bold">
-                <span className="text-hadir">Hadir {counts.HADIR}</span>
-                <span className="text-izin">Izin {counts.IZIN}</span>
-                <span className="text-sakit">Sakit {counts.SAKIT}</span>
-                <span className="text-alpa">Alpa {counts.ALPA}</span>
-                <span className="text-muted">Belum {counts.BELUM}</span>
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-6">
+        <div className="min-w-0 space-y-4 pb-24 lg:pb-0">
+          <section className={cn(card, "p-4 md:p-5")}>
+            <div className="flex items-start gap-3">
+              <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary">
+                <CalendarDays size={22} aria-hidden />
+              </span>
+              <div className="min-w-0">
+                <p className="eyebrow">{session.cancelled ? "Sesi libur" : "Jadwal pertemuan aktif"}</p>
+                <h2 className="text-lg font-black tracking-tight">{formatDateId(session.date)}</h2>
+                <p className="text-sm font-medium text-muted">
+                  {[
+                    session.groupName,
+                    `${formatTimeId(session.startTime)} WIB`,
+                    session.location,
+                    session.topic,
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </p>
               </div>
+            </div>
+            <SessionSettings session={session}>{bulk}</SessionSettings>
+          </section>
+
+          {session.cancelled ? (
+            <div className="rounded-2xl border border-izin/40 bg-warn-soft p-4 text-warn">
+              <p className="font-bold">Sesi ini ditandai libur.</p>
+              <p className="mt-1 text-[15px]">Presensi tidak diisi dan ortu tidak bisa mengajukan izin untuk tanggal ini.</p>
+            </div>
+          ) : (
+            <>
+              <section className={cn(card, "space-y-3 p-4 md:p-5")}>
+                <div>
+                  <p className="eyebrow">Rekap kehadiran sesi lapangan</p>
+                  <h3 className="text-base font-black tracking-tight">
+                    {filled} dari {total} pemain sudah terdata ({pct}%)
+                  </h3>
+                </div>
+                <div className="flex h-2.5 overflow-hidden rounded-full bg-ground" aria-hidden>
+                  {(["HADIR", "IZIN", "SAKIT", "ALPA"] as const).map(
+                    (st) => counts[st] > 0 && <span key={st} className={BAR[st]} style={{ width: `${(counts[st] / total) * 100}%` }} />
+                  )}
+                </div>
+                <div className="grid grid-cols-5 gap-1.5 sm:gap-2.5">
+                  {(Object.keys(BOX) as SheetStatus[]).map((st) => (
+                    <div key={st} className={cn("rounded-xl border px-1 py-2 text-center", BOX[st])}>
+                      <p className="text-[9px] font-extrabold tracking-wider uppercase sm:text-[10px]">{st === "BELUM" ? "Belum" : STATUS_LABEL[st]}</p>
+                      <p className="text-xl font-black">{counts[st]}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              <div className={cn(card, "flex flex-col gap-2 p-3 sm:flex-row")}>
+                <label className="relative flex-1">
+                  <Search size={18} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted" aria-hidden />
+                  <input
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Cari nama atau nomor punggung"
+                    className={inputClass + " pl-10"}
+                    aria-label="Cari pemain"
+                  />
+                </label>
+                <div className="flex rounded-xl border border-line bg-subtle p-1" role="tablist">
+                  {(
+                    [
+                      ["all", `Semua ${total}`],
+                      ["belum", `Belum ${counts.BELUM}`],
+                      ["hadir", `Hadir ${counts.HADIR}`],
+                    ] as const
+                  ).map(([f, label]) => (
+                    <button
+                      key={f}
+                      role="tab"
+                      aria-selected={filter === f}
+                      onClick={() => setFilter(f)}
+                      className={cn(
+                        "min-h-10 flex-1 rounded-lg px-3 text-sm font-bold whitespace-nowrap",
+                        filter === f ? "bg-primary text-white shadow-sm" : "text-muted"
+                      )}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <h3 className="eyebrow px-1 pt-1">
+                Daftar siswa {session.groupCode} ({total} siswa)
+              </h3>
+              <ul className="space-y-2">
+                {visible.map((r) => (
+                  <li key={r.id} className={cn(card, "p-2.5")}>
+                    <div className="flex items-center gap-2.5">
+                      <span
+                        className={cn(
+                          "grid size-9 shrink-0 place-items-center rounded-lg text-xs font-black",
+                          r.status === "BELUM" ? "bg-ground text-muted" : BADGE[r.status]
+                        )}
+                      >
+                        {r.jerseyNumber ?? "–"}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="flex flex-wrap items-center gap-x-1.5 text-[15px] leading-tight font-bold break-words">
+                          {r.fullName}
+                          {r.source === "parent" && r.status !== "BELUM" && (
+                            <span className={cn("rounded-md border px-1.5 py-px text-[10px] font-bold", PILL[r.status])}>
+                              {STATUS_LABEL[r.status]} dari ortu
+                            </span>
+                          )}
+                        </p>
+                        <p className="truncate text-[11px] font-medium text-muted">
+                          {[positionLabel(r.position), session.groupCode].filter(Boolean).join(" · ")}
+                        </p>
+                      </div>
+                      <div className="flex shrink-0 gap-1">
+                        {BUTTONS.map((b) => {
+                          const on = r.status === b.status && r.source === "coach";
+                          const fromParent = r.status === b.status && r.source === "parent";
+                          return (
+                            <button
+                              key={b.status}
+                              onClick={() => mark([r.id], b.status)}
+                              aria-pressed={on}
+                              aria-label={`${STATUS_LABEL[b.status]} — ${r.fullName}`}
+                              className={cn(
+                                // 44 px lebar × 56 px tinggi: nama tetap muat di layar 360 px, sasaran jempol tetap besar.
+                                "flex h-14 w-11 flex-col items-center justify-center gap-0.5 rounded-xl border-2 font-extrabold transition-transform active:scale-95 min-[400px]:w-14",
+                                on
+                                  ? TONE[b.status].solid
+                                  : fromParent
+                                    ? TONE[b.status].soft
+                                    : cn("border-line bg-subtle", TONE[b.status].text)
+                              )}
+                            >
+                              <b.icon size={18} strokeWidth={3} aria-hidden />
+                              <span className="text-xs leading-none">{b.letter}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    {r.source === "parent" && permissions[r.id] && (
+                      <p className="mt-1.5 ml-[46px] text-xs text-muted">Alasan ortu: {permissions[r.id]!.reason}</p>
+                    )}
+                    {r.pending && <PendingPermission permission={r.pending} />}
+                  </li>
+                ))}
+                {visible.length === 0 && (
+                  <li className="rounded-2xl border border-dashed border-line p-6 text-center text-muted">
+                    {filter === "belum" ? "Semua anak sudah terisi. Saatnya kirim rekap." : "Tidak ada nama yang cocok."}
+                  </li>
+                )}
+              </ul>
+            </>
+          )}
+        </div>
+
+        {!session.cancelled && (
+          // HP: bilah progres menempel di atas bottom-nav; desktop: panel preview menempel di kanan. Satu elemen supaya status simpan tidak ganda.
+          <aside
+            className={cn(
+              "fixed inset-x-3 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-30 flex items-center justify-between gap-3 rounded-2xl border border-slate-700/80 bg-hero p-3 text-white shadow-xl",
+              "lg:sticky lg:top-24 lg:inset-x-auto lg:bottom-auto lg:z-10 lg:block lg:space-y-3 lg:border-line lg:bg-card lg:p-5 lg:text-ink lg:shadow-sm"
+            )}
+          >
+            <div className="min-w-0 lg:flex lg:items-center lg:justify-between lg:gap-3">
+              <p className="eyebrow hidden lg:block">Preview pesan WhatsApp</p>
+              <p className="text-xs font-bold text-slate-300 lg:hidden">Terdata</p>
+              <p className="text-sm font-black lg:hidden">
+                {filled} / {total} ({pct}%)
+              </p>
               <SyncBadge sync={sync} queued={queued} onRetry={flush} />
             </div>
-          </div>
-
-          <div className="mt-3 flex gap-2 px-4 lg:px-0">
-            <label className="relative flex-1">
-              <Search size={18} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted" />
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Cari nama / nomor"
-                className={inputClass + " pl-10"}
-                aria-label="Cari pemain"
-              />
-            </label>
-            <div className="flex rounded-xl border border-line bg-card p-1" role="tablist">
-              {(["all", "belum"] as const).map((f) => (
-                <button
-                  key={f}
-                  role="tab"
-                  aria-selected={filter === f}
-                  onClick={() => setFilter(f)}
-                  className={cn(
-                    "min-h-10 rounded-lg px-3 text-sm font-semibold",
-                    filter === f ? "bg-primary text-white" : "text-muted"
-                  )}
-                >
-                  {f === "all" ? "Semua" : `Belum (${counts.BELUM})`}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <ul className="mt-3 space-y-2 px-4 lg:px-0">
-            {visible.map((r) => (
-              <li
-                key={r.id}
-                className={cn("rounded-2xl border border-l-[6px] border-line bg-card p-2.5 pl-3", TONE[r.status].border)}
-              >
-                <div className="flex items-center gap-2">
-                  <span className="w-6 shrink-0 text-center text-sm font-bold text-muted">{r.no}</span>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-[17px] leading-tight font-bold break-words">{r.fullName}</p>
-                    <p className={cn("text-sm font-semibold", TONE[r.status].text)}>
-                      {r.status === "BELUM" ? "Belum" : STATUS_LABEL[r.status]}
-                      {r.source === "parent" && " · dari ortu"}
-                      {r.jerseyNumber ? <span className="font-normal text-muted"> · #{r.jerseyNumber}</span> : null}
-                    </p>
-                  </div>
-                  <div className="flex shrink-0 gap-1">
-                    {BUTTONS.map((b) => {
-                      const on = r.status === b.status && r.source === "coach";
-                      return (
-                        <button
-                          key={b.status}
-                          onClick={() => mark([r.id], b.status)}
-                          aria-pressed={on}
-                          aria-label={`${STATUS_LABEL[b.status]} — ${r.fullName}`}
-                          className={cn(
-                            // 44 px lebar × 56 px tinggi: nama tetap muat di layar 360 px, sasaran jempol tetap besar.
-                            "flex h-14 w-11 flex-col items-center justify-center gap-0.5 rounded-xl border-2 font-extrabold transition-transform active:scale-95 min-[400px]:w-14",
-                            on ? TONE[b.status].solid : cn("border-line bg-card", TONE[b.status].text)
-                          )}
-                        >
-                          <b.icon size={18} strokeWidth={3} aria-hidden />
-                          <span className="text-xs leading-none">{b.letter}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-                {r.source === "parent" && permissions[r.id] && (
-                  <p className="mt-1.5 ml-9 text-sm text-muted">Alasan ortu: {permissions[r.id]!.reason}</p>
-                )}
-                {r.pending && <PendingPermission permission={r.pending} />}
-              </li>
-            ))}
-            {visible.length === 0 && (
-              <li className="rounded-2xl border border-dashed border-line p-6 text-center text-muted">
-                {filter === "belum" ? "Semua anak sudah terisi. Saatnya kirim rekap." : "Tidak ada nama yang cocok."}
-              </li>
-            )}
-          </ul>
-
-          <div className="mt-4 space-y-2 px-4 lg:px-0">
-            {counts.BELUM > 0 && (
-              <Button variant="outline" size="lg" className="w-full" onClick={() => setConfirmBulk(true)}>
-                <Check size={20} aria-hidden /> Tandai sisa {counts.BELUM} anak sebagai Hadir
-              </Button>
-            )}
-            <div className="grid grid-cols-2 gap-2">
-              <Button size="lg" onClick={copyRekap}>
-                <Copy size={20} aria-hidden /> Salin rekap
+            <pre className="hidden max-h-80 overflow-auto rounded-xl border border-line bg-subtle p-3 font-mono text-[11px] leading-relaxed whitespace-pre-wrap text-ink lg:block">
+              {rekap()}
+            </pre>
+            <div className="flex shrink-0 gap-2 lg:grid lg:grid-cols-1">
+              <Button onClick={copyRekap} className="min-h-11 px-3 lg:min-h-14 lg:w-full">
+                <Copy size={18} aria-hidden /> Salin rekap
               </Button>
               <a
                 href={waLink(rekap())}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-xl border border-hadir bg-card px-4 font-semibold text-hadir"
+                aria-label="Kirim ke WA"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-hadir bg-card px-3 font-semibold text-hadir lg:min-h-14"
               >
-                <Send size={20} aria-hidden /> Kirim ke WA
+                <Send size={18} aria-hidden /> <span className="hidden lg:inline">Kirim ke WA</span>
               </a>
             </div>
-          </div>
+          </aside>
+        )}
+      </div>
 
-          <ConfirmDialog
-            open={confirmBulk}
-            title={`Tandai ${counts.BELUM} anak sebagai Hadir?`}
-            message="Hanya anak yang masih 'Belum' yang berubah. Status yang sudah diisi tidak tersentuh."
-            confirmLabel="Ya, tandai Hadir"
-            onClose={() => setConfirmBulk(false)}
-            onConfirm={() => {
-              mark(
-                rows.filter((r) => r.status === "BELUM").map((r) => r.id),
-                "HADIR"
-              );
-              setConfirmBulk(false);
-            }}
-          />
-        </>
-      )}
+      <ConfirmDialog
+        open={confirmBulk}
+        title={`Tandai ${counts.BELUM} anak sebagai Hadir?`}
+        message="Hanya anak yang masih 'Belum' yang berubah. Status yang sudah diisi tidak tersentuh."
+        confirmLabel="Ya, tandai Hadir"
+        onClose={() => setConfirmBulk(false)}
+        onConfirm={() => {
+          mark(
+            rows.filter((r) => r.status === "BELUM").map((r) => r.id),
+            "HADIR"
+          );
+          setConfirmBulk(false);
+        }}
+      />
     </div>
   );
 }
@@ -371,56 +465,65 @@ function PendingPermission({ permission }: { permission: Permission }) {
   );
 }
 
-function SessionSettings({ session }: { session: Props["session"] }) {
+function SessionSettings({ session, children }: { session: Props["session"]; children?: React.ReactNode }) {
   const [pending, start] = useTransition();
+  const [libur, startLibur] = useTransition();
+  const [open, setOpen] = useState(false);
   const [time, setTime] = useState(session.startTime.slice(0, 5));
   const [location, setLocation] = useState(session.location ?? "");
   const [topic, setTopic] = useState(session.topic ?? "");
 
   return (
-    <details className="mt-2">
-      <summary className="inline-flex min-h-11 cursor-pointer list-none items-center gap-1.5 text-[15px] font-semibold text-primary">
-        <Settings2 size={18} aria-hidden /> Atur sesi (jam, lokasi, libur)
-      </summary>
-      <form
-        className="mt-2 grid gap-3 rounded-2xl border border-line bg-card p-4 sm:grid-cols-3"
-        onSubmit={(e) => {
-          e.preventDefault();
-          start(async () => {
-            const r = await updateSessionInfo(session.id, { startTime: time, location, topic });
-            if (r?.error) toast.error(r.error);
-            else toast.success("Info sesi disimpan");
-          });
-        }}
-      >
-        <Field label="Jam mulai">
-          <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className={inputClass} />
-        </Field>
-        <Field label="Lokasi">
-          <input value={location} onChange={(e) => setLocation(e.target.value)} className={inputClass} />
-        </Field>
-        <Field label="Materi latihan">
-          <input value={topic} onChange={(e) => setTopic(e.target.value)} placeholder="mis. Passing pendek" className={inputClass} />
-        </Field>
-        <div className="flex flex-wrap gap-2 sm:col-span-3">
-          <Button type="submit" loading={pending}>
-            Simpan info
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            disabled={pending}
-            onClick={() =>
-              start(async () => {
-                await setSessionCancelled(session.id, !session.cancelled);
-                toast.success(session.cancelled ? "Sesi dibuka lagi" : "Sesi ditandai libur");
-              })
-            }
-          >
-            <Minus size={18} aria-hidden /> {session.cancelled ? "Batalkan libur" : "Tandai libur (hujan, dll)"}
-          </Button>
-        </div>
-      </form>
-    </details>
+    <div className="mt-4 space-y-3 border-t border-line pt-4">
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+        {children}
+        <Button
+          type="button"
+          variant="outline"
+          size="md"
+          loading={libur}
+          onClick={() =>
+            startLibur(async () => {
+              await setSessionCancelled(session.id, !session.cancelled);
+              toast.success(session.cancelled ? "Sesi dibuka lagi" : "Sesi ditandai libur");
+            })
+          }
+          className={session.cancelled ? undefined : "border-alpa/30 bg-alpa/10 text-alpa hover:bg-alpa/15"}
+        >
+          {!libur && <Minus size={18} aria-hidden />} {session.cancelled ? "Batalkan libur" : "Tandai libur"}
+        </Button>
+        <Button type="button" variant="outline" size="md" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+          <Settings2 size={18} aria-hidden /> Atur sesi
+        </Button>
+      </div>
+      {open && (
+        <form
+          className="grid gap-3 sm:grid-cols-3"
+          onSubmit={(e) => {
+            e.preventDefault();
+            start(async () => {
+              const r = await updateSessionInfo(session.id, { startTime: time, location, topic });
+              if (r?.error) toast.error(r.error);
+              else toast.success("Info sesi disimpan");
+            });
+          }}
+        >
+          <Field label="Jam mulai">
+            <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className={inputClass} />
+          </Field>
+          <Field label="Lokasi">
+            <input value={location} onChange={(e) => setLocation(e.target.value)} className={inputClass} />
+          </Field>
+          <Field label="Materi latihan">
+            <input value={topic} onChange={(e) => setTopic(e.target.value)} placeholder="mis. Passing pendek" className={inputClass} />
+          </Field>
+          <div className="sm:col-span-3">
+            <Button type="submit" loading={pending}>
+              Simpan info
+            </Button>
+          </div>
+        </form>
+      )}
+    </div>
   );
 }

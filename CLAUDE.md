@@ -24,9 +24,10 @@ DB lokal (WSL): cluster Postgres 18 `gm` di :5417, database `talenta_bola`, role
 
 ## Gaya tampilan
 
-Diputuskan dari mockup + `design_talentabola.md` (vault `4.Archives/applications/aplikasi-ssb/`), bukan disalin app lain:
-- **Layout**: sidebar desktop (≥ lg) + bottom-nav 5 item di HP. Shell di `src/app/(app)/layout.tsx`.
-- **Rupa**: hijau lapangan `#2F6B3F`, latar hangat `#F7F6F3`, Plus Jakarta Sans (`next/font`), kontras tinggi, **tanpa mode gelap** (dipakai di bawah matahari).
+**Mockup di `mockups/*.html` adalah acuan rupa yang mengikat** (diputuskan Abu 22 Okt 2026 setelah v1.0.0 menyimpang — issue `app-1xtg`). Halaman baru: buka mockup terkait dan bandingkan screenshot berdampingan.
+- **Layout**: sidebar desktop (≥ md) berseksi + panel KU aktif + top bar (remah + judul dari tabel `TITLES` di `_components/Nav.tsx`), bottom-nav 5 item di HP. Shell di `src/app/(app)/layout.tsx`.
+- **Rupa**: slate + emerald (`#059669`), latar `#F1F5F9`, kartu `rounded-2xl border-line shadow-sm`, label kapital kecil (utility `eyebrow`), kartu sorotan gelap (`from-hero`), Plus Jakarta Sans.
+- **Dark mode**: kelas `.dark` di `<html>` (skrip di root layout; pilihan tersimpan, default ikut sistem) + `ThemeToggle`. Token berganti nilai sendiri, jadi komponen cukup memakai token — hindari `bg-white`/`slate-*` mentah. Cetak/PDF selalu terang.
 - **Warna status presensi** dibedakan warna + ikon + huruf: Hadir hijau ✓, Izin oranye ✋, Sakit ungu +, Alpa merah bata ✕.
 - Semua warna lewat token `@theme` di `globals.css`. Warna klub (`ssb_profiles.primary_color`) diterapkan lewat wrapper `.brand` + `--color-primary`.
 
@@ -55,7 +56,8 @@ Diputuskan dari mockup + `design_talentabola.md` (vault `4.Archives/applications
 | Komponen satu-halaman di `src/components/` | Colocate di `_components/` dalam folder route; `src/components/` hanya yang dipakai lintas halaman |
 | `router.push` / tombol async tanpa tanda tunggu | `Button loading`, `useTransition` dengan `isPending` dipakai, `loading.tsx` per grup, `useLinkStatus` di nav |
 | Modal ad-hoc | `ConfirmDialog` (native `<dialog>`) |
-| Tombol presensi dikecilkan | Minimal 44×56 px; ini dipakai berdiri satu tangan di lapangan |
+| Tombol presensi dikecilkan | Minimal 44×56 px; ini dipakai berdiri satu tangan di lapangan (mockup lebih kecil — ini satu-satunya penyimpangan sengaja) |
+| Mendesain ulang rupa sendiri | Ikuti `mockups/*.html`; jangan karang palet/tata letak baru |
 | "Powered by TalentaBola" di halaman ortu | Halaman ortu & rapor terasa milik klub |
 | Data anak asli masuk repo | Repo publik. Daftar nama asli hanya di `src/db/roster.local.txt` (gitignored) |
 | `pkill -f <pola>` di Bash tool | Pola ikut cocok dengan shell tool itu sendiri → shell mati (exit 144). Matikan pakai PID |

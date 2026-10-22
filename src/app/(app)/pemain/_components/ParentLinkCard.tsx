@@ -28,11 +28,11 @@ export function ParentLinkCard({ playerId, playerName, ssbName, parentPhoneWa, b
     `lihat kehadiran, ajukan izin/sakit, dan baca rapor perkembangan.\n\n${url}\n\nMohon link ini tidak dibagikan ke grup.`;
 
   return (
-    <section className="mb-5 rounded-2xl border border-line bg-primary-soft p-4">
-      <h3 className="flex items-center gap-2 font-bold text-primary">
+    <section className="mb-5 max-w-3xl rounded-2xl border border-primary/20 bg-primary-soft p-5 shadow-sm">
+      <h3 className="flex items-center gap-2 text-xs font-extrabold tracking-wider text-primary uppercase">
         <Link2 size={18} aria-hidden /> Link untuk orang tua
       </h3>
-      <p className="mt-1 text-[15px] text-muted">
+      <p className="mt-1 text-sm text-muted">
         Ortu membuka link ini untuk izin/sakit dan melihat rapor — tanpa perlu daftar akun.
       </p>
       <div className="mt-3 flex flex-wrap gap-2">
@@ -40,7 +40,7 @@ export function ParentLinkCard({ playerId, playerName, ssbName, parentPhoneWa, b
           href={waLink(message, parentPhoneWa)}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 font-semibold text-white"
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 font-bold text-white shadow-sm hover:bg-primary-dark"
         >
           <Send size={18} aria-hidden /> {parentPhoneWa ? "Kirim ke WA ortu" : "Kirim lewat WA"}
         </a>

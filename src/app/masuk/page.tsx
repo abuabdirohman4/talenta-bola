@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { isCoach } from "@/lib/auth/require-user";
 import { getSsb } from "@/lib/data";
-import { initials } from "@/lib/format";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { clubInitials } from "@/lib/format";
 import { LoginForm } from "./_components/LoginForm";
 
 export const metadata: Metadata = { title: "Masuk" };
@@ -13,23 +14,24 @@ export default async function MasukPage() {
 
   return (
     <main className="brand grid min-h-dvh lg:grid-cols-2" style={{ "--color-primary": ssb.primaryColor } as React.CSSProperties}>
-      <section className="flex flex-col justify-center px-6 py-10 sm:px-12">
-        <div className="mx-auto w-full max-w-sm">
-          <div className="mb-8 flex items-center gap-3">
+      <section className="relative flex flex-col justify-center px-4 py-10 sm:px-12">
+        <ThemeToggle className="absolute top-4 right-4" />
+        <div className="mx-auto w-full max-w-sm rounded-2xl border border-line bg-card p-6 shadow-sm">
+          <div className="mb-6 flex items-center gap-3">
             <span className="grid size-12 place-items-center rounded-xl bg-primary text-lg font-extrabold text-white">
-              {initials(ssb.name)}
+              {clubInitials(ssb.name)}
             </span>
             <div>
-              <p className="text-lg font-bold leading-tight">{ssb.name}</p>
-              <p className="text-sm text-muted">Ruang pelatih</p>
+              <p className="text-base leading-tight font-black tracking-tight">{ssb.name}</p>
+              <p className="eyebrow">Ruang pelatih</p>
             </div>
           </div>
-          <h1 className="text-2xl font-extrabold tracking-tight">Masuk untuk mulai presensi</h1>
-          <p className="mt-2 text-[15px] text-muted">Masukkan kode akses pelatih. Sekali masuk, HP ini diingat 30 hari.</p>
+          <h1 className="text-xl font-black tracking-tight">Masuk untuk mulai presensi</h1>
+          <p className="mt-2 text-sm text-muted">Masukkan kode akses pelatih. Sekali masuk, HP ini diingat 30 hari.</p>
           <LoginForm />
         </div>
       </section>
-      <aside className="relative hidden overflow-hidden bg-primary lg:block" aria-hidden>
+      <aside className="relative hidden overflow-hidden bg-linear-to-br from-primary to-primary-dark lg:block" aria-hidden>
         {/* Garis lapangan sederhana sebagai panel brand. */}
         <svg viewBox="0 0 400 600" className="absolute inset-0 h-full w-full opacity-25" preserveAspectRatio="xMidYMid slice">
           <g fill="none" stroke="white" strokeWidth="3">

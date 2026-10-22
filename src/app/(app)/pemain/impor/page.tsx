@@ -12,8 +12,8 @@ export default async function ImportPage({ searchParams }: { searchParams: Promi
   return (
     <>
       <BackLink href={`/pemain?ku=${group.id}`}>Daftar pemain</BackLink>
-      <h2 className="text-2xl font-extrabold tracking-tight">Impor dari daftar WA</h2>
-      <p className="mt-1 mb-4 text-muted">
+      <h2 className="text-xl font-extrabold tracking-tight md:hidden">Impor dari daftar WA</h2>
+      <p className="mb-4 max-w-3xl text-sm text-muted md:mt-0">
         Salin pesan daftar presensi dari grup WA (yang bernomor), tempel di bawah. Emoji, “ijin”, dan baris instruksi
         dibuang otomatis; nama yang sudah ada dilewati.
       </p>

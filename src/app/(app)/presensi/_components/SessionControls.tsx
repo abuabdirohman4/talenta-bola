@@ -8,11 +8,21 @@ import { Field, inputClass } from "@/components/ui/Field";
 import { cn } from "@/lib/utils";
 import { openSession, scheduleWeekly } from "../actions";
 
-export function StartTodayButton({ ageGroupId, className }: { ageGroupId: string; className?: string }) {
+export function StartTodayButton({
+  ageGroupId,
+  className,
+  label = "Mulai presensi hari ini",
+  size = "lg",
+}: {
+  ageGroupId: string;
+  className?: string;
+  label?: string;
+  size?: "md" | "lg";
+}) {
   const [pending, start] = useTransition();
   return (
     <Button
-      size="lg"
+      size={size}
       className={cn("mt-3 w-full", className)}
       loading={pending}
       onClick={() =>
@@ -22,8 +32,8 @@ export function StartTodayButton({ ageGroupId, className }: { ageGroupId: string
         })
       }
     >
-      {!pending && <Play size={20} aria-hidden />}
-      Mulai presensi hari ini
+      {!pending && <Play size={size === "lg" ? 20 : 16} aria-hidden />}
+      {label}
     </Button>
   );
 }
@@ -35,8 +45,8 @@ export function NewSessionForm({ ageGroupId, defaultLocation }: { ageGroupId: st
   const [location, setLocation] = useState(defaultLocation);
 
   return (
-    <details className="mt-3 group">
-      <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 text-[15px] font-semibold text-primary">
+    <details className="group py-1">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 text-[15px] font-bold text-primary hover:underline">
         <CalendarPlus size={18} aria-hidden /> Jadwalkan sesi tanggal lain
       </summary>
       <form
@@ -77,8 +87,8 @@ export function WeeklyScheduleForm({ ageGroupId, defaultLocation }: { ageGroupId
   const [weeks, setWeeks] = useState(4);
 
   return (
-    <details className="mt-1 group">
-      <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 text-[15px] font-semibold text-primary">
+    <details className="group py-1">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 text-[15px] font-bold text-primary hover:underline">
         <CalendarRange size={18} aria-hidden /> Buat jadwal rutin mingguan
       </summary>
       <form
@@ -104,8 +114,8 @@ export function WeeklyScheduleForm({ ageGroupId, defaultLocation }: { ageGroupId
                   aria-pressed={on}
                   onClick={() => setDays((xs) => (on ? xs.filter((x) => x !== i) : [...xs, i]))}
                   className={
-                    "min-h-11 min-w-12 rounded-xl border px-3 font-semibold " +
-                    (on ? "border-primary bg-primary text-white" : "border-line bg-card")
+                    "min-h-11 min-w-12 rounded-xl border px-3 font-bold " +
+                    (on ? "border-primary bg-primary text-white" : "border-line bg-subtle")
                   }
                 >
                   {d}

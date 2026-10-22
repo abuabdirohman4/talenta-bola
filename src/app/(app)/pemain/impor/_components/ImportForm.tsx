@@ -21,7 +21,8 @@ export function ImportForm({ groups, defaultGroupId }: { groups: { id: string; n
   const preview = parseWaList(text);
 
   return (
-    <div className="space-y-4">
+    <div className="max-w-3xl space-y-4">
+      <div className="space-y-4 rounded-2xl border border-line bg-card p-5 shadow-sm">
       <Field label="Kelompok umur">
         <select value={groupId} onChange={(e) => setGroupId(e.target.value)} className={inputClass}>
           {groups.map((g) => (
@@ -40,10 +41,11 @@ export function ImportForm({ groups, defaultGroupId }: { groups: { id: string; n
           className={inputClass + " font-mono text-sm"}
         />
       </Field>
+      </div>
 
       {preview.length > 0 && (
-        <section className="rounded-2xl border border-line bg-card p-4">
-          <p className="font-bold">Terbaca {preview.length} nama</p>
+        <section className="rounded-2xl border border-line bg-card p-5 shadow-sm">
+          <p className="text-xs font-extrabold tracking-wider uppercase">Terbaca {preview.length} nama</p>
           <ol className="mt-2 grid list-decimal grid-cols-2 gap-x-6 gap-y-1 pl-5 text-[15px] sm:grid-cols-3">
             {preview.map((p) => (
               <li key={p.fullName}>

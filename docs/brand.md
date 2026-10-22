@@ -35,11 +35,11 @@
 
 ## 4. Visual · Must
 
-- **Warna utama:** `--color-primary` hijau lapangan `#2F6B3F` — aksi utama, header kartu sesi. Bisa diganti warna klub.
+- **Warna utama:** `--color-primary` emerald `#059669` di atas latar slate `#F1F5F9`, mengikuti `mockups/*.html` — aksi utama. Kartu sorotan (sesi berikutnya, kartu pemain di rapor) gelap. Bisa diganti warna klub.
 - **Warna status:** Hadir `--color-hadir`, Izin `--color-izin`, Sakit `--color-sakit`, Alpa `--color-alpa`; selalu disertai ikon + huruf.
 - **Huruf:** Plus Jakarta Sans lewat `next/font`; aksen serif hanya untuk nama anak & tanda tangan di rapor.
 - **Ikon & logo:** lucide-react; ikon PWA bola di `public/icons/` (192/512/maskable), `src/app/icon.png`, `apple-icon.png`.
-- **Mode gelap:** tidak didukung (dipakai di bawah matahari; kontras tinggi lebih penting).
+- **Mode gelap:** didukung — ikut setelan HP, bisa diganti lewat tombol bulan/matahari. Mode terang tetap kontras tinggi untuk lapangan siang hari; cetak/PDF selalu terang.
 
 ## 5. Konsistensi lintas permukaan · Should
 

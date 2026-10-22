@@ -34,7 +34,7 @@ export const ssbProfiles = pgTable(
     name: text("name").notNull(),
     slug: text("slug").notNull(),
     logoUrl: text("logo_url"),
-    primaryColor: text("primary_color").default("#2F6B3F").notNull(),
+    primaryColor: text("primary_color").default("#059669").notNull(),
     phoneWa: text("phone_wa"),
     homeGround: text("home_ground"),
     headCoachName: text("head_coach_name"),

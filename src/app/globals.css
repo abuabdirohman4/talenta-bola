@@ -1,34 +1,69 @@
 @import "tailwindcss";
 
-/* Palet dari design brief TalentaBola: hijau lapangan, latar hangat, kontras tinggi untuk layar HP di bawah matahari. */
+/* Dark mode lewat kelas .dark di <html> (skrip di root layout: pilihan tersimpan, kalau belum ada ikut sistem). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Palet mengikuti mockups/dashboard.html: slate + emerald. Semua komponen memakai token ini, jadi dark mode cukup menukar nilainya. */
 @theme {
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-serif: Georgia, "Times New Roman", serif;
 
-  --color-primary: #2f6b3f;
-  --color-primary-dark: #24552f;
-  --color-primary-soft: #e8f0e6;
-  --color-ink: #1c2119;
-  --color-muted: #5a6355;
-  --color-ground: #f7f6f3;
-  --color-line: #e3e1da;
+  --color-primary: #059669;
+  --color-primary-dark: #047857;
+  --color-primary-soft: #ecfdf5;
+  --color-ink: #0f172a;
+  --color-muted: #64748b;
+  --color-ground: #f1f5f9;
+  --color-line: #e2e8f0;
   --color-card: #ffffff;
+  --color-subtle: #f8fafc;
+  /* Kartu sorotan (sesi berikutnya): gelap di kedua mode. */
+  --color-hero: #0f172a;
+  --color-hero-2: #1e293b;
 
-  /* Status presensi: dibedakan warna + ikon, bukan merah-hijau saja. */
-  --color-hadir: #2f6b3f;
-  --color-izin: #b26d21;
-  --color-sakit: #7b5ea7;
-  --color-alpa: #a6402e;
-  --color-belum: #8a8a80;
-  --color-warn: #8a5a12;
-  --color-warn-soft: #fbf1df;
+  /* Status presensi: dibedakan warna + ikon + huruf, bukan merah-hijau saja. */
+  --color-hadir: #059669;
+  --color-izin: #d97706;
+  --color-sakit: #7c3aed;
+  --color-alpa: #dc2626;
+  --color-belum: #94a3b8;
+  --color-warn: #b45309;
+  --color-warn-soft: #fffbeb;
+  --color-info: #2563eb;
 }
 
 /* Warna klub bisa diganti (ssb_profiles.primary_color): wrapper .brand mengisi --color-primary, turunannya dihitung ulang di sini. */
 :root,
 .brand {
   --color-primary-dark: color-mix(in srgb, var(--color-primary) 80%, black);
-  --color-primary-soft: color-mix(in srgb, var(--color-primary) 12%, white);
+  --color-primary-soft: color-mix(in srgb, var(--color-primary) 10%, white);
+}
+
+/* Hanya layar: cetak/PDF rapor selalu terang. */
+@media screen {
+  .dark,
+  .dark .brand {
+    --color-primary-soft: color-mix(in srgb, var(--color-primary) 18%, #0f172a);
+  }
+  .dark {
+    color-scheme: dark;
+    --color-ink: #f1f5f9;
+    --color-muted: #94a3b8;
+    --color-ground: #020617;
+    --color-line: #1e293b;
+    --color-card: #0f172a;
+    --color-subtle: #1e293b;
+    --color-hero: #0f172a;
+    --color-hero-2: #1e293b;
+    --color-hadir: #10b981;
+    --color-izin: #f59e0b;
+    --color-sakit: #8b5cf6;
+    --color-alpa: #ef4444;
+    --color-belum: #64748b;
+    --color-warn: #fbbf24;
+    --color-warn-soft: #422006;
+    --color-info: #60a5fa;
+  }
 }
 
 html {
@@ -38,6 +73,15 @@ html {
 body {
   background: var(--color-ground);
   color: var(--color-ink);
+}
+
+/* Label seksi kecil kapital ala mockup ("MENU UTAMA", "TOTAL SISWA"). */
+@utility eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
 }
 
 @media print {

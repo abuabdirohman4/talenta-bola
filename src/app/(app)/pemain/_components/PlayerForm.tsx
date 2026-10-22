@@ -61,8 +61,8 @@ export function PlayerForm({ initial, groups }: { initial: PlayerFormData; group
   const num = { inputMode: "decimal" as const, className: inputClass };
 
   return (
-    <form onSubmit={submit} className="space-y-5" noValidate>
-      <section className="space-y-4 rounded-2xl border border-line bg-card p-4">
+    <form onSubmit={submit} className="max-w-3xl space-y-5" noValidate>
+      <section className="space-y-4 rounded-2xl border border-line bg-card p-5 shadow-sm">
         <ImagePicker name={f.fullName} value={f.photoUrl} onChange={(v) => set("photoUrl", v)} />
         <Field label="Nama lengkap" required error={err("fullName")}>
           <input value={f.fullName} onChange={(e) => set("fullName", e.target.value)} className={inputClass} autoComplete="off" />
@@ -115,8 +115,8 @@ export function PlayerForm({ initial, groups }: { initial: PlayerFormData; group
         </div>
       </section>
 
-      <section className="space-y-4 rounded-2xl border border-line bg-card p-4">
-        <h3 className="font-bold">Orang tua / wali</h3>
+      <section className="space-y-4 rounded-2xl border border-line bg-card p-5 shadow-sm">
+        <h3 className="border-b border-line pb-3 text-xs font-extrabold tracking-wider uppercase">Orang tua / wali</h3>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Nama orang tua">
             <input value={f.parentName} onChange={(e) => set("parentName", e.target.value)} className={inputClass} />

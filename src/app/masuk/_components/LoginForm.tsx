@@ -11,9 +11,9 @@ export function LoginForm() {
   const [show, setShow] = useState(false);
 
   return (
-    <form action={action} className="mt-8 space-y-4">
+    <form action={action} className="mt-6 space-y-4">
       <label className="block">
-        <span className="mb-1.5 block text-sm font-semibold">Kode akses</span>
+        <span className="eyebrow mb-1.5 block">Kode akses</span>
         <span className="relative block">
           <input
             name="code"

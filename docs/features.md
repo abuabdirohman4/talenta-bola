@@ -66,3 +66,12 @@ Step-by-step guide in Indonesian for the club: [`panduan-demo.md`](panduan-demo.
 > Make every page feel like the club's own.
 
 **How to use:** **Pengaturan** → name, head coach, home ground, WhatsApp, colour, logo; add age groups.
+
+## Light & dark mode
+
+> The app follows the phone's light/dark setting; coaches can switch with the sun/moon button.
+
+**How to use:** tap the moon/sun button (top bar, phone header, or **Mode Tampilan** in the sidebar). The choice is remembered on that phone.
+
+**Notes:**
+- Printed / PDF report cards are always light.

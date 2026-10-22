@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0] — 2026-10-22
+
+### Improved
+- **New look matching the club mockups**: every page now follows the approved TalentaBola design — slate and emerald colours, a dark "next session" card, summary cards with clear labels, and a sidebar grouped by menu with the active age group always visible.
+- **Richer dashboard**: next session at a glance, four key numbers (players, attendance rate, report progress, complete data), the children who were excused/sick/absent last session, the upcoming schedule, and quick shortcuts.
+- **Attendance sheet**: attendance summary with a progress bar and coloured status tiles, search and filters (All / Not yet / Present), and the WhatsApp recap shown side by side on larger screens.
+- **Player roster**: cards with shirt number, position, parent, attendance and report status, plus position filters and a team composition summary.
+- **Report card form and shared report**: roster panel beside the form, skill groups with averages, and an official-looking report with coloured skill bars and the coach's signature.
+
+### Added
+- **Dark mode**: follows the phone's setting automatically, with a sun/moon button to switch. Printed and PDF reports always stay light.
+
 ## [1.0.0] — 2026-10-22
 
 First working app for the SSB Galuh Putra demo (replaces the static HTML mockups, now in `mockups/`).

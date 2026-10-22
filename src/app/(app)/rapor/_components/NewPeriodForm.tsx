@@ -14,8 +14,8 @@ export function NewPeriodForm({ ageGroupId }: { ageGroupId: string }) {
   const [endDate, setEnd] = useState("");
 
   return (
-    <details className="mt-6 rounded-2xl border border-line bg-card p-4">
-      <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 font-semibold text-primary">
+    <details className="rounded-2xl border border-line bg-card p-5 shadow-sm">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 text-sm font-extrabold text-primary">
         <Plus size={18} aria-hidden /> Buat periode rapor baru
       </summary>
       <form

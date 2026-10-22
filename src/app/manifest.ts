@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Presensi lapangan satu tap dan rapor perkembangan pemain untuk Sekolah Sepak Bola.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f7f6f3",
-    theme_color: "#2f6b3f",
+    background_color: "#f1f5f9",
+    theme_color: "#059669",
     orientation: "portrait",
     icons: [
       { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },

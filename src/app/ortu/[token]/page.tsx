@@ -5,6 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/Avatar";
 import { ClubHeader } from "@/components/ClubHeader";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { db } from "@/db";
 import { ageGroups, parentPermissions, players, reportPeriods, reports, ssbProfiles, trainingSessions } from "@/db/schema";
 import { STATUS_LABEL } from "@/lib/attendance";
@@ -68,19 +69,29 @@ export default async function ParentPage({ params }: { params: Promise<{ token: 
   for (const x of perms) if (!permBy.has(x.sessionId)) permBy.set(x.sessionId, x);
 
   return (
-    <main className="brand mx-auto min-h-dvh max-w-xl px-4 py-6" style={{ "--color-primary": ssb.primaryColor } as React.CSSProperties}>
-      <ClubHeader name={ssb.name} logoUrl={ssb.logoUrl} subtitle="Halaman orang tua" />
+    <main className="brand mx-auto min-h-dvh max-w-2xl space-y-4 px-4 py-5" style={{ "--color-primary": ssb.primaryColor } as React.CSSProperties}>
+      <div className="flex items-center justify-between gap-3">
+        <ClubHeader name={ssb.name} logoUrl={ssb.logoUrl} subtitle="Halaman orang tua" />
+        <ThemeToggle />
+      </div>
 
-      <section className="mt-6 flex items-center gap-4 rounded-2xl border border-line bg-card p-4">
-        <Avatar name={p.fullName} photoUrl={p.photoUrl} className="size-16 text-xl" />
-        <div>
-          <h1 className="text-xl font-extrabold">{p.fullName}</h1>
-          <p className="text-muted">{row.groupName}</p>
+      <section className="flex items-center gap-4 overflow-hidden rounded-2xl border border-slate-700/80 bg-linear-to-br from-hero via-hero-2 to-hero p-5 text-white shadow-md">
+        <Avatar name={p.fullName} photoUrl={p.photoUrl} className="size-16 border-2 border-primary text-xl" />
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] font-extrabold tracking-widest text-emerald-400 uppercase">Pemain</p>
+          <h1 className="text-xl font-black tracking-tight">{p.fullName}</h1>
+          <p className="text-xs font-medium text-slate-300">{row.groupName}</p>
         </div>
+        {attendance.rate != null && (
+          <div className="shrink-0 text-right">
+            <p className="text-2xl font-black text-emerald-400">{attendance.rate}%</p>
+            <p className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Kehadiran</p>
+          </div>
+        )}
       </section>
 
-      <section className="mt-4 rounded-2xl border border-line bg-card p-4">
-        <h2 className="font-bold">Kehadiran latihan</h2>
+      <section className="rounded-2xl border border-line bg-card p-5 shadow-sm">
+        <h2 className="text-xs font-extrabold tracking-wider uppercase">Kehadiran latihan</h2>
         {attendance.held ? (
           <>
             <p className="mt-1 text-[15px]">
@@ -89,7 +100,7 @@ export default async function ParentPage({ params }: { params: Promise<{ token: 
             </p>
             <ul className="mt-3 flex flex-wrap gap-2" aria-label="Kehadiran sesi terakhir">
               {attendance.recent.map((s) => (
-                <li key={s.date} className="flex items-center gap-1.5 rounded-full border border-line px-2.5 py-1 text-sm">
+                <li key={s.date} className="flex items-center gap-1.5 rounded-lg border border-line bg-subtle px-2.5 py-1 text-xs font-semibold">
                   <span className={cn("size-2.5 rounded-full", s.status ? DOT[s.status] : "bg-belum")} aria-hidden />
                   {formatDateId(s.date, { weekday: false }).replace(/ \d{4}$/, "")} · {s.status ? STATUS_LABEL[s.status] : "Belum diisi"}
                 </li>
@@ -101,8 +112,8 @@ export default async function ParentPage({ params }: { params: Promise<{ token: 
         )}
       </section>
 
-      <section className="mt-4 rounded-2xl border border-line bg-card p-4">
-        <h2 className="font-bold">Izin / sakit</h2>
+      <section className="rounded-2xl border border-line bg-card p-5 shadow-sm">
+        <h2 className="text-xs font-extrabold tracking-wider uppercase">Izin / sakit</h2>
         {upcoming.filter((s) => s.status !== "CANCELLED").length === 0 ? (
           <p className="mt-1 text-[15px] text-muted">
             Belum ada jadwal latihan dalam 3 minggu ke depan. Kalau anak berhalangan, kabari pelatih lewat WA.
@@ -120,15 +131,15 @@ export default async function ParentPage({ params }: { params: Promise<{ token: 
         )}
       </section>
 
-      <section className="mt-4 rounded-2xl border border-line bg-card p-4">
-        <h2 className="font-bold">Rapor perkembangan</h2>
+      <section className="rounded-2xl border border-line bg-card p-5 shadow-sm">
+        <h2 className="text-xs font-extrabold tracking-wider uppercase">Rapor perkembangan</h2>
         {published.length ? (
           <ul className="mt-2 space-y-2">
             {published.map((r) => (
               <li key={r.token}>
                 <Link
                   href={`/r/${r.token}`}
-                  className="flex min-h-12 items-center gap-2 rounded-xl bg-primary-soft px-3 font-semibold text-primary"
+                  className="flex min-h-12 items-center gap-2 rounded-xl border border-primary/30 bg-primary-soft px-3 text-sm font-bold text-primary"
                 >
                   <FileText size={18} aria-hidden /> {r.periodName}
                 </Link>
@@ -140,7 +151,7 @@ export default async function ParentPage({ params }: { params: Promise<{ token: 
         )}
       </section>
 
-      <p className="mt-6 text-center text-sm text-muted">Link ini khusus untuk keluarga {p.nickname || p.fullName}. Mohon tidak dibagikan ke grup.</p>
+      <p className="pt-2 text-center text-xs text-muted">Link ini khusus untuk keluarga {p.nickname || p.fullName}. Mohon tidak dibagikan ke grup.</p>
     </main>
   );
 }

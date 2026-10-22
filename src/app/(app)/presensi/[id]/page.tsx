@@ -15,7 +15,7 @@ export default async function SessionPage({ params }: { params: Promise<{ id: st
   const ssb = await getSsb();
 
   const [session] = await db
-    .select({ s: trainingSessions, groupName: ageGroups.name })
+    .select({ s: trainingSessions, groupName: ageGroups.name, groupCode: ageGroups.code })
     .from(trainingSessions)
     .innerJoin(ageGroups, eq(ageGroups.id, trainingSessions.ageGroupId))
     .where(and(eq(trainingSessions.id, id), eq(trainingSessions.ssbId, ssb.id), isNull(trainingSessions.deletedAt)));
@@ -29,6 +29,7 @@ export default async function SessionPage({ params }: { params: Promise<{ id: st
         fullName: players.fullName,
         nickname: players.nickname,
         jerseyNumber: players.jerseyNumber,
+        position: players.position,
       })
       .from(players)
       .where(and(eq(players.ageGroupId, s.ageGroupId), eq(players.isActive, true), isNull(players.deletedAt)))
@@ -65,6 +66,7 @@ export default async function SessionPage({ params }: { params: Promise<{ id: st
         topic: s.topic,
         cancelled: s.status === "CANCELLED",
         groupName: session.groupName,
+        groupCode: session.groupCode,
       }}
       roster={roster}
       serverMarks={markBy}
