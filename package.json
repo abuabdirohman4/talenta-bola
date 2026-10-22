@@ -1,6 +1,6 @@
 {
   "name": "talenta-bola",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 5113",
@@ -13,6 +13,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx src/db/seed.ts",
+    "db:set-code": "tsx src/db/set-code.ts",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {

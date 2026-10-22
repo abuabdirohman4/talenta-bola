@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.0] — 2026-10-22
+
+### Added
+- **Access code per club**: each club has its own coach code stored in the database; the club changes it from Pengaturan, which signs out every other phone.
+- **Super-admin page (`/admin`)**: list clubs (counts only, no children's data), add a club with its first age group and code, reset a club's code, remove a club. Protected by a separate admin code.
+
+### Changed
+- **Coaches sign in once more** after this release (same code); the login page shows TalentaBola branding until the club is known.
+
 ## [1.4.1] — 2026-10-22
 
 ### Improved

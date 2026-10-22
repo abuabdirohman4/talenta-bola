@@ -90,3 +90,16 @@ Step-by-step guide in Indonesian for the club: [`panduan-demo.md`](panduan-demo.
 - Screenshots come from demo data with fictional names.
 - The WhatsApp button uses `NEXT_PUBLIC_CONTACT_WA`; without it only "Masuk pelatih" is shown.
 - Only this page is indexed by search engines; app, parent and report pages stay `noindex`.
+
+## Access codes & super-admin
+
+> Every club signs in with its own code; the product owner manages clubs from `/admin`.
+
+**How to use:**
+1. Coaches: **Pengaturan → Ganti kode akses**. Every other phone is signed out; this one stays in.
+2. Owner: open `/admin/masuk`, enter `SUPER_ADMIN_CODE`, then add a club, reset its code, or remove it.
+3. From the command line: `ENV_FILE=.env.production pnpm db:set-code <slug> <code>`.
+
+**Notes:**
+- Codes are case-insensitive, at least 4 characters, unique across clubs.
+- Changing `AUTH_SECRET` invalidates every stored code — set them again afterwards.
