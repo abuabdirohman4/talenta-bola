@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Cta, waHref } from "./_components/Cta";
 import { Phone } from "./_components/Phone";
 import { Pitch } from "./_components/Pitch";
+import { RevealOnScroll } from "./_components/RevealOnScroll";
 
 const PROMISE = "Presensi lapangan satu tap dan rapor perkembangan pemain untuk Sekolah Sepak Bola.";
 
@@ -109,21 +110,24 @@ export default function TentangPage() {
         </div>
       </header>
 
+      <RevealOnScroll />
       <main>
         {/* Hero */}
         <section className="relative overflow-hidden bg-linear-to-b from-primary-soft to-ground">
           <div className={cn(wrap, "grid items-center gap-10 pt-12 pb-14 md:pt-20 md:pb-24 lg:grid-cols-[1.15fr_1fr]")}>
             <div className="text-center lg:text-left">
-              <p className="eyebrow inline-flex items-center gap-2 rounded-full border border-line bg-card px-3.5 py-1.5 shadow-sm">
+              <p className="lp-in eyebrow inline-flex items-center gap-2 rounded-full border border-line bg-card px-3.5 py-1.5 shadow-sm">
                 <span className="size-2 rounded-full bg-brand" aria-hidden />
                 Untuk pelatih & pengelola SSB
               </p>
-              <h1 className="mt-5 text-[2.1rem] leading-[1.1] font-extrabold tracking-tight text-balance md:text-5xl lg:text-[3.4rem]">
+              <h1 style={{ "--d": "0.1s" } as React.CSSProperties} className="lp-in mt-5 text-[2.1rem] leading-[1.1] font-extrabold tracking-tight text-balance md:text-5xl lg:text-[3.4rem]">
                 Latihan tercatat, <span className="text-brand">perkembangan terlihat</span>, orang tua tenang.
               </h1>
-              <p className="mx-auto mt-5 max-w-xl text-base text-muted md:text-lg lg:mx-0">{PROMISE}</p>
-              <Cta className="mt-8 justify-center lg:justify-start" />
-              <ul className="mt-7 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm font-semibold text-muted lg:justify-start">
+              <p style={{ "--d": "0.25s" } as React.CSSProperties} className="lp-in mx-auto mt-5 max-w-xl text-base text-muted md:text-lg lg:mx-0">{PROMISE}</p>
+              <div className="lp-in" style={{ "--d": "0.4s" } as React.CSSProperties}>
+                <Cta className="mt-8 justify-center lg:justify-start" />
+              </div>
+              <ul style={{ "--d": "0.55s" } as React.CSSProperties} className="lp-in mt-7 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm font-semibold text-muted lg:justify-start">
                 {["Jalan tanpa sinyal", "Orang tua tanpa login", "Rapor PDF & WA"].map((t) => (
                   <li key={t} className="flex items-center gap-1.5">
                     <Check size={16} className="text-primary" aria-hidden />
@@ -132,9 +136,9 @@ export default function TentangPage() {
                 ))}
               </ul>
             </div>
-            <div className="relative mx-auto w-full max-w-sm">
+            <div className="lp-in relative mx-auto w-full max-w-sm" style={{ "--d": "0.3s" } as React.CSSProperties}>
               <Pitch className="absolute top-1/2 left-1/2 w-[135%] max-w-none -translate-x-1/2 -translate-y-1/2 text-primary opacity-[0.14]" />
-              <Phone src="/landing/presensi-tap.webp" alt="Aplikasi TalentaBola: presensi satu tap per anak" priority className="relative max-w-[270px]" />
+              <Phone src="/landing/presensi-tap.webp" alt="Aplikasi TalentaBola: presensi satu tap per anak" priority className="lp-float relative max-w-[270px]" />
             </div>
           </div>
         </section>
@@ -142,11 +146,13 @@ export default function TentangPage() {
         {/* Masalah */}
         <section className={section}>
           <div className={wrap}>
-            <p className="eyebrow">Hari ini</p>
-            <h2 className={cn(h2, "mt-2 max-w-2xl text-balance")}>Presensi lewat grup WA itu melelahkan.</h2>
+            <div data-reveal>
+              <p className="eyebrow">Hari ini</p>
+              <h2 className={cn(h2, "mt-2 max-w-2xl text-balance")}>Presensi lewat grup WA itu melelahkan.</h2>
+            </div>
             <div className="mt-10 grid gap-4 md:grid-cols-3">
-              {PROBLEMS.map(({ icon: Icon, title, body }) => (
-                <div key={title} className={cn(card, "p-6")}>
+              {PROBLEMS.map(({ icon: Icon, title, body }, i) => (
+                <div key={title} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className={cn(card, "p-6")}>
                   <span className="grid size-11 place-items-center rounded-xl bg-alpa/10 text-alpa">
                     <Icon size={22} aria-hidden />
                   </span>
@@ -163,7 +169,7 @@ export default function TentangPage() {
           <div className={cn(wrap, "space-y-20 md:space-y-28")}>
             {PILLARS.map((p, i) => (
               <div key={p.id} className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-                <div className={cn(i % 2 === 1 && "lg:order-2")}>
+                <div data-reveal className={cn(i % 2 === 1 && "lg:order-2")}>
                   <p className="eyebrow text-primary! dark:text-primary-2!">{p.eyebrow}</p>
                   <h2 className={cn(h2, "mt-2 text-balance")}>{p.title}</h2>
                   <p className="mt-4 text-base leading-relaxed text-muted md:text-lg">{p.body}</p>
@@ -188,7 +194,7 @@ export default function TentangPage() {
                     </p>
                   )}
                 </div>
-                <div className="rounded-3xl bg-primary-soft px-4 py-10 md:py-12">
+                <div data-reveal style={{ "--d": "0.15s" } as React.CSSProperties} className="rounded-3xl bg-primary-soft px-4 py-10 md:py-12">
                   <div className="flex items-start justify-center gap-4">
                     {p.shots.map((s, k) => (
                       <Phone key={s.src} {...s} className={cn(p.shots.length > 1 && "max-w-[44%] sm:max-w-[210px]", k === 1 && "mt-10")} />
@@ -203,10 +209,12 @@ export default function TentangPage() {
         {/* Perbandingan */}
         <section id="beda" className={section}>
           <div className={wrap}>
-            <p className="eyebrow">Bedanya</p>
-            <h2 className={cn(h2, "mt-2 max-w-2xl text-balance")}>Dibuat untuk HP di pinggir lapangan, bukan dashboard admin.</h2>
+            <div data-reveal>
+              <p className="eyebrow">Bedanya</p>
+              <h2 className={cn(h2, "mt-2 max-w-2xl text-balance")}>Dibuat untuk HP di pinggir lapangan, bukan dashboard admin.</h2>
+            </div>
 
-            <div className={cn(card, "mt-10 hidden overflow-hidden md:block")}>
+            <div data-reveal className={cn(card, "mt-10 hidden overflow-hidden md:block")}>
               <table className="w-full border-collapse text-left text-[15px]">
                 <thead>
                   <tr className="border-b border-line bg-subtle">
@@ -233,7 +241,7 @@ export default function TentangPage() {
 
             <div className="mt-8 space-y-4 md:hidden">
               {ROWS.map(([label, tb, wa, other]) => (
-                <div key={label} className={cn(card, "overflow-hidden")}>
+                <div key={label} data-reveal className={cn(card, "overflow-hidden")}>
                   <p className="eyebrow border-b border-line bg-subtle px-4 py-2.5">{label}</p>
                   <div className="space-y-3 p-4 text-sm">
                     <p className="rounded-lg bg-primary-soft px-3 py-2 font-semibold text-primary dark:text-primary-2">
@@ -264,11 +272,13 @@ export default function TentangPage() {
         {/* Cara mulai */}
         <section id="mulai" className={cn(section, "bg-card")}>
           <div className={wrap}>
-            <p className="eyebrow">Cara mulai</p>
-            <h2 className={cn(h2, "mt-2 max-w-2xl text-balance")}>Tiga langkah, tanpa pelatihan panjang.</h2>
+            <div data-reveal>
+              <p className="eyebrow">Cara mulai</p>
+              <h2 className={cn(h2, "mt-2 max-w-2xl text-balance")}>Tiga langkah, tanpa pelatihan panjang.</h2>
+            </div>
             <ol className="mt-10 grid gap-4 md:grid-cols-3">
               {STEPS.map(({ icon: Icon, title, body }, i) => (
-                <li key={title} className="rounded-2xl border border-line bg-subtle p-6">
+                <li key={title} data-reveal style={{ "--d": `${i * 0.12}s` } as React.CSSProperties} className="rounded-2xl border border-line bg-subtle p-6">
                   <div className="flex items-center gap-3">
                     <span className="grid size-10 place-items-center rounded-full bg-brand text-lg font-black text-white shadow-md shadow-primary/25">{i + 1}</span>
                     <Icon size={22} className="text-primary" aria-hidden />
@@ -284,7 +294,7 @@ export default function TentangPage() {
         {/* CTA akhir */}
         <section className={section}>
           <div className={wrap}>
-            <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-hero to-hero-2 px-6 py-14 text-center text-white md:px-12 md:py-20">
+            <div data-reveal className="relative overflow-hidden rounded-3xl bg-linear-to-br from-hero to-hero-2 px-6 py-14 text-center text-white md:px-12 md:py-20">
               <span className="absolute -top-24 -right-16 size-80 rounded-full bg-primary-2/25 blur-3xl" aria-hidden />
               <Pitch className="absolute top-1/2 left-1/2 h-[170%] -translate-x-1/2 -translate-y-1/2 text-white opacity-[0.06]" />
               <div className="relative">
