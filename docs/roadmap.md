@@ -8,10 +8,10 @@
 
 ## 🎯 MVP & Post-MVP
 
-> **Definisi MVP dalam 1 kalimat yang bisa diverifikasi orang lain:** Coach Riyandi bisa mengabsen 40 anak KU 2016 dari HP dalam < 2 menit (juga tanpa sinyal), menempel rekapnya ke grup WA, mengisi rapor satu anak < 2 menit, dan ortu membuka rapor itu dari link WA tanpa login.
+> **Definisi MVP dalam 1 kalimat yang bisa diverifikasi orang lain:** Coach Rizky bisa mengabsen 40 anak KU 2016 dari HP dalam < 2 menit (juga tanpa sinyal), menempel rekapnya ke grup WA, mengisi rapor satu anak < 2 menit, dan ortu membuka rapor itu dari link WA tanpa login.
 > Aturan pilah: *"Apakah ini dipakai di demo Galuh Putra?"* → ya = MVP, tidak = Post-MVP.
 
-### MVP — SEKARANG (jalur ke demo Coach Riyandi)
+### MVP — SEKARANG (jalur ke demo Coach Rizky)
 
 | # | Item | Kenapa MVP | Status |
 |---|---|---|---|

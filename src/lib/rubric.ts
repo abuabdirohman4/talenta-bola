@@ -1,4 +1,4 @@
-// Rubrik rapor yang disetujui Coach Riyandi (Sep 2026) — jangan diubah tanpa persetujuan pelatih.
+// Rubrik rapor yang disetujui pelatih KU 2016 (Sep 2026) — jangan diubah tanpa persetujuan pelatih.
 // Skor disimpan per baris (report_scores.aspect_key), jadi aspek boleh bertambah tanpa ubah tabel.
 
 export type AspectGroup = { key: string; label: string; aspects: { key: string; label: string }[] };

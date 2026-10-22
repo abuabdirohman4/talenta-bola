@@ -1,4 +1,4 @@
-# Panduan demo TalentaBola — untuk Mas Angga & Coach Riyandi
+# Panduan demo TalentaBola — untuk Mas Angga & Coach Rizky
 
 Aplikasi dibuka dari HP lewat browser (Chrome). Tidak perlu install apa pun.
 

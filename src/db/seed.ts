@@ -37,7 +37,7 @@ async function main() {
       name: "SSB Galuh Putra",
       slug: "galuh-putra",
       homeGround: "Lapang Brigif 13 Galuh",
-      headCoachName: "Coach Riyandi",
+      headCoachName: "Coach Rizky",
     })
     .returning();
   const [ku] = await db
