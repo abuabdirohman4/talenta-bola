@@ -30,7 +30,7 @@ export function verifySessionValue(value: string | undefined, now = Date.now()):
 /** Bandingkan kode akses tanpa bocor lewat waktu respons (hash dulu supaya panjang sama). */
 export function accessCodeMatches(input: string): boolean {
   const code = process.env.COACH_ACCESS_CODE;
-  if (!code || code.length < 8) throw new Error("COACH_ACCESS_CODE belum diisi (min. 8 karakter)");
+  if (!code || code.length < 4) throw new Error("COACH_ACCESS_CODE belum diisi (min. 4 karakter)");
   const h = (s: string) => createHmac("sha256", secret()).update(s.trim().toLowerCase()).digest();
   return timingSafeEqual(h(input), h(code));
 }
