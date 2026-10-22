@@ -98,20 +98,20 @@ export default async function PemainPage({ searchParams }: { searchParams: Promi
       <KuSwitcher groups={groups} activeId={group.id} basePath="/pemain" />
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-xl font-extrabold tracking-tight md:hidden">Data siswa</h2>
+        <h2 className="text-xl font-extrabold tracking-tight md:hidden">Data pemain</h2>
         <p className="hidden text-sm font-medium text-muted md:block">{group.name}</p>
         <div className="flex gap-2">
           <Link href={`/pemain/impor?ku=${group.id}`} className={buttonClass("outline")}>
             <FileInput size={18} aria-hidden /> Impor dari WA
           </Link>
           <Link href={`/pemain/baru?ku=${group.id}`} className={buttonClass("primary")}>
-            <UserPlus size={18} aria-hidden /> Tambah Siswa
+            <UserPlus size={18} aria-hidden /> Tambah Pemain
           </Link>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
-        <Stat icon={Users} tone="text-primary bg-primary-soft" label="Total siswa terdaftar">
+        <Stat icon={Users} tone="text-primary bg-primary-soft" label="Total pemain terdaftar">
           {active.length} <span className="text-base font-bold text-muted">Anak</span>
           <Note className="text-primary">{group.name}</Note>
         </Stat>

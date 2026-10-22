@@ -15,19 +15,19 @@ const NAV = [
   { href: "/", label: "Dashboard", short: "Beranda", icon: House, section: "Menu Utama" },
   { href: "/presensi", label: "Presensi Lapangan", short: "Presensi", icon: ClipboardCheck, section: "Menu Utama" },
   { href: "/rapor", label: "Rapor & Evaluasi", short: "Rapor", icon: NotebookPen, section: "Menu Utama" },
-  { href: "/pemain", label: "Data Siswa & Roster", short: "Pemain", icon: Users, section: "Tim & Pemain" },
+  { href: "/pemain", label: "Data Pemain", short: "Pemain", icon: Users, section: "Tim & Pemain" },
   { href: "/pengaturan", label: "Pengaturan Klub", short: "Pengaturan", icon: Settings, section: "Klub" },
 ] as const;
 
 /** Judul top bar per rute: [remah, judul]. */
 const TITLES: [RegExp, string, string][] = [
-  [/^\/$/, "Dashboard Pelatih", "Ringkasan Sesi & Roster Pemain"],
+  [/^\/$/, "Dashboard Pelatih", "Ringkasan Latihan & Pemain"],
   [/^\/presensi\/[^/]+$/, "Presensi Lapangan", "Sesi Latihan"],
   [/^\/presensi/, "Presensi Lapangan", "Jadwal & Presensi Latihan"],
-  [/^\/pemain\/baru/, "Database Siswa", "Tambah Siswa"],
-  [/^\/pemain\/impor/, "Database Siswa", "Impor dari Grup WhatsApp"],
-  [/^\/pemain\/[^/]+$/, "Database Siswa", "Profil Siswa"],
-  [/^\/pemain/, "Database Siswa", "Data Siswa & Roster Pemain"],
+  [/^\/pemain\/baru/, "Data Pemain", "Tambah Pemain"],
+  [/^\/pemain\/impor/, "Data Pemain", "Impor dari Grup WhatsApp"],
+  [/^\/pemain\/[^/]+$/, "Data Pemain", "Profil Pemain"],
+  [/^\/pemain/, "Tim & Pemain", "Data Pemain"],
   [/^\/rapor\/[^/]+\/[^/]+$/, "Evaluasi & Rapor Pelatih", "Penilaian Pemain"],
   [/^\/rapor\/[^/]+$/, "Evaluasi & Rapor Pelatih", "Periode Rapor"],
   [/^\/rapor/, "Evaluasi & Rapor Pelatih", "Rapor & Evaluasi"],

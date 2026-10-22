@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.3] — 2026-10-22
+
+### Improved
+- **Clearer wording**: "Presensi 40 anak, beres sebelum pemanasan." on the sign-in page, and "player" instead of mixed "student / roster / database" labels throughout.
+- **Sign-in panel in dark mode**: becomes a night pitch with a green glow instead of staying bright green.
+
 ## [1.1.2] — 2026-10-22
 
 ### Improved

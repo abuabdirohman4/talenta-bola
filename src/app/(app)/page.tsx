@@ -193,7 +193,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       {/* KPI */}
       <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
-        <Kpi href={`/pemain?ku=${group.id}`} icon={Users} tone="text-primary bg-primary-soft" label={`Total siswa ${group.code}`}>
+        <Kpi href={`/pemain?ku=${group.id}`} icon={Users} tone="text-primary bg-primary-soft" label={`Total pemain ${group.code}`}>
           {total}
           <Note className="text-primary">{fresh ? `+${fresh} anak baru bulan ini` : group.name}</Note>
         </Kpi>
@@ -209,7 +209,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
         >
           {period ? published!.n : "—"}
           {period && <span className="text-sm font-semibold text-muted"> / {total}</span>}
-          <Note className="text-izin">{period ? (unrated ? `${unrated} siswa belum terbit` : "Semua terbit") : "Belum ada periode"}</Note>
+          <Note className="text-izin">{period ? (unrated ? `${unrated} anak belum terbit` : "Semua terbit") : "Belum ada periode"}</Note>
         </Kpi>
         <Kpi href={`/pemain?ku=${group.id}`} icon={UserCheck} tone="text-sakit bg-sakit/10" label="Data lengkap">
           {total - incomplete}
@@ -313,7 +313,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
             <h3 className="text-xs font-extrabold tracking-wider uppercase">Fitur pelatih</h3>
             <div className="grid grid-cols-2 gap-2.5">
               <Shortcut href={`/presensi?ku=${group.id}`} icon={ClipboardCheck} tone="text-primary bg-primary-soft" title="Presensi" sub="Catat lapangan" />
-              <Shortcut href={`/pemain?ku=${group.id}`} icon={Users} tone="text-primary bg-primary-soft" title="Data Siswa" sub="Roster & link ortu" />
+              <Shortcut href={`/pemain?ku=${group.id}`} icon={Users} tone="text-primary bg-primary-soft" title="Data Pemain" sub="Profil & link ortu" />
               <Shortcut href={period ? `/rapor/${period.id}` : `/rapor?ku=${group.id}`} icon={NotebookPen} tone="text-info bg-info/10" title="Isi Rapor" sub="22 aspek bintang" />
               <Shortcut href="/pemain/impor" icon={MessageSquareText} tone="text-izin bg-izin/10" title="Impor WA" sub="Tempel daftar grup" />
             </div>

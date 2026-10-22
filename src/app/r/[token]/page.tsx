@@ -135,7 +135,7 @@ export default async function PublicReportPage({ params }: { params: Promise<{ t
                 <Avatar name={p.fullName} photoUrl={p.photoUrl} className="size-16 text-xl" />
               </div>
               <div className="min-w-0">
-                <p className="eyebrow">Nama lengkap siswa</p>
+                <p className="eyebrow">Nama lengkap pemain</p>
                 <h1 className="text-xl font-black tracking-tight md:text-2xl">{p.fullName}</h1>
                 <p className="mt-1 text-xs text-muted">
                   {meta.map(([k, v], i) => (

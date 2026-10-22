@@ -9,6 +9,7 @@
 - **Untuk siapa:** pelatih SSB usia dini (KU 8–16) yang hari ini mengabsen dan mengabari wali murid lewat grup WA.
 - **Masalah yang diselesaikan:** daftar presensi di grup WA diisi ramai-ramai, notasinya campur aduk, dan ortu tidak pernah dapat gambaran perkembangan anaknya.
 - **Janji satu kalimat (hero LP):** Presensi lapangan satu tap dan rapor perkembangan pemain untuk Sekolah Sepak Bola.
+- **Tagline pendek (login, konten):** Presensi 40 anak, beres sebelum pemanasan.
 - **Beda dari alternatif:** dibanding daftar WA — rekapnya rapi dalam satu tap, ortu izin sendiri tanpa chat tenggelam, dan rapor terasa dokumen resmi klub. Dibanding app SSB lain — dibuat untuk HP di pinggir lapangan, bukan dashboard admin.
 - **Bukan:** aplikasi keuangan/SPP, papan taktik, atau media sosial klub (belum).
 
@@ -31,7 +32,7 @@
 
 | Sering dipakai | Dilarang |
 |---|---|
-| presensi, sesi, rapor, izin, sakit, KU | absensi (pakai "presensi"), submit, data error mentah |
+| presensi, sesi, rapor, izin, sakit, KU, pemain/anak | absen/absensi (pakai "presensi" — "absen" berarti tidak hadir), roster/siswa/database (pakai "pemain"/"anak"), submit, data error mentah |
 
 ## 4. Visual · Must
 

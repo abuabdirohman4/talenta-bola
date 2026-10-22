@@ -285,7 +285,7 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
               </div>
 
               <h3 className="eyebrow px-1 pt-1">
-                Daftar siswa {session.groupCode} ({total} siswa)
+                Daftar pemain {session.groupCode} ({total} anak)
               </h3>
               <ul className="space-y-2">
                 {visible.map((r) => (

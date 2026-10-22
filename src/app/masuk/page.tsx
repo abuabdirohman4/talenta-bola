@@ -43,7 +43,7 @@ export default async function MasukPage() {
           <LoginForm />
         </div>
       </section>
-      <aside className="relative hidden overflow-hidden bg-linear-to-br from-primary to-primary-dark lg:block" aria-hidden>
+      <aside className="relative hidden overflow-hidden bg-linear-to-br from-primary to-primary-dark lg:block dark:from-primary-dark dark:via-hero-2 dark:to-hero" aria-hidden>
         <span className="absolute -top-32 -right-24 size-96 rounded-full bg-primary-2/40 blur-3xl" />
         {/* Lapangan + formasi 7v7 (1-2-3-1) ala papan line up; nomor saja, tanpa nama anak. */}
         <svg viewBox="0 0 400 600" className="absolute inset-x-0 top-36 bottom-6 h-[calc(100%-10.5rem)] w-full" preserveAspectRatio="xMidYMid meet">
@@ -73,7 +73,7 @@ export default async function MasukPage() {
           ))}
         </svg>
         <div className="absolute inset-x-12 top-12 text-white">
-          <p className="text-3xl leading-tight font-extrabold">Absen 40 anak di bawah dua menit.</p>
+          <p className="text-3xl leading-tight font-extrabold">Presensi 40 anak, beres sebelum pemanasan.</p>
           <p className="mt-3 text-white/80">Satu tap per anak, rekap langsung siap ditempel ke grup WA wali murid.</p>
         </div>
       </aside>

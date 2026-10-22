@@ -136,8 +136,8 @@ export function ReportForm({ period, player, roster, nav, attendance, initial, b
       <aside className={cn(card, "hidden max-h-[calc(100dvh-7rem)] flex-col p-4 lg:sticky lg:top-24 lg:flex")}>
         <div className="mb-3 flex items-start justify-between gap-2">
           <div>
-            <h3 className="text-xs font-extrabold tracking-wider uppercase">Roster periode ({roster.length} siswa)</h3>
-            <p className="text-[11px] font-medium text-muted">Pilih siswa untuk menilai</p>
+            <h3 className="text-xs font-extrabold tracking-wider uppercase">Daftar pemain ({roster.length} anak)</h3>
+            <p className="text-[11px] font-medium text-muted">Pilih anak untuk dinilai</p>
           </div>
           <span className="shrink-0 rounded-md border border-primary/30 bg-primary-soft px-2 py-0.5 text-[11px] font-bold text-primary">
             {done} dinilai
@@ -362,8 +362,8 @@ function RosterList({
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Cari nama siswa…"
-            aria-label="Cari nama siswa"
+            placeholder="Cari nama anak…"
+            aria-label="Cari nama anak"
             className={cn(inputClass, "py-2 pl-9 text-sm")}
           />
         </label>
