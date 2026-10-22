@@ -128,7 +128,10 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       {/* Sorotan sesi berikutnya */}
       <section className="relative overflow-hidden rounded-2xl border border-slate-700/80 bg-linear-to-br from-hero via-hero-2 to-hero p-5 text-white shadow-md md:p-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        {/* Pendar hijau di pojok — aksen gradasi merek di kartu gelap. */}
+        <span aria-hidden className="pointer-events-none absolute -top-24 -right-16 size-72 rounded-full bg-primary/30 blur-3xl" />
+        <span aria-hidden className="pointer-events-none absolute -bottom-28 left-1/3 size-56 rounded-full bg-primary-2/15 blur-3xl" />
+        <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="space-y-1.5">
             <div className="flex flex-wrap items-center gap-2">
               <span className="size-2 animate-ping rounded-full bg-emerald-400" />
@@ -166,7 +169,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
             {isToday ? (
               <Link
                 href={`/presensi/${next!.id}`}
-                className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 text-sm font-black text-white shadow-sm hover:bg-emerald-600"
+                className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand px-4 text-sm font-black text-white shadow-lg shadow-primary/30 hover:brightness-110"
               >
                 <ClipboardCheck size={18} aria-hidden /> Presensi Lapangan
               </Link>
@@ -175,7 +178,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
                 ageGroupId={group.id}
                 size="md"
                 label="Presensi Lapangan"
-                className="mt-0 w-auto border-transparent bg-emerald-500 hover:bg-emerald-600"
+                className="mt-0 w-auto shadow-lg shadow-primary/30"
               />
             )}
             <Link

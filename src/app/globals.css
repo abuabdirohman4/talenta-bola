@@ -11,6 +11,7 @@
   --color-primary: #059669;
   --color-primary-dark: #047857;
   --color-primary-soft: #ecfdf5;
+  --color-primary-2: #34d399;
   --color-ink: #0f172a;
   --color-muted: #64748b;
   --color-ground: #f1f5f9;
@@ -36,6 +37,7 @@
 :root,
 .brand {
   --color-primary-dark: color-mix(in srgb, var(--color-primary) 80%, black);
+  --color-primary-2: color-mix(in oklch, var(--color-primary), white 22%);
   --color-primary-soft: color-mix(in srgb, var(--color-primary) 10%, white);
 }
 
@@ -73,6 +75,16 @@ html {
 body {
   background: var(--color-ground);
   color: var(--color-ink);
+}
+
+/* Gradasi merek ala LP Better Planner: dipakai aksi utama, logo, dan bar progres — bukan untuk latar luas. */
+@utility bg-brand {
+  background-image: linear-gradient(to right, var(--color-primary), var(--color-primary-2));
+}
+@utility text-brand {
+  background-image: linear-gradient(to right, var(--color-primary), var(--color-primary-2));
+  background-clip: text;
+  color: transparent;
 }
 
 /* Label seksi kecil kapital ala mockup ("MENU UTAMA", "TOTAL SISWA"). */

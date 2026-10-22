@@ -40,7 +40,7 @@ export function ParentLinkCard({ playerId, playerName, ssbName, parentPhoneWa, b
           href={waLink(message, parentPhoneWa)}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 font-bold text-white shadow-sm hover:bg-primary-dark"
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand px-4 font-bold text-white shadow-md shadow-primary/25 hover:brightness-110"
         >
           <Send size={18} aria-hidden /> {parentPhoneWa ? "Kirim ke WA ortu" : "Kirim lewat WA"}
         </a>

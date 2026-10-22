@@ -45,7 +45,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <div className="m-2 space-y-2 border-t border-line p-3">
           <ThemeRow />
           <div className="flex items-center gap-2.5 px-2 py-1.5">
-            <span className="grid size-8 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-white shadow-sm">
+            <span className="grid size-8 shrink-0 place-items-center rounded-full bg-linear-to-br from-primary to-primary-2 text-xs font-bold text-white shadow-sm">
               {initials(ssb.headCoachName ?? "Coach")}
             </span>
             <div className="min-w-0 leading-tight">
@@ -89,7 +89,7 @@ function Logo({ name, logoUrl, small }: { name: string; logoUrl: string | null; 
     <img src={logoUrl} alt="" className={`${size} shrink-0 rounded-xl object-cover`} />
   ) : (
     <span
-      className={`${size} grid shrink-0 place-items-center rounded-xl bg-linear-to-br from-primary to-primary-dark font-black tracking-wider text-white shadow-sm`}
+      className={`${size} grid shrink-0 place-items-center rounded-xl bg-linear-to-br from-primary to-primary-2 font-black tracking-wider text-white shadow-sm`}
     >
       {clubInitials(name)}
     </span>

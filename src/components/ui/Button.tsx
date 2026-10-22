@@ -3,7 +3,7 @@ import { Spinner } from "./Spinner";
 
 type Variant = "primary" | "outline" | "ghost" | "danger";
 const VARIANT: Record<Variant, string> = {
-  primary: "bg-primary text-white border-transparent hover:bg-primary-dark",
+  primary: "bg-brand text-white border-transparent shadow-md shadow-primary/25 hover:brightness-110",
   outline: "bg-card text-ink border-line hover:bg-ground",
   ghost: "bg-transparent text-ink border-transparent hover:bg-ground",
   danger: "bg-alpa text-white border-transparent hover:brightness-90",

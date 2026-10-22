@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, Check, ChevronLeft, ChevronRight, Eye, Plus, Search, Send, Star, Undo2 } from "lucide-react";
+import { AlertCircle, Check, ChevronDown, ChevronLeft, ChevronRight, Eye, Plus, Search, Send, Star, Undo2, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -132,7 +132,7 @@ export function ReportForm({ period, player, roster, nav, attendance, initial, b
 
   return (
     <div className="grid items-start gap-6 lg:grid-cols-[22rem_1fr]">
-      {/* Roster periode — hanya desktop; di HP pindah anak lewat panah. */}
+      {/* Roster periode — desktop; di HP lewat tombol "Anak N dari M" (RosterSheet). */}
       <aside className={cn(card, "hidden max-h-[calc(100dvh-7rem)] flex-col p-4 lg:sticky lg:top-24 lg:flex")}>
         <div className="mb-3 flex items-start justify-between gap-2">
           <div>
@@ -143,52 +143,7 @@ export function ReportForm({ period, player, roster, nav, attendance, initial, b
             {done} dinilai
           </span>
         </div>
-        <label className="relative mb-3 block">
-          <Search size={15} className="absolute top-1/2 left-3 -translate-y-1/2 text-muted" aria-hidden />
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Cari nama siswa…"
-            aria-label="Cari nama siswa"
-            className={cn(inputClass, "py-2 pl-9 text-sm")}
-          />
-        </label>
-        <ul className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-0.5">
-          {rows.map((r) => {
-            const current = r.id === player.id;
-            return (
-              <li key={r.id}>
-                <Link
-                  href={`/rapor/${period.id}/${r.id}`}
-                  aria-current={current ? "true" : undefined}
-                  className={cn(
-                    "flex items-center justify-between gap-2 rounded-xl border p-2.5",
-                    current ? "border-primary bg-primary-soft" : "border-line bg-subtle hover:border-muted/40"
-                  )}
-                >
-                  <span className="flex min-w-0 items-center gap-3">
-                    <span
-                      className={cn(
-                        "grid size-8 shrink-0 place-items-center rounded-lg text-xs font-black",
-                        current ? "bg-primary text-white" : "bg-ground"
-                      )}
-                    >
-                      {r.jersey ?? "–"}
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block truncate text-sm font-bold">{r.name}</span>
-                      <span className="block truncate text-[11px] font-medium text-muted">
-                        {[r.position, r.rate != null ? `Hadir ${r.rate}%` : null].filter(Boolean).join(" · ") || "–"}
-                      </span>
-                    </span>
-                  </span>
-                  <RosterPill status={r.status} avg={overall(r.scores)} />
-                </Link>
-              </li>
-            );
-          })}
-          {rows.length === 0 && <li className="rounded-xl bg-subtle p-3 text-sm text-muted">Tidak ada nama yang cocok.</li>}
-        </ul>
+        <RosterList rows={rows} q={q} setQ={setQ} periodId={period.id} currentId={player.id} />
       </aside>
 
       <div className="min-w-0 space-y-4">
@@ -229,9 +184,9 @@ export function ReportForm({ period, player, roster, nav, attendance, initial, b
           </div>
           <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-line pt-3">
             <div className="flex items-center gap-2">
-              <p className="text-xs font-semibold text-muted">
-                Anak {nav.index + 1} dari {nav.total}
-              </p>
+              <RosterSheet label={`Anak ${nav.index + 1} dari ${nav.total}`}>
+                <RosterList rows={rows} q={q} setQ={setQ} periodId={period.id} currentId={player.id} />
+              </RosterSheet>
               <SaveState inflight={inflight} failed={failed} />
             </div>
             <p className="flex items-baseline gap-2">
@@ -351,7 +306,7 @@ export function ReportForm({ period, player, roster, nav, attendance, initial, b
                   href={waLink(shareText, player.parentPhoneWa)}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 font-semibold text-white hover:bg-primary-dark"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand px-4 font-semibold text-white shadow-md shadow-primary/25 hover:brightness-110"
                 >
                   <Send size={18} aria-hidden /> {player.parentPhoneWa ? "Kirim ke WA ortu" : "Kirim lewat WA"}
                 </a>
@@ -384,6 +339,101 @@ export function ReportForm({ period, player, roster, nav, attendance, initial, b
         </section>
       </div>
     </div>
+  );
+}
+
+function RosterList({
+  rows,
+  q,
+  setQ,
+  periodId,
+  currentId,
+}: {
+  rows: RosterRow[];
+  q: string;
+  setQ: (v: string) => void;
+  periodId: string;
+  currentId: string;
+}) {
+  return (
+    <>
+        <label className="relative mb-3 block">
+          <Search size={15} className="absolute top-1/2 left-3 -translate-y-1/2 text-muted" aria-hidden />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Cari nama siswa…"
+            aria-label="Cari nama siswa"
+            className={cn(inputClass, "py-2 pl-9 text-sm")}
+          />
+        </label>
+        <ul className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-0.5">
+          {rows.map((r) => {
+            const current = r.id === currentId;
+            return (
+              <li key={r.id}>
+                <Link
+                  href={`/rapor/${periodId}/${r.id}`}
+                  aria-current={current ? "true" : undefined}
+                  className={cn(
+                    "flex items-center justify-between gap-2 rounded-xl border p-2.5",
+                    current ? "border-primary bg-primary-soft" : "border-line bg-subtle hover:border-muted/40"
+                  )}
+                >
+                  <span className="flex min-w-0 items-center gap-3">
+                    <span
+                      className={cn(
+                        "grid size-8 shrink-0 place-items-center rounded-lg text-xs font-black",
+                        current ? "bg-primary text-white" : "bg-ground"
+                      )}
+                    >
+                      {r.jersey ?? "–"}
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block truncate text-sm font-bold">{r.name}</span>
+                      <span className="block truncate text-[11px] font-medium text-muted">
+                        {[r.position, r.rate != null ? `Hadir ${r.rate}%` : null].filter(Boolean).join(" · ") || "–"}
+                      </span>
+                    </span>
+                  </span>
+                  <RosterPill status={r.status} avg={overall(r.scores)} />
+                </Link>
+              </li>
+            );
+          })}
+          {rows.length === 0 && <li className="rounded-xl bg-subtle p-3 text-sm text-muted">Tidak ada nama yang cocok.</li>}
+        </ul>
+    </>
+  );
+}
+
+/** Pilih anak di HP: lembar bawah berisi daftar + pencarian yang sama dengan panel desktop. */
+function RosterSheet({ label, children }: { label: string; children: React.ReactNode }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => ref.current?.showModal()}
+        className="flex min-h-9 items-center gap-1 rounded-lg border border-line bg-subtle px-2.5 text-xs font-bold lg:pointer-events-none lg:border-transparent lg:bg-transparent lg:px-0 lg:font-semibold lg:text-muted"
+      >
+        {label}
+        <ChevronDown size={14} className="lg:hidden" aria-hidden />
+      </button>
+      <dialog
+        ref={ref}
+        className="mx-auto mt-auto mb-0 flex max-h-[85dvh] w-full max-w-lg flex-col rounded-t-2xl border border-line bg-card p-4 text-ink backdrop:bg-black/40 not-open:hidden"
+        onClick={(e) => e.target === ref.current && ref.current.close()}
+      >
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-xs font-extrabold tracking-wider uppercase">Pilih anak</h3>
+          <button type="button" onClick={() => ref.current?.close()} className="grid size-9 place-items-center rounded-lg hover:bg-ground" aria-label="Tutup">
+            <X size={18} aria-hidden />
+          </button>
+        </div>
+        {children}
+      </dialog>
+    </>
   );
 }
 

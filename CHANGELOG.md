@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1] — 2026-10-22
+
+### Improved
+- **Long names on the attendance sheet**: a long full name no longer squeezes under the H/I/S/A buttons — the buttons move to their own full-width row for that child.
+- **Pick a child while writing reports on a phone**: tap "Anak N dari M" to open a searchable list and jump straight to any child.
+- **Brand gradient**: main buttons, logo and progress bars use a soft green gradient, with a subtle glow on the next-session card.
+
 ## [1.1.0] — 2026-10-22
 
 ### Improved

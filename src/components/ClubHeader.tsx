@@ -8,7 +8,7 @@ export function ClubHeader({ name, logoUrl, subtitle }: { name: string; logoUrl:
         // eslint-disable-next-line @next/next/no-img-element
         <img src={logoUrl} alt="" className="size-12 rounded-xl object-cover" />
       ) : (
-        <span className="grid size-12 place-items-center rounded-xl bg-primary text-lg font-extrabold text-white">
+        <span className="grid size-12 place-items-center rounded-xl bg-linear-to-br from-primary to-primary-2 text-lg font-extrabold text-white shadow-md shadow-primary/25">
           {clubInitials(name)}
         </span>
       )}

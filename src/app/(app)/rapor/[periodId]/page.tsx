@@ -49,7 +49,7 @@ export default async function PeriodPage({ params }: { params: Promise<{ periodI
           Dinilai {done} dari {rows.length} anak. Tip demo: mulai 5–10 anak dulu.
         </p>
         <div className="mt-3 h-2 max-w-md overflow-hidden rounded-full bg-ground" aria-hidden>
-          <div className="h-full rounded-full bg-primary" style={{ width: `${rows.length ? (done / rows.length) * 100 : 0}%` }} />
+          <div className="h-full rounded-full bg-brand" style={{ width: `${rows.length ? (done / rows.length) * 100 : 0}%` }} />
         </div>
       </div>
       {next && (

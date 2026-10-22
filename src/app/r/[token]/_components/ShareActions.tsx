@@ -16,7 +16,7 @@ export function ShareActions({ url, text }: { url: string; text: string }) {
         href={waLink(`${text}:\n${url}`)}
         target="_blank"
         rel="noreferrer"
-        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-3 text-sm font-bold whitespace-nowrap sm:px-4 text-white hover:bg-primary-dark"
+        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand px-3 text-sm font-bold whitespace-nowrap sm:px-4 text-white shadow-md shadow-primary/25 hover:brightness-110"
       >
         <Send size={18} aria-hidden /> Bagikan ke WA
       </a>

@@ -18,7 +18,7 @@ export default async function MasukPage() {
         <ThemeToggle className="absolute top-4 right-4" />
         <div className="mx-auto w-full max-w-sm rounded-2xl border border-line bg-card p-6 shadow-sm">
           <div className="mb-6 flex items-center gap-3">
-            <span className="grid size-12 place-items-center rounded-xl bg-primary text-lg font-extrabold text-white">
+            <span className="grid size-12 place-items-center rounded-xl bg-linear-to-br from-primary to-primary-2 text-lg font-extrabold text-white shadow-md shadow-primary/25">
               {clubInitials(ssb.name)}
             </span>
             <div>

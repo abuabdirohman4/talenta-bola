@@ -295,7 +295,8 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
               <ul className="space-y-2">
                 {visible.map((r) => (
                   <li key={r.id} className={cn(card, "p-2.5")}>
-                    <div className="flex items-center gap-2.5">
+                    {/* Nama panjang (> 18 huruf) di layar sempit → tombol turun ke baris sendiri selebar kartu. */}
+                    <div className="flex flex-wrap items-center gap-2.5">
                       <span
                         className={cn(
                           "grid size-9 shrink-0 place-items-center rounded-lg text-xs font-black",
@@ -304,8 +305,8 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
                       >
                         {r.jerseyNumber ?? "–"}
                       </span>
-                      <div className="min-w-0 flex-1">
-                        <p className="flex flex-wrap items-center gap-x-1.5 text-[15px] leading-tight font-bold break-words">
+                      <div className={cn("flex-[999_1_0%]", r.fullName.length > 18 ? "min-w-[12rem]" : "min-w-[5.5rem]")}>
+                        <p className="flex flex-wrap items-center gap-x-1.5 text-[15px] leading-tight font-bold [overflow-wrap:anywhere]">
                           {r.fullName}
                           {r.source === "parent" && r.status !== "BELUM" && (
                             <span className={cn("rounded-md border px-1.5 py-px text-[10px] font-bold", PILL[r.status])}>
@@ -317,7 +318,7 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
                           {[positionLabel(r.position), session.groupCode].filter(Boolean).join(" · ")}
                         </p>
                       </div>
-                      <div className="flex shrink-0 gap-1">
+                      <div className="flex flex-[1_0_auto] gap-1">
                         {BUTTONS.map((b) => {
                           const on = r.status === b.status && r.source === "coach";
                           const fromParent = r.status === b.status && r.source === "parent";
@@ -328,8 +329,8 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
                               aria-pressed={on}
                               aria-label={`${STATUS_LABEL[b.status]} — ${r.fullName}`}
                               className={cn(
-                                // 44 px lebar × 56 px tinggi: nama tetap muat di layar 360 px, sasaran jempol tetap besar.
-                                "flex h-14 w-11 flex-col items-center justify-center gap-0.5 rounded-xl border-2 font-extrabold transition-transform active:scale-95 min-[400px]:w-14",
+                                // Minimal 44 × 56 px; melebar sendiri saat tombol pindah ke baris bawah.
+                                "flex h-14 w-11 grow flex-col items-center justify-center gap-0.5 rounded-xl border-2 font-extrabold transition-transform active:scale-95 min-[400px]:w-14",
                                 on
                                   ? TONE[b.status].solid
                                   : fromParent

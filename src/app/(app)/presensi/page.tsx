@@ -64,7 +64,7 @@ export default async function PresensiPage({ searchParams }: { searchParams: Pro
             {todaySession ? (
               <Link
                 href={`/presensi/${todaySession.id}`}
-                className="mt-3 flex min-h-14 items-center justify-between rounded-xl bg-primary px-4 font-bold text-white shadow-sm hover:bg-primary-dark"
+                className="mt-3 flex min-h-14 items-center justify-between rounded-xl bg-brand px-4 font-bold text-white shadow-md shadow-primary/25 hover:brightness-110"
               >
                 {todaySession.status === "CANCELLED" ? "Lihat sesi (libur)" : "Lanjutkan presensi"}
                 <span className="text-sm font-semibold text-white/85">

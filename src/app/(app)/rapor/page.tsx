@@ -70,7 +70,7 @@ export default async function RaporPage({ searchParams }: { searchParams: Promis
                     <ChevronRight className="text-muted" />
                   </div>
                   <div className="mt-4 h-2 overflow-hidden rounded-full bg-ground" aria-hidden>
-                    <div className="h-full rounded-full bg-primary" style={{ width: `${total ? (done / total) * 100 : 0}%` }} />
+                    <div className="h-full rounded-full bg-brand" style={{ width: `${total ? (done / total) * 100 : 0}%` }} />
                   </div>
                   <div className="mt-3 flex flex-wrap items-center gap-2 text-sm font-semibold">
                     <span>
