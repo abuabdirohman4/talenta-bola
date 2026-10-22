@@ -1,4 +1,4 @@
-import { and, eq, isNotNull } from "drizzle-orm";
+import { and, eq, isNotNull, isNull } from "drizzle-orm";
 import { Check, Lightbulb } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -35,7 +35,7 @@ const load = cache(async (token: string) => {
     .innerJoin(reportPeriods, eq(reportPeriods.id, reports.periodId))
     .innerJoin(ssbProfiles, eq(ssbProfiles.id, reports.ssbId))
     .innerJoin(ageGroups, eq(ageGroups.id, players.ageGroupId))
-    .where(and(eq(reports.publicToken, token), isNotNull(reports.publishedAt)));
+    .where(and(eq(reports.publicToken, token), isNotNull(reports.publishedAt), isNull(ssbProfiles.deletedAt)));
   return row ?? null;
 });
 

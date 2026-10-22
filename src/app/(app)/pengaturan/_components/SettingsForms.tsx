@@ -1,13 +1,14 @@
 "use client";
 
-import { LogOut, Plus } from "lucide-react";
+import { Eye, EyeOff, KeyRound, LogOut, Plus } from "lucide-react";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { ImagePicker } from "@/components/ImagePicker";
 import { Button } from "@/components/ui/Button";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Field, inputClass } from "@/components/ui/Field";
 import { signOut } from "@/app/masuk/actions";
-import { addAgeGroup, updateSsb } from "../actions";
+import { addAgeGroup, changeAccessCode, updateSsb } from "../actions";
 
 type Ssb = { name: string; headCoachName: string; homeGround: string; phoneWa: string; primaryColor: string; logoUrl: string };
 
@@ -96,6 +97,74 @@ export function AgeGroupForm() {
         <Plus size={18} aria-hidden /> Tambah KU
       </Button>
     </form>
+  );
+}
+
+export function AccessCodeForm() {
+  const [code, setCode] = useState("");
+  const [show, setShow] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [error, setError] = useState("");
+  const [pending, start] = useTransition();
+
+  return (
+    <section className="mt-4 rounded-2xl border border-line bg-card p-5 shadow-sm">
+      <h3 className="text-xs font-extrabold tracking-wider uppercase">Kode akses pelatih</h3>
+      <p className="mt-1 text-sm text-muted">Ganti kode kalau HP pelatih hilang atau ada pelatih yang keluar. Semua HP lain otomatis keluar.</p>
+      <form
+        className="mt-3 grid gap-3"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (code.trim().length < 4) return setError("Kode akses minimal 4 karakter");
+          setError("");
+          setConfirm(true);
+        }}
+      >
+        <Field label="Kode akses baru" error={error}>
+          <span className="relative block">
+            <input
+              type={show ? "text" : "password"}
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              autoComplete="new-password"
+              className={inputClass + " pr-12"}
+              aria-invalid={!!error}
+            />
+            <button
+              type="button"
+              onClick={() => setShow((s) => !s)}
+              className="absolute inset-y-0 right-0 grid w-12 place-items-center text-muted"
+              aria-label={show ? "Sembunyikan kode" : "Tampilkan kode"}
+            >
+              {show ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </span>
+        </Field>
+        <Button type="submit" variant="outline" className="self-end">
+          <KeyRound size={18} aria-hidden /> Ganti kode akses
+        </Button>
+      </form>
+      <ConfirmDialog
+        open={confirm}
+        title="Ganti kode akses?"
+        message="Semua HP pelatih lain akan keluar dan harus masuk lagi dengan kode baru. HP ini tetap masuk."
+        confirmLabel="Ganti kode"
+        loading={pending}
+        onClose={() => setConfirm(false)}
+        onConfirm={() =>
+          start(async () => {
+            const r = await changeAccessCode({ code });
+            setConfirm(false);
+            if (r?.error) {
+              setError(r.error);
+              return void toast.error(r.error);
+            }
+            setCode("");
+            toast.success("Kode akses diganti. Bagikan kode baru ke pelatih lain.");
+          })
+        }
+      />
+    </section>
   );
 }
 

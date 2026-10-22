@@ -34,7 +34,7 @@ export default async function ParentPage({ params }: { params: Promise<{ token: 
     .from(players)
     .innerJoin(ssbProfiles, eq(ssbProfiles.id, players.ssbId))
     .innerJoin(ageGroups, eq(ageGroups.id, players.ageGroupId))
-    .where(and(eq(players.parentToken, token), isNull(players.deletedAt)));
+    .where(and(eq(players.parentToken, token), isNull(players.deletedAt), isNull(ssbProfiles.deletedAt)));
   if (!row) notFound();
   const { p, ssb } = row;
 

@@ -29,6 +29,13 @@
       "when": 1792654227292,
       "tag": "0003_jadwal_rutin",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792655775545,
+      "tag": "0004_kode_akses_per_ssb",
+      "breakpoints": true
     }
   ]
 }

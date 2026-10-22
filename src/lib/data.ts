@@ -2,19 +2,16 @@ import "server-only";
 import { randomBytes } from "node:crypto";
 import { and, asc, eq, isNull } from "drizzle-orm";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { cache } from "react";
 import { db } from "@/db";
-import { ageGroups, auditLog, ssbProfiles } from "@/db/schema";
+import { ageGroups, auditLog } from "@/db/schema";
+import { getSessionSsb } from "@/lib/auth/require-user";
 
-// ponytail: satu SSB (baris pertama) untuk demo Galuh Putra; multi-SSB = ssb_id dari sesi pelatih.
+/** SSB pelatih yang sedang masuk — selalu dari sesi, tidak pernah "baris pertama". Tanpa sesi sah: alihkan ke /masuk. */
 export const getSsb = cache(async () => {
-  const [ssb] = await db
-    .select()
-    .from(ssbProfiles)
-    .where(isNull(ssbProfiles.deletedAt))
-    .orderBy(asc(ssbProfiles.createdAt))
-    .limit(1);
-  if (!ssb) throw new Error("Belum ada data SSB — jalankan `pnpm db:seed`.");
+  const ssb = await getSessionSsb();
+  if (!ssb) redirect("/masuk");
   return ssb;
 });
 

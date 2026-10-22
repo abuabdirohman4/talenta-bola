@@ -38,10 +38,16 @@ export const ssbProfiles = pgTable(
     phoneWa: text("phone_wa"),
     homeGround: text("home_ground"),
     headCoachName: text("head_coach_name"),
+    // HMAC kode akses pelatih (lihat hashAccessCode); versi naik = semua HP yang masuk dengan kode lama keluar.
+    accessCodeHash: text("access_code_hash"),
+    accessCodeVersion: integer("access_code_version").default(1).notNull(),
     ...ts,
     deletedAt: timestamp("deleted_at", { withTimezone: true }),
   },
-  (t) => [uniqueIndex("ssb_profiles_slug_active_unique").on(t.slug).where(isNull(t.deletedAt))]
+  (t) => [
+    uniqueIndex("ssb_profiles_slug_active_unique").on(t.slug).where(isNull(t.deletedAt)),
+    uniqueIndex("ssb_profiles_access_code_active_unique").on(t.accessCodeHash).where(isNull(t.deletedAt)),
+  ]
 );
 
 export const ageGroups = pgTable(

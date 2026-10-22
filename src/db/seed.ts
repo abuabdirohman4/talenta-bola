@@ -1,4 +1,4 @@
-// Isi awal: SSB Galuh Putra, KU 2016, daftar pemain, dan satu periode rapor. Aman dijalankan ulang (lewati kalau sudah ada).
+// Isi awal: SSB Galuh Putra (kode akses = COACH_ACCESS_CODE), KU 2016, daftar pemain, dan satu periode rapor. Aman dijalankan ulang (lewati kalau sudah ada).
 // Nama anak asli dibaca dari src/db/roster.local.txt (tidak masuk git); tanpa file itu dipakai nama contoh.
 import { randomBytes } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
@@ -6,6 +6,7 @@ import { join } from "node:path";
 import { config } from "dotenv";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
+import { hashAccessCode, MIN_CODE } from "../lib/auth/session";
 import { parseWaList } from "../lib/wa-import";
 import { ageGroups, players, reportPeriods, ssbProfiles } from "./schema";
 
@@ -18,6 +19,8 @@ Naufal, Omar, Pandu, Qais, Raka, Satria, Taufik, Umar, Vino, Wira, Yusuf, Zaki, 
   .join("\n");
 
 async function main() {
+  const code = process.env.COACH_ACCESS_CODE ?? "";
+  if (code.trim().length < MIN_CODE) throw new Error(`COACH_ACCESS_CODE (min. ${MIN_CODE} karakter) dipakai sebagai kode akses awal SSB seed`);
   const client = postgres(process.env.DATABASE_URL!, { prepare: false, max: 1 });
   const db = drizzle(client);
 
@@ -38,6 +41,7 @@ async function main() {
       slug: "galuh-putra",
       homeGround: "Lapang Brigif 13 Galuh",
       headCoachName: "Coach Rizky",
+      accessCodeHash: hashAccessCode(code),
     })
     .returning();
   const [ku] = await db

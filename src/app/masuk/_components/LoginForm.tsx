@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/Button";
 import { inputClass } from "@/components/ui/Field";
 import { signIn } from "../actions";
 
-export function LoginForm() {
-  const [state, action, pending] = useActionState(signIn, undefined);
+/** Form kode akses; `action` lain dipakai /admin/masuk (kode super-admin). */
+export function LoginForm({ action: submit = signIn }: { action?: typeof signIn }) {
+  const [state, action, pending] = useActionState(submit, undefined);
   const [show, setShow] = useState(false);
 
   return (

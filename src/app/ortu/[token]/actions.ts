@@ -3,7 +3,7 @@
 import { and, eq, gte, isNull } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";
-import { parentPermissions, players, trainingSessions } from "@/db/schema";
+import { parentPermissions, players, ssbProfiles, trainingSessions } from "@/db/schema";
 import { addDays, dateWib } from "@/lib/format";
 
 // Pintu publik (tercatat di PUBLIC guard.test.ts): penjaganya token acak per anak, bukan sesi login.
@@ -17,7 +17,8 @@ export async function submitPermission(input: {
   const [player] = await db
     .select({ id: players.id, ssbId: players.ssbId, ageGroupId: players.ageGroupId })
     .from(players)
-    .where(and(eq(players.parentToken, input.token), isNull(players.deletedAt)));
+    .innerJoin(ssbProfiles, eq(ssbProfiles.id, players.ssbId))
+    .where(and(eq(players.parentToken, input.token), isNull(players.deletedAt), isNull(ssbProfiles.deletedAt)));
   if (!player) return { error: "Link sudah tidak berlaku. Minta link baru ke pelatih." };
 
   if (input.type !== "IZIN" && input.type !== "SAKIT") return { error: "Pilih Izin atau Sakit" };

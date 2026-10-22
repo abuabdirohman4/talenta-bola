@@ -1,8 +1,11 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
-// Dipakai proxy.ts dan server — tanpa "server-only" supaya bisa diimpor proxy; tetap hanya jalan di server (node:crypto).
+// Dipakai proxy.ts, server, dan skrip CLI — tanpa "server-only" supaya bisa diimpor di sana; tetap hanya jalan di server (node:crypto).
 export const SESSION_COOKIE = "tb_session";
 export const SESSION_DAYS = 30;
+export const ADMIN_COOKIE = "tb_admin";
+export const ADMIN_HOURS = 12;
+export const MIN_CODE = 4;
 
 function secret(): string {
   const s = process.env.AUTH_SECRET;
@@ -10,27 +13,62 @@ function secret(): string {
   return s;
 }
 
-const sign = (payload: string) => createHmac("sha256", secret()).update(payload).digest("base64url");
+const hmac = (payload: string) => createHmac("sha256", secret()).update(payload).digest("base64url");
+const safeEqual = (a: string, b: string) => {
+  const x = Buffer.from(a);
+  const y = Buffer.from(b);
+  return x.length === y.length && timingSafeEqual(x, y);
+};
 
-/** Nilai cookie sesi pelatih: "<kedaluwarsa ms>.<hmac>". */
-export function createSessionValue(now = Date.now()): string {
-  const exp = String(now + SESSION_DAYS * 86_400_000);
-  return `${exp}.${sign(`coach.${exp}`)}`;
+export const normalizeCode = (code: string) => code.trim().toLowerCase();
+
+/** Hash deterministik kode akses SSB (disimpan di ssb_profiles.access_code_hash, dicari saat masuk). Ganti AUTH_SECRET = semua kode harus di-set ulang. */
+export const hashAccessCode = (code: string) =>
+  createHmac("sha256", secret()).update(normalizeCode(code)).digest("hex");
+
+export type CoachSession = { ssbId: string; version: number };
+
+/** Cookie sesi pelatih: "<ssb_id>.<versi kode>.<kedaluwarsa ms>.<hmac>". Versi beda dengan DB = sesi dicabut. */
+export function createSessionValue(s: CoachSession, now = Date.now()): string {
+  const body = `${s.ssbId}.${s.version}.${now + SESSION_DAYS * 86_400_000}`;
+  return `${body}.${hmac(`coach.${body}`)}`;
 }
 
-export function verifySessionValue(value: string | undefined, now = Date.now()): boolean {
-  if (!value) return false;
-  const [exp, sig] = value.split(".");
-  if (!exp || !sig || Number(exp) < now) return false;
-  const want = Buffer.from(sign(`coach.${exp}`));
-  const got = Buffer.from(sig);
-  return want.length === got.length && timingSafeEqual(want, got);
+/** Cek tanda tangan + kedaluwarsa saja (tanpa DB) — versi & SSB terhapus dicek di server (require-user.ts). */
+export function verifySessionValue(value: string | undefined, now = Date.now()): CoachSession | null {
+  const parts = value?.split(".") ?? [];
+  if (parts.length !== 4) return null;
+  const [ssbId, version, exp, sig] = parts as [string, string, string, string];
+  if (!/^[0-9a-f-]{36}$/.test(ssbId) || !/^\d+$/.test(version) || !(Number(exp) >= now)) return null;
+  if (!safeEqual(sig, hmac(`coach.${ssbId}.${version}.${exp}`))) return null;
+  return { ssbId, version: Number(version) };
 }
 
-/** Bandingkan kode akses tanpa bocor lewat waktu respons (hash dulu supaya panjang sama). */
-export function accessCodeMatches(input: string): boolean {
-  const code = process.env.COACH_ACCESS_CODE;
-  if (!code || code.length < 4) throw new Error("COACH_ACCESS_CODE belum diisi (min. 4 karakter)");
-  const h = (s: string) => createHmac("sha256", secret()).update(s.trim().toLowerCase()).digest();
-  return timingSafeEqual(h(input), h(code));
+// Kode super-admin ikut ditandatangani: ganti SUPER_ADMIN_CODE = semua cookie admin lama gugur.
+function adminCode(): string | null {
+  const c = process.env.SUPER_ADMIN_CODE;
+  return c && c.length >= 12 ? c : null;
+}
+
+/** Cookie super-admin: "<kedaluwarsa ms>.<hmac>"; awalan "admin." membuatnya tak tertukar dengan cookie pelatih. */
+export function createAdminValue(now = Date.now()): string {
+  const code = adminCode();
+  if (!code) throw new Error("SUPER_ADMIN_CODE belum diisi (min. 12 karakter)");
+  const exp = String(now + ADMIN_HOURS * 3_600_000);
+  return `${exp}.${hmac(`admin.${exp}.${code}`)}`;
+}
+
+export function verifyAdminValue(value: string | undefined, now = Date.now()): boolean {
+  const code = adminCode();
+  const parts = value?.split(".") ?? [];
+  if (!code || parts.length !== 2) return false;
+  const [exp, sig] = parts as [string, string];
+  return /^\d+$/.test(exp) && Number(exp) >= now && safeEqual(sig, hmac(`admin.${exp}.${code}`));
+}
+
+/** Bandingkan kode super-admin tanpa bocor lewat waktu respons (hash dulu supaya panjang sama). */
+export function adminCodeMatches(input: string): boolean {
+  const code = adminCode();
+  if (!code) return false;
+  return safeEqual(hmac(`code.${input.trim()}`), hmac(`code.${code}`));
 }

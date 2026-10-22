@@ -37,6 +37,8 @@ DB lokal (WSL): cluster Postgres 18 `gm` di :5417, database `talenta_bola`, role
 |---|---|
 | `requireUser()` di baris pertama **tiap** server action & route handler | `guard.test.ts` gagal kalau lupa. Pintu publik (masuk, izin ortu) terdaftar di set `PUBLIC` tes itu |
 | Proxy hanya mengalihkan halaman ke `/masuk` | Bukan penjaga data (CVE-2025-29927) |
+| SSB pelatih = `ssb_id` dari cookie sesi (`getSsb()`), dicek ulang ke DB: SSB terhapus atau `access_code_version` beda = keluar | Kode akses per SSB (`access_code_hash`); ganti kode = semua HP lain keluar. Jangan pernah ambil "SSB pertama" |
+| `/admin` = super-admin, cookie `tb_admin` + `SUPER_ADMIN_CODE`, `requireAdmin()` di tiap action | Terpisah dari sesi pelatih; halaman admin hanya angka, tanpa data anak |
 | Server Action **hanya untuk mutasi**; baca lewat RSC (page.tsx) | Server Action antre satu per satu |
 | Presensi lewat `POST /api/presensi` (batch, idempoten, last-write-wins by waktu tap) | Antrean offline mengirim ulang; kiriman lama tidak boleh menimpa yang baru |
 | `ssb_id` di semua tabel; query selalu filter `ssb_id` dari `getSsb()` | Tenancy flat, siap multi-SSB |

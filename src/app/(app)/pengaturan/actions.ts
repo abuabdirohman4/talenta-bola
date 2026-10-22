@@ -4,7 +4,8 @@ import { and, eq, isNull } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";
 import { ageGroups, ssbProfiles } from "@/db/schema";
-import { requireUser } from "@/lib/auth/require-user";
+import { CODE_TAKEN, saveAccessCode } from "@/lib/auth/access-code";
+import { requireUser, setCoachCookie } from "@/lib/auth/require-user";
 import { audit, getSsb } from "@/lib/data";
 import { normalizePhoneWa } from "@/lib/validation/player";
 
@@ -55,4 +56,18 @@ export async function addAgeGroup(input: { name: string; code: string; birthYear
   if (dupe) return { error: `Kode ${code} sudah dipakai` };
   await db.insert(ageGroups).values({ ssbId: ssb.id, name, code, birthYear: year });
   revalidatePath("/", "layout");
+}
+
+/** Ganti kode akses klub: versi naik → semua HP lain keluar; HP ini dapat cookie baru supaya tetap masuk. */
+export async function changeAccessCode(input: { code: string }): Promise<Result> {
+  await requireUser();
+  const ssb = await getSsb();
+  const r = await saveAccessCode(ssb.id, input.code);
+  if ("error" in r) {
+    // Pesan "sudah dipakai" membocorkan kode klub lain — perlambat setara salah kode di /masuk.
+    if (r.error === CODE_TAKEN) await new Promise((res) => setTimeout(res, 800));
+    return r;
+  }
+  await setCoachCookie(ssb.id, r.version);
+  await audit({ ssbId: ssb.id, action: "update", tableName: "ssb_profiles", recordId: ssb.id, dataAfter: { accessCodeVersion: r.version } });
 }

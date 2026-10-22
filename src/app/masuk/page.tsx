@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { isCoach } from "@/lib/auth/require-user";
-import { getSsb } from "@/lib/data";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { clubInitials } from "@/lib/format";
 import { LoginForm } from "./_components/LoginForm";
 
 export const metadata: Metadata = { title: "Masuk" };
@@ -22,24 +20,24 @@ const LINKS: [number, number][] = [[0, 1], [0, 2], [1, 3], [1, 4], [2, 4], [2, 5
 
 export default async function MasukPage() {
   if (await isCoach()) redirect("/");
-  const ssb = await getSsb();
+  // Klub belum diketahui sebelum kode dimasukkan — tampil sebagai TalentaBola; warna klub muncul setelah masuk.
 
   return (
-    <main className="brand grid min-h-dvh lg:grid-cols-2" style={{ "--color-primary": ssb.primaryColor } as React.CSSProperties}>
+    <main className="grid min-h-dvh lg:grid-cols-2">
       <section className="relative flex flex-col justify-center px-4 py-10 sm:px-12">
         <ThemeToggle className="absolute top-4 right-4" />
         <div className="mx-auto w-full max-w-sm rounded-2xl border border-line bg-card p-6 shadow-sm">
           <div className="mb-6 flex items-center gap-3">
             <span className="grid size-12 place-items-center rounded-xl bg-linear-to-br from-primary to-primary-2 text-lg font-extrabold text-white shadow-md shadow-primary/25">
-              {clubInitials(ssb.name)}
+              TB
             </span>
             <div>
-              <p className="text-base leading-tight font-black tracking-tight">{ssb.name}</p>
+              <p className="text-base leading-tight font-black tracking-tight">TalentaBola</p>
               <p className="eyebrow">Ruang pelatih</p>
             </div>
           </div>
           <h1 className="text-xl font-black tracking-tight">Masuk untuk mulai presensi</h1>
-          <p className="mt-2 text-sm text-muted">Masukkan kode akses pelatih. Sekali masuk, HP ini diingat 30 hari.</p>
+          <p className="mt-2 text-sm text-muted">Masukkan kode akses klub dari pengurus SSB. Sekali masuk, HP ini diingat 30 hari.</p>
           <LoginForm />
         </div>
       </section>

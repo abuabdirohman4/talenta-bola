@@ -6,12 +6,16 @@ import { describe, expect, it } from "vitest";
 
 const SRC = join(process.cwd(), "src");
 const GUARD = /\brequire(User|Role|Owner)\s*\(/g;
+// Area super-admin punya penjaga sendiri; requireUser (sesi pelatih) tidak sah di sana.
+const ADMIN_GUARD = /\brequireAdmin\s*\(/g;
+const isAdminArea = (rel: string) => rel.startsWith("app/admin/");
 const SERVICE_ROLE = /SUPABASE_SERVICE_ROLE_KEY|createAdminClient\s*\(/;
 const USE_SERVER = /^\s*["']use server["'];?\s*$/gm;
 // Pintu yang memang publik (callback OAuth, webhook bertoken, aksi signin) — tiap entri wajib beralasan saat review.
 const PUBLIC = new Set<string>([
   "app/masuk/actions.ts", // masuk/keluar: belum punya sesi
   "app/ortu/[token]/actions.ts", // izin ortu: dijaga token acak per anak
+  "app/admin/masuk/actions.ts", // masuk/keluar super-admin: belum punya sesi
 ]);
 
 const files = (readdirSync(SRC, { recursive: true }) as string[])
@@ -30,9 +34,9 @@ const needed = (rel: string, code: string) =>
     : count(code, USE_SERVER);
 
 describe("guard server", () => {
-  it("tiap server action & route handler memanggil requireUser()", () => {
+  it("tiap server action & route handler memanggil requireUser() (area admin: requireAdmin())", () => {
     const bolong = files
-      .filter(({ rel, code }) => !PUBLIC.has(rel) && count(code, GUARD) < needed(rel, code))
+      .filter(({ rel, code }) => !PUBLIC.has(rel) && count(code, isAdminArea(rel) ? ADMIN_GUARD : GUARD) < needed(rel, code))
       .map(({ rel }) => rel);
     expect(bolong).toEqual([]);
   });
