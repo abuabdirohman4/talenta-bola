@@ -1,5 +1,5 @@
 import { and, count, desc, eq, inArray, isNull } from "drizzle-orm";
-import { CalendarX2, ChevronRight } from "lucide-react";
+import { CalendarDays, CalendarX2, ChevronRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { KuSwitcher } from "@/components/KuSwitcher";
@@ -8,12 +8,12 @@ import { attendances, parentPermissions, players, trainingSessions } from "@/db/
 import { getActiveGroup } from "@/lib/data";
 import { formatDateId, formatTimeId, dateWib } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { NewSessionForm, StartTodayButton, WeeklyScheduleForm } from "./_components/SessionControls";
+import { StartTodayButton } from "./_components/SessionControls";
 
 export const metadata: Metadata = { title: "Presensi" };
 
 export default async function PresensiPage({ searchParams }: { searchParams: Promise<{ ku?: string }> }) {
-  const { ssb, groups, group } = await getActiveGroup((await searchParams).ku);
+  const { groups, group } = await getActiveGroup((await searchParams).ku);
   if (!group) return <p className="rounded-2xl border border-dashed border-line bg-card p-6 text-center">Belum ada kelompok umur. Tambahkan di Pengaturan.</p>;
 
   const today = dateWib();
@@ -74,10 +74,12 @@ export default async function PresensiPage({ searchParams }: { searchParams: Pro
             ) : (
               <StartTodayButton ageGroupId={group.id} />
             )}
-            <div className="mt-3 divide-y divide-line border-t border-line">
-              <NewSessionForm ageGroupId={group.id} defaultLocation={ssb.homeGround ?? ""} />
-              <WeeklyScheduleForm ageGroupId={group.id} defaultLocation={ssb.homeGround ?? ""} />
-            </div>
+            <Link
+              href={`/jadwal?ku=${group.id}`}
+              className="mt-3 flex min-h-11 items-center gap-2 border-t border-line pt-3 text-[15px] font-bold text-primary hover:underline"
+            >
+              <CalendarDays size={18} aria-hidden /> Atur jadwal & sesi tambahan
+            </Link>
           </section>
 
           {upcoming.length > 0 && (

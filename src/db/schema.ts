@@ -96,6 +96,31 @@ export const players = pgTable(
   ]
 );
 
+// Jadwal rutin per KU: satu slot per hari dalam seminggu; sesi 4 minggu ke depan dibuat dari sini.
+export const trainingPatterns = pgTable(
+  "training_patterns",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    ssbId: uuid("ssb_id")
+      .notNull()
+      .references(() => ssbProfiles.id, { onDelete: "cascade" }),
+    ageGroupId: uuid("age_group_id")
+      .notNull()
+      .references(() => ageGroups.id),
+    weekday: smallint("weekday").notNull(), // 0 = Minggu … 6 = Sabtu
+    startTime: time("start_time").notNull(),
+    location: text("location"),
+    topic: text("topic"),
+    ...ts,
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex("training_patterns_group_weekday_active_unique")
+      .on(t.ageGroupId, t.weekday)
+      .where(isNull(t.deletedAt)),
+  ]
+);
+
 export const trainingSessions = pgTable(
   "training_sessions",
   {
@@ -111,6 +136,9 @@ export const trainingSessions = pgTable(
     location: text("location"),
     topic: text("topic"),
     status: sessionStatus("status").default("SCHEDULED").notNull(),
+    cancelReason: text("cancel_reason"),
+    // Sesi hasil jadwal rutin; null = sesi tambahan yang dibuat manual.
+    patternId: uuid("pattern_id").references(() => trainingPatterns.id),
     ...ts,
     deletedAt: timestamp("deleted_at", { withTimezone: true }),
   },

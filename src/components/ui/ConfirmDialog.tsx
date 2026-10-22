@@ -12,10 +12,11 @@ type Props = {
   loading?: boolean;
   onConfirm: () => void;
   onClose: () => void;
+  children?: React.ReactNode;
 };
 
 // <dialog> bawaan browser: backdrop, Escape, dan focus trap sudah diurus platform.
-export function ConfirmDialog({ open, title, message, confirmLabel = "Ya", danger, loading, onConfirm, onClose }: Props) {
+export function ConfirmDialog({ open, title, message, confirmLabel = "Ya", danger, loading, onConfirm, onClose, children }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     const d = ref.current;
@@ -32,6 +33,7 @@ export function ConfirmDialog({ open, title, message, confirmLabel = "Ya", dange
     >
       <h2 className="text-lg font-bold">{title}</h2>
       <p className="mt-2 text-[15px] text-muted">{message}</p>
+      {children && <div className="mt-4">{children}</div>}
       <div className="mt-5 flex justify-end gap-2">
         <Button variant="outline" onClick={onClose} disabled={loading}>
           Batal

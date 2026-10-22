@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ClipboardCheck, House, NotebookPen, Settings, Users } from "lucide-react";
+import { ArrowLeft, CalendarDays, ClipboardCheck, House, NotebookPen, Settings, Users } from "lucide-react";
 import Link, { useLinkStatus } from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -16,12 +16,15 @@ const NAV = [
   { href: "/presensi", label: "Presensi Lapangan", short: "Presensi", icon: ClipboardCheck, section: "Menu Utama" },
   { href: "/rapor", label: "Rapor & Evaluasi", short: "Rapor", icon: NotebookPen, section: "Menu Utama" },
   { href: "/pemain", label: "Data Pemain", short: "Pemain", icon: Users, section: "Tim & Pemain" },
+  // Tidak masuk bottom-nav HP (tetap 5 item); di HP dibuka dari tombol Atur Jadwal di beranda & presensi.
+  { href: "/jadwal", label: "Jadwal & Agenda", short: "Jadwal", icon: CalendarDays, section: "Tim & Pemain", desktopOnly: true },
   { href: "/pengaturan", label: "Pengaturan Klub", short: "Pengaturan", icon: Settings, section: "Klub" },
 ] as const;
 
 /** Judul top bar per rute: [remah, judul]. */
 const TITLES: [RegExp, string, string][] = [
   [/^\/$/, "Dashboard Pelatih", "Ringkasan Latihan & Pemain"],
+  [/^\/jadwal/, "Kalender Latihan", "Jadwal & Agenda Latihan"],
   [/^\/presensi\/[^/]+$/, "Presensi Lapangan", "Sesi Latihan"],
   [/^\/presensi/, "Presensi Lapangan", "Jadwal & Presensi Latihan"],
   [/^\/pemain\/baru/, "Data Pemain", "Tambah Pemain"],
@@ -194,7 +197,7 @@ export function BottomNav() {
   const isActive = useActive();
   return (
     <nav className="no-print fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-line bg-card/95 pb-[env(safe-area-inset-bottom)] shadow-lg backdrop-blur-md md:hidden">
-      {NAV.map((n) => (
+      {NAV.filter((n) => !("desktopOnly" in n)).map((n) => (
         <Link
           key={n.href}
           href={n.href}

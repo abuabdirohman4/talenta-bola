@@ -10,7 +10,7 @@ import { db } from "@/db";
 import { ageGroups, parentPermissions, players, reportPeriods, reports, ssbProfiles, trainingSessions } from "@/db/schema";
 import { STATUS_LABEL } from "@/lib/attendance";
 import { addDays, formatDateId, formatTimeId, dateWib } from "@/lib/format";
-import { getAttendanceSummary } from "@/lib/queries";
+import { fillSessionsFromPatterns, getAttendanceSummary } from "@/lib/queries";
 import { footLabel, positionLabel } from "@/lib/players";
 import { cn, waLink } from "@/lib/utils";
 import { IzinForm } from "./_components/IzinForm";
@@ -38,6 +38,8 @@ export default async function ParentPage({ params }: { params: Promise<{ token: 
   if (!row) notFound();
   const { p, ssb } = row;
 
+  // Ortu bisa membuka link berminggu-minggu setelah pelatih terakhir buka app; jadwal rutin tetap mengisi sesi (idempoten).
+  await fillSessionsFromPatterns(ssb.id, p.ageGroupId, ssb.homeGround);
   const today = dateWib();
   const [upcoming, attendance, published] = await Promise.all([
     db
@@ -140,6 +142,13 @@ export default async function ParentPage({ params }: { params: Promise<{ token: 
                                 </span>
                               )}
                             </span>
+                            {s.status === "CANCELLED" ? (
+                              <span className="mt-1 block text-xs font-semibold text-alpa">
+                                Latihan diliburkan{s.cancelReason ? `: ${s.cancelReason}` : ""} — tidak perlu izin.
+                              </span>
+                            ) : (
+                              s.topic && <span className="mt-1 block text-xs font-semibold text-primary">Fokus: {s.topic}</span>
+                            )}
                           </span>
                           {s.status === "CANCELLED" ? (
                             <span className="shrink-0 rounded-md border border-alpa/30 bg-alpa/10 px-2 py-0.5 text-[11px] font-bold text-alpa">Libur</span>

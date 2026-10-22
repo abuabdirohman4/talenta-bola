@@ -20,13 +20,14 @@ import { STATUS_LABEL, type Status } from "@/lib/attendance";
 import { getActiveGroup } from "@/lib/data";
 import { addDays, dateWib, formatDateId, formatTimeId } from "@/lib/format";
 import { positionLabel } from "@/lib/players";
+import { fillSessionsFromPatterns } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 import { StartTodayButton } from "./presensi/_components/SessionControls";
 
 const card = "rounded-2xl border border-line bg-card shadow-sm";
 
 export default async function BerandaPage({ searchParams }: { searchParams: Promise<{ ku?: string }> }) {
-  const { groups, group } = await getActiveGroup((await searchParams).ku);
+  const { ssb, groups, group } = await getActiveGroup((await searchParams).ku);
   if (!group) {
     return (
       <p className={cn(card, "border-dashed p-6 text-center")}>
@@ -35,6 +36,8 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
     );
   }
 
+  // Beranda paling sering dibuka: jaga sesi 4 minggu ke depan dari jadwal rutin tetap terisi.
+  await fillSessionsFromPatterns(ssb.id, group.id, ssb.homeGround);
   const today = dateWib();
   const monthAgo = addDays(today, -30);
   const activePlayer = and(eq(players.ageGroupId, group.id), eq(players.isActive, true), isNull(players.deletedAt));
@@ -182,7 +185,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
               />
             )}
             <Link
-              href={`/presensi?ku=${group.id}`}
+              href={`/jadwal?ku=${group.id}`}
               className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-600 bg-slate-800 px-4 text-sm font-bold text-white hover:bg-slate-700"
             >
               <CalendarDays size={18} aria-hidden /> Atur Jadwal
@@ -299,7 +302,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
             ) : (
               <p className="rounded-xl bg-subtle p-4 text-sm text-muted">
                 Belum ada jadwal ke depan.{" "}
-                <Link href={`/presensi?ku=${group.id}`} className="font-semibold text-primary underline">
+                <Link href={`/jadwal?ku=${group.id}`} className="font-semibold text-primary underline">
                   Buat jadwal rutin mingguan
                 </Link>{" "}
                 supaya ortu bisa kirim izin lebih dulu.

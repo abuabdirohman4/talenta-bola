@@ -16,3 +16,4 @@ next-env.d.ts
 .beads/beads.db
 # Daftar nama anak asli (data di bawah umur) — tidak masuk repo publik
 src/db/roster.local.txt
+.claude/worktrees/

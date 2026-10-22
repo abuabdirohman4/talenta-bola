@@ -65,6 +65,7 @@ export default async function SessionPage({ params }: { params: Promise<{ id: st
         location: s.location,
         topic: s.topic,
         cancelled: s.status === "CANCELLED",
+        cancelReason: s.cancelReason,
         groupName: session.groupName,
         groupCode: session.groupCode,
       }}

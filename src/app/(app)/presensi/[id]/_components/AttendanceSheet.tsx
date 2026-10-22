@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays, Check, CloudOff, Copy, Hand, Minus, Plus, Search, Send, Settings2, X } from "lucide-react";
+import { CalendarDays, Check, CloudOff, Copy, Hand, Plus, Search, Send, Settings2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -21,7 +21,8 @@ import { formatDateId, formatTimeId } from "@/lib/format";
 import { positionLabel } from "@/lib/players";
 import { buildRekap } from "@/lib/rekap";
 import { cn, waLink } from "@/lib/utils";
-import { resolvePermission, setSessionCancelled, updateSessionInfo } from "../../actions";
+import { resolvePermission, updateSessionInfo } from "../../actions";
+import { CancelSessionButton } from "../../_components/SessionControls";
 import { enqueue, readQueue, sendQueue } from "./offline-queue";
 
 type Props = {
@@ -32,6 +33,7 @@ type Props = {
     location: string | null;
     topic: string | null;
     cancelled: boolean;
+    cancelReason: string | null;
     groupName: string;
     groupCode: string;
   };
@@ -223,6 +225,7 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
           {session.cancelled ? (
             <div className="rounded-2xl border border-izin/40 bg-warn-soft p-4 text-warn">
               <p className="font-bold">Sesi ini ditandai libur.</p>
+              {session.cancelReason && <p className="mt-1 text-[15px] font-semibold">Alasan: {session.cancelReason}</p>}
               <p className="mt-1 text-[15px]">Presensi tidak diisi dan ortu tidak bisa mengajukan izin untuk tanggal ini.</p>
             </div>
           ) : (
@@ -463,7 +466,6 @@ function PendingPermission({ permission }: { permission: Permission }) {
 
 function SessionSettings({ session, children }: { session: Props["session"]; children?: React.ReactNode }) {
   const [pending, start] = useTransition();
-  const [libur, startLibur] = useTransition();
   const [open, setOpen] = useState(false);
   const [time, setTime] = useState(session.startTime.slice(0, 5));
   const [location, setLocation] = useState(session.location ?? "");
@@ -473,21 +475,7 @@ function SessionSettings({ session, children }: { session: Props["session"]; chi
     <div className="mt-4 space-y-3 border-t border-line pt-4">
       <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
         {children}
-        <Button
-          type="button"
-          variant="outline"
-          size="md"
-          loading={libur}
-          onClick={() =>
-            startLibur(async () => {
-              await setSessionCancelled(session.id, !session.cancelled);
-              toast.success(session.cancelled ? "Sesi dibuka lagi" : "Sesi ditandai libur");
-            })
-          }
-          className={session.cancelled ? undefined : "border-alpa/30 bg-alpa/10 text-alpa hover:bg-alpa/15"}
-        >
-          {!libur && <Minus size={18} aria-hidden />} {session.cancelled ? "Batalkan libur" : "Tandai libur"}
-        </Button>
+        <CancelSessionButton sessionId={session.id} cancelled={session.cancelled} />
         <Button type="button" variant="outline" size="md" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
           <Settings2 size={18} aria-hidden /> Atur sesi
         </Button>

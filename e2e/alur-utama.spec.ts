@@ -76,10 +76,17 @@ test("rapor: nilai + catatan, terbit, lalu dibuka ortu tanpa login", async ({ pa
 test("ortu mengajukan izin lewat link, pelatih melihatnya di lembar presensi", async ({ page, browser }) => {
   await login(page);
   // Sesi besok supaya izin diterima (izin hanya untuk sesi yang belum lewat).
-  await page.goto("/presensi");
-  await page.getByText("Jadwalkan sesi tanggal lain").click();
-  await page.getByLabel("Tanggal").first().fill(tomorrow());
-  await page.getByRole("button", { name: "Buat sesi" }).click();
+  const label = new Intl.DateTimeFormat("id-ID", { timeZone: "UTC", weekday: "long", day: "numeric", month: "short", year: "numeric" })
+    .format(new Date(tomorrow() + "T00:00:00Z"));
+  await page.goto("/jadwal");
+  const row = page.getByRole("listitem").filter({ hasText: label });
+  // Besok bisa sudah terisi dari jadwal rutin; kalau belum, tambah sesi manual.
+  if (!(await row.count())) {
+    await page.getByRole("button", { name: "Tambah sesi" }).click();
+    await page.getByLabel("Tanggal").fill(tomorrow());
+    await page.getByRole("button", { name: "Simpan sesi" }).click();
+  }
+  await row.getByRole("link", { name: /Atur sesi/ }).click();
   await expect(page).toHaveURL(/\/presensi\/[0-9a-f-]{36}$/);
   const sessionUrl = page.url();
 
@@ -90,8 +97,6 @@ test("ortu mengajukan izin lewat link, pelatih melihatnya di lembar presensi", a
 
   const ortu = await (await browser.newContext()).newPage();
   await ortu.goto(parentUrl);
-  const label = new Intl.DateTimeFormat("id-ID", { timeZone: "UTC", weekday: "long", day: "numeric", month: "short", year: "numeric" })
-    .format(new Date(tomorrow() + "T00:00:00Z"));
   await ortu.getByRole("radio", { name: new RegExp(label) }).check();
   await ortu.getByRole("button", { name: "Sakit" }).click();
   await ortu.getByLabel("Alasan").fill("Demam sejak semalam");
