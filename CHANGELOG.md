@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.1] — 2026-10-22
+
+### Improved
+- **Landing page comes alive**: the hero enters in sequence with a gently floating phone, and each section rises into view while scrolling (turned off when the phone asks for reduced motion).
+
 ## [1.4.0] — 2026-10-22
 
 ### Added
