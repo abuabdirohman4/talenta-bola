@@ -8,13 +8,15 @@ Step-by-step guide in Indonesian for the club: [`panduan-demo.md`](panduan-demo.
 
 **How to use:**
 1. **Presensi → Mulai presensi hari ini** (or open a scheduled session).
-2. Tap **H / I / S / A** (Present / Excused / Sick / Absent) per child; counters update at the top.
-3. **Tandai sisa … sebagai Hadir** marks everyone still unmarked as present.
-4. **Salin rekap** or **Kirim ke WA**.
+2. Every child starts as **A** (Alpa). Tap **H / I / S / A** per child, or **Hadir semua** first and then fix the exceptions (it only changes children not marked yet).
+3. For **I**, optionally write the reason (suggestions offered); it appears in the recap.
+4. Tap a column title to sort (Nama, or bring H/I/S/A to the top).
+5. **Salin rekap** or the WhatsApp button in the floating bar.
 
 **Notes:**
 - Without signal, taps stay on the phone ("… di HP, menunggu sinyal") and are sent automatically later. Don't clear browser data before it shows **Tersimpan**.
 - One session per age group per date.
+- A warning appears in the floating bar only when taps are still on the phone or sending failed; normal saving shows nothing.
 
 ## Training schedule
 

@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0] — 2026-10-23
+
+### Changed
+- **Attendance sheet is a calm table** (pattern from Generus Mandiri): Nama | H | I | S | A, every child starts as Alpa (shown faint) and one tap fills the circle. Session details stay on top behind the settings button; a summary card shows "x hadir, y alpa, z izin, w sakit" with the attendance percentage. The first children are visible on the first phone screen.
+- **Unmarked children count as Alpa** in the WhatsApp recap (was "Belum konfirmasi"). The parent page still says "Belum dicatat" for sessions where the child was not marked.
+- **Floating bar** holds only Salin rekap and the WhatsApp button; a warning appears on its left only when taps are still on the phone or sending failed.
+
+### Added
+- **Reason for Izin**: after tapping I, an optional reason field with suggestions (Sekolah, Acara keluarga, …). Saved through the same offline queue, shown in the recap ("Izin (Acara keluarga)") and in the parent's attendance history. Accepting a parent's leave request keeps the parent's reason.
+- **Sort by column**: tap Nama (A–Z, Z–A) or H/I/S/A to bring that status to the top. The order is frozen at the tap, so rows never jump while marking.
+- Jersey number and position shown under each name.
+
 ## [1.6.0] — 2026-10-23
 
 ### Added

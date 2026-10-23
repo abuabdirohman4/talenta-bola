@@ -1,5 +1,5 @@
 // Service worker manual (tanpa next-pwa). Naikkan BUILD_VERSION tiap deploy berarti → cache lama dibuang.
-const BUILD_VERSION = "2026-10-23.1";
+const BUILD_VERSION = "2026-10-23.2";
 const CACHE = `talenta-bola-${BUILD_VERSION}`;
 // Cache "talenta-bola-pages" diisi halaman presensi sendiri (salinan offline); ikut dibuang saat versi berganti.
 
