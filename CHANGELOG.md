@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.0] — 2026-10-23
+
+### Added
+- **Install on the phone**: the coach home page offers "Pasang TalentaBola di HP" — an Install button on Android/Chrome, Share → Add to Home Screen steps on iPhone. Hidden once installed or dismissed.
+
+### Improved
+- **Phone layout pass (360–390 px, light and dark)**: no more iOS zoom when typing in the WA import box or the report search; selected status buttons readable in dark mode; buttons that wrapped onto two lines on small phones fit on one; tap targets raised to at least 44 px (filters, chips, close buttons); long names in the report form no longer cut off.
+
 ## [1.5.0] — 2026-10-22
 
 ### Added

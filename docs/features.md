@@ -73,6 +73,18 @@ Step-by-step guide in Indonesian for the club: [`panduan-demo.md`](panduan-demo.
 
 **How to use:** **Pengaturan** → name, head coach, home ground, WhatsApp, colour, logo; add age groups.
 
+## Install on the phone
+
+> TalentaBola can sit on the home screen and open like an app.
+
+**How to use:**
+1. Android/Chrome: tap **Pasang** on the card at the top of the home page.
+2. iPhone (Safari): tap Share, then **Tambah ke Layar Utama**.
+
+**Notes:**
+- The card hides after installing or tapping ✕ (remembered on that phone).
+- Links opened inside WhatsApp use WhatsApp's own browser, which cannot install; open the link in Chrome/Safari first.
+
 ## Light & dark mode
 
 > The app follows the phone's light/dark setting; coaches can switch with the sun/moon button.
