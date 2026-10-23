@@ -1,87 +1,128 @@
 "use client";
 
-import { Download, Share, X } from "lucide-react";
+import { Check, Download, Share, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 
 const DISMISS_KEY = "tb-install-dismissed";
 
 type InstallEvent = Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome: string }> };
 
-/** Ajak pelatih memasang app ke layar utama: tombol Pasang (Android/Chrome) atau panduan Bagikan (iPhone). */
-export function InstallCard() {
-  const [mode, setMode] = useState<"android" | "ios" | null>(null);
-  const [evt, setEvt] = useState<InstallEvent | null>(null);
+// Chrome mengirim tawaran pasang sekali per muat halaman; ditangkap di tingkat modul supaya tidak hilang saat pindah halaman.
+let deferred: InstallEvent | null = null;
+const listeners = new Set<() => void>();
+if (typeof window !== "undefined") {
+  addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferred = e as InstallEvent;
+    listeners.forEach((f) => f());
+  });
+  addEventListener("appinstalled", () => {
+    deferred = null;
+    listeners.forEach((f) => f());
+  });
+}
+
+type Mode = "installed" | "prompt" | "ios" | "manual";
+
+function detect(): Mode {
+  const standalone =
+    matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone;
+  if (standalone) return "installed";
+  if (deferred) return "prompt";
+  // Safari iPadOS mengaku Mac, jadi cek layar sentuh juga.
+  const ua = navigator.userAgent;
+  if (/iphone|ipad|ipod/i.test(ua) || (/macintosh/i.test(ua) && navigator.maxTouchPoints > 1)) return "ios";
+  return "manual";
+}
+
+/**
+ * Ajakan memasang app ke layar utama.
+ * "home": kartu di beranda, bisa ditutup, hanya muncul kalau bisa dipasang. "settings": selalu tampil di Pengaturan.
+ */
+export function InstallCard({ variant = "home" }: { variant?: "home" | "settings" }) {
+  const [mode, setMode] = useState<Mode | null>(null);
+  const [hidden, setHidden] = useState(variant === "home");
 
   useEffect(() => {
-    const standalone =
-      matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone;
-    let dismissed = false;
-    try {
-      dismissed = localStorage.getItem(DISMISS_KEY) === "1";
-    } catch {}
-    if (standalone || dismissed) return;
-
-    // iPhone/iPad tidak punya prompt pasang; Safari iPadOS mengaku Mac, jadi cek layar sentuh juga.
-    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (/macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
-    if (ios) setMode("ios");
-
-    const onPrompt = (e: Event) => {
-      e.preventDefault();
-      setEvt(e as InstallEvent);
-      setMode("android");
-    };
-    const onInstalled = () => setMode(null);
-    addEventListener("beforeinstallprompt", onPrompt);
-    addEventListener("appinstalled", onInstalled);
+    const update = () => setMode(detect());
+    update();
+    if (variant === "home") {
+      try {
+        setHidden(localStorage.getItem(DISMISS_KEY) === "1");
+      } catch {
+        setHidden(false);
+      }
+    }
+    listeners.add(update);
     return () => {
-      removeEventListener("beforeinstallprompt", onPrompt);
-      removeEventListener("appinstalled", onInstalled);
+      listeners.delete(update);
     };
-  }, []);
+  }, [variant]);
 
-  if (!mode) return null;
+  if (!mode || hidden) return null;
+  if (variant === "home" && (mode === "installed" || mode === "manual")) return null;
 
   const dismiss = () => {
     try {
       localStorage.setItem(DISMISS_KEY, "1");
     } catch {}
-    setMode(null);
+    setHidden(true);
+  };
+  const install = async () => {
+    const e = deferred;
+    if (!e) return;
+    await e.prompt();
+    const choice = await e.userChoice;
+    deferred = null;
+    setMode(choice.outcome === "accepted" ? "installed" : detect());
   };
 
   return (
-    <section className="relative flex items-start gap-3 rounded-2xl border border-line bg-card p-4 pr-12 shadow-sm">
+    <section
+      className={cn(
+        "relative flex items-start gap-3 rounded-2xl border border-line bg-card p-4 shadow-sm",
+        variant === "home" && "pr-12",
+        variant === "settings" && "mt-4"
+      )}
+    >
       <img src="/icons/icon-192.png" alt="" className="size-11 shrink-0 rounded-xl" />
       <div className="min-w-0 flex-1 space-y-2">
         <div>
-          <p className="font-bold text-ink">Pasang TalentaBola di HP</p>
+          <p className="font-bold text-ink">{variant === "settings" ? "Pasang aplikasi" : "Pasang TalentaBola di HP"}</p>
           <p className="text-sm text-muted">Buka langsung dari layar utama seperti aplikasi, tanpa mengetik alamat.</p>
         </div>
-        {mode === "android" ? (
-          <Button
-            onClick={async () => {
-              await evt?.prompt();
-              const choice = await evt?.userChoice;
-              if (choice?.outcome === "accepted") setMode(null);
-            }}
-          >
+        {mode === "installed" ? (
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-hadir">
+            <Check size={16} aria-hidden /> Sudah terpasang di perangkat ini
+          </p>
+        ) : mode === "prompt" ? (
+          <Button onClick={install}>
             <Download size={18} aria-hidden /> Pasang
           </Button>
+        ) : mode === "ios" ? (
+          <p className="text-sm text-ink">
+            Di Safari, ketuk <Share size={16} className="inline align-text-bottom text-info" aria-label="Bagikan" /> lalu pilih{" "}
+            <b>Tambah ke Layar Utama</b>.
+          </p>
         ) : (
           <p className="text-sm text-ink">
-            Di Safari, ketuk <Share size={16} className="inline align-text-bottom text-info" aria-label="Bagikan" /> lalu
-            pilih <b>Tambah ke Layar Utama</b>.
+            Buka di Chrome, ketuk menu <b>⋮</b> lalu pilih <b>Tambahkan ke layar utama</b> atau <b>Instal aplikasi</b>. Kalau
+            dibuka dari WhatsApp, pilih dulu &quot;Buka di Chrome&quot;.
           </p>
         )}
       </div>
-      <button
-        type="button"
-        onClick={dismiss}
-        aria-label="Tutup"
-        className="absolute top-2 right-2 grid size-10 place-items-center rounded-xl text-muted hover:bg-ground"
-      >
-        <X size={18} aria-hidden />
-      </button>
+      {variant === "home" && (
+        <button
+          type="button"
+          onClick={dismiss}
+          aria-label="Tutup"
+          className="absolute top-2 right-2 grid size-10 place-items-center rounded-xl text-muted hover:bg-ground"
+        >
+          <X size={18} aria-hidden />
+        </button>
+      )}
     </section>
   );
 }

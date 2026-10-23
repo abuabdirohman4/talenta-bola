@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { dateWib } from "../format";
-import { weekdayDates } from "../schedule";
+import { monthGrid, shiftMonth, weekdayDates } from "../schedule";
 
 describe("jadwal rutin → tanggal sesi", () => {
   it("4 tanggal berurutan per minggu, mulai hari ini kalau harinya cocok", () => {
@@ -26,5 +26,20 @@ describe("jadwal rutin → tanggal sesi", () => {
   it("hari ini = tanggal WIB: Sabtu 18.00 UTC sudah Minggu pagi di WIB", () => {
     const today = dateWib(new Date("2026-10-24T18:00:00Z"));
     expect(weekdayDates(0, today)[0]).toBe("2026-10-25");
+  });
+});
+
+describe("kalender bulan", () => {
+  it("Senin di kolom pertama, panjang bulan benar", () => {
+    const g = monthGrid("2026-10"); // 1 Okt 2026 = Kamis
+    expect(g.slice(0, 4)).toEqual([null, null, null, "2026-10-01"]);
+    expect(g.at(-1)).toBe("2026-10-31");
+    expect(monthGrid("2026-02").filter(Boolean)).toHaveLength(28);
+    expect(monthGrid("2026-06")[0]).toBe("2026-06-01"); // 1 Jun 2026 = Senin
+  });
+
+  it("geser bulan melewati tahun", () => {
+    expect(shiftMonth("2026-12", 1)).toBe("2027-01");
+    expect(shiftMonth("2026-01", -1)).toBe("2025-12");
   });
 });

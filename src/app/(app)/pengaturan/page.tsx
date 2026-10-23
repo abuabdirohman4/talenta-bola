@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getAgeGroups, getSsb } from "@/lib/data";
+import { InstallCard } from "../_components/InstallCard";
 import { AccessCodeForm, AgeGroupForm, LogoutButton, SsbForm } from "./_components/SettingsForms";
 
 export const metadata: Metadata = { title: "Pengaturan" };
@@ -44,6 +45,7 @@ export default async function PengaturanPage() {
             </ul>
             <AgeGroupForm />
           </section>
+          <InstallCard variant="settings" />
           <AccessCodeForm />
           <LogoutButton />
         </div>
