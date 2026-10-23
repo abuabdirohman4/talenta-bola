@@ -18,6 +18,15 @@ Step-by-step guide in Indonesian for the club: [`panduan-demo.md`](panduan-demo.
 - One session per age group per date.
 - A warning appears in the floating bar only when taps are still on the phone or sending failed; normal saving shows nothing.
 
+## Attendance calendar
+
+> See the month at a glance and open or create any training day.
+
+**How to use:**
+1. **Presensi**: circles show each session (green/amber/red by attendance, dashed = scheduled, struck = cancelled).
+2. Tap a day to open its sheet; tap an empty day → **Buat sesi** to record another date or an extra session.
+3. The list under the calendar shows each session's counts and percentage.
+
 ## Training schedule
 
 > Set the weekly routine once; sessions for the next 4 weeks appear by themselves and parents see them on their link.
@@ -84,6 +93,7 @@ Step-by-step guide in Indonesian for the club: [`panduan-demo.md`](panduan-demo.
 2. iPhone (Safari): tap Share, then **Tambah ke Layar Utama**.
 
 **Notes:**
+- **Pengaturan → Pasang aplikasi** is always there, also after the home card was closed.
 - The card hides after installing or tapping ✕ (remembered on that phone).
 - Links opened inside WhatsApp use WhatsApp's own browser, which cannot install; open the link in Chrome/Safari first.
 

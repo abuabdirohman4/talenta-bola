@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.8.0] — 2026-10-23
+
+### Added
+- **Attendance calendar** on Presensi: each training day is a circle coloured by attendance (green ≥80%, amber 60–79%, red below), dashed for scheduled, struck for cancelled, ring for today; ‹ › moves between months. Tapping a day opens its sheet; tapping an empty day offers "Buat sesi" — attendance for another date or an extra session now works straight from the phone.
+- **Sessions this month** list under the calendar: "Sab, 3 Okt · 07.30 — 24 hadir · 3 izin · 1 sakit · 2 alpa · 80%".
+- **Install section in Pengaturan**, always available: Install button on Android/Chrome, Share steps on iPhone, Chrome menu steps elsewhere, or "Sudah terpasang".
+
+### Changed
+- The "Hari ini" card is one line with a single Mulai/Lanjutkan button; the routine schedule is a small link under the calendar.
+- The install offer from Chrome is caught on the first page load, so the Install button still works after moving between pages.
+
 ## [1.7.0] — 2026-10-23
 
 ### Changed
