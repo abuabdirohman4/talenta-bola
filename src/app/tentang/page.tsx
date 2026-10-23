@@ -321,6 +321,12 @@ export default function TentangPage() {
                 Hubungi kami
               </a>
             )}
+            <a href="https://www.instagram.com/talenta.bola/" target="_blank" rel="noopener noreferrer" className="hover:text-ink">
+              Instagram
+            </a>
+            <a href="mailto:halotalentabola@gmail.com" className="hover:text-ink">
+              Email
+            </a>
           </p>
         </div>
       </footer>

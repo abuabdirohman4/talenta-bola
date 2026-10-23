@@ -13,6 +13,12 @@
 - **Beda dari alternatif:** dibanding daftar WA — rekapnya rapi dalam satu tap, ortu izin sendiri tanpa chat tenggelam, dan rapor terasa dokumen resmi klub. Dibanding app SSB lain — dibuat untuk HP di pinggir lapangan, bukan dashboard admin.
 - **Bukan:** aplikasi keuangan/SPP, papan taktik, atau media sosial klub (belum).
 
+## 1a. Akun resmi
+
+- Instagram: [@talenta.bola](https://www.instagram.com/talenta.bola/)
+- Email: halotalentabola@gmail.com
+- App/LP: https://talenta-bola.vercel.app (tamu otomatis lihat LP)
+
 ## 2. Kepribadian
 
 | Sifat | Bukan |
