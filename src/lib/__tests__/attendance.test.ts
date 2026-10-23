@@ -68,4 +68,19 @@ describe("buildRekap", () => {
       ].join("\n")
     );
   });
+
+  it("alasan izin ikut di belakang status", () => {
+    const text = buildRekap({
+      groupName: "KU 2016",
+      sessionDate: "2026-09-20",
+      startTime: "07:30:00",
+      location: null,
+      rows: [
+        { name: "Shiraj", status: "IZIN", note: "Acara keluarga" },
+        { name: "Athar", status: "HADIR", note: null },
+      ],
+    });
+    expect(text).toContain("1. Shiraj — Izin (Acara keluarga)");
+    expect(text).toContain("2. Athar — Hadir\n");
+  });
 });

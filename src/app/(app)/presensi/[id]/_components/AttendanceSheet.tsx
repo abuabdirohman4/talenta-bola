@@ -1,17 +1,17 @@
 "use client";
 
-import { CalendarDays, Check, CloudOff, Copy, Hand, Plus, Search, Send, Settings2, X } from "lucide-react";
+import { CalendarDays, Check, CloudOff, Copy, Search, Send, Settings2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Field, inputClass } from "@/components/ui/Field";
-import { Spinner } from "@/components/ui/Spinner";
 import {
   countStatuses,
   resolveStatus,
   STATUS_LABEL,
+  NOTE_MAX,
   type Mark,
   type Permission,
   type SheetStatus,
@@ -42,11 +42,11 @@ type Props = {
   permissions: Record<string, Permission>;
 };
 
-const BUTTONS: { status: Status; letter: string; icon: typeof Check }[] = [
-  { status: "HADIR", letter: "H", icon: Check },
-  { status: "IZIN", letter: "I", icon: Hand },
-  { status: "SAKIT", letter: "S", icon: Plus },
-  { status: "ALPA", letter: "A", icon: X },
+const BUTTONS: { status: Status; letter: string }[] = [
+  { status: "HADIR", letter: "H" },
+  { status: "IZIN", letter: "I" },
+  { status: "SAKIT", letter: "S" },
+  { status: "ALPA", letter: "A" },
 ];
 
 // Kelas lengkap ditulis eksplisit supaya ikut dipindai Tailwind.
@@ -55,26 +55,6 @@ const TONE: Record<Status, { solid: string; soft: string; text: string }> = {
   IZIN: { solid: "bg-izin border-izin text-white dark:text-ground", soft: "bg-izin/15 border-izin/50 text-izin", text: "text-izin" },
   SAKIT: { solid: "bg-sakit border-sakit text-white dark:text-ground", soft: "bg-sakit/15 border-sakit/50 text-sakit", text: "text-sakit" },
   ALPA: { solid: "bg-alpa border-alpa text-white dark:text-ground", soft: "bg-alpa/15 border-alpa/50 text-alpa", text: "text-alpa" },
-};
-const BADGE: Record<Status, string> = {
-  HADIR: "bg-hadir/15 text-hadir",
-  IZIN: "bg-izin/15 text-izin",
-  SAKIT: "bg-sakit/15 text-sakit",
-  ALPA: "bg-alpa/15 text-alpa",
-};
-const PILL: Record<Status, string> = {
-  HADIR: "bg-hadir/10 text-hadir border-hadir/30",
-  IZIN: "bg-izin/10 text-izin border-izin/30",
-  SAKIT: "bg-sakit/10 text-sakit border-sakit/30",
-  ALPA: "bg-alpa/10 text-alpa border-alpa/30",
-};
-const BAR: Record<Status, string> = { HADIR: "bg-hadir", IZIN: "bg-izin", SAKIT: "bg-sakit", ALPA: "bg-alpa" };
-const BOX: Record<SheetStatus, string> = {
-  HADIR: "border-hadir/30 bg-hadir/10 text-hadir",
-  IZIN: "border-izin/30 bg-izin/10 text-izin",
-  SAKIT: "border-sakit/30 bg-sakit/10 text-sakit",
-  ALPA: "border-alpa/30 bg-alpa/10 text-alpa",
-  BELUM: "border-line bg-subtle text-muted",
 };
 const card = "rounded-2xl border border-line bg-card shadow-sm";
 
@@ -86,16 +66,18 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
   const [local, setLocal] = useState<Record<string, Mark>>({});
   const [sync, setSync] = useState<Sync>("saved");
   const [queued, setQueued] = useState(0);
-  const [filter, setFilter] = useState<"all" | "belum" | "hadir">("all");
   const [query, setQuery] = useState("");
+  // Urutan dibekukan saat judul kolom diketuk, supaya baris tidak melompat di bawah jari ketika status diubah.
+  const [sort, setSort] = useState<{ key: "name" | Status; desc: boolean; order: string[] } | null>(null);
   const [confirmBulk, setConfirmBulk] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(session.cancelled);
   const flushing = useRef(false);
 
   // Tap yang belum terkirim (mis. HP sempat offline lalu halaman dibuka ulang) tetap ditampilkan.
   useEffect(() => {
     const mine = readQueue().filter((m) => m.sessionId === session.id);
     if (mine.length) {
-      setLocal(Object.fromEntries(mine.map((m) => [m.playerId, { status: m.status, updatedAt: m.at }])));
+      setLocal(Object.fromEntries(mine.map((m) => [m.playerId, { status: m.status, updatedAt: m.at, note: m.note }])));
       setQueued(mine.length);
     }
   }, [session.id]);
@@ -147,16 +129,30 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
         const s = serverMarks[p.id];
         const l = local[p.id];
         const mark = l && (!s || l.updatedAt >= s.updatedAt) ? l : s;
-        return { ...p, no: i + 1, ...resolveStatus(mark, permissions[p.id]) };
+        const res = resolveStatus(mark, permissions[p.id]);
+        // Catatan: alasan izin dari pelatih, atau alasan yang ditulis ortu kalau statusnya dari ortu.
+        const note = res.source === "coach" ? (mark?.note ?? null) : res.source === "parent" ? permissions[p.id]!.reason : null;
+        return { ...p, no: i + 1, ...res, note };
       }),
     [roster, serverMarks, local, permissions]
   );
   const counts = countStatuses(rows.map((r) => r.status));
 
-  function mark(playerIds: string[], status: Status) {
+  /** note undefined = pertahankan alasan lama kalau statusnya tidak berubah. */
+  function mark(playerIds: string[], status: Status, note?: string | null) {
     const at = Date.now();
-    for (const playerId of playerIds) enqueue({ sessionId: session.id, playerId, status, at });
-    setLocal((prev) => ({ ...prev, ...Object.fromEntries(playerIds.map((id) => [id, { status, updatedAt: at }])) }));
+    const notes = Object.fromEntries(
+      playerIds.map((id) => {
+        const row = rows.find((r) => r.id === id);
+        const keep = row?.source === "coach" && row.status === status ? row.note : null;
+        return [id, status === "IZIN" ? (note === undefined ? keep : note) : null];
+      })
+    );
+    for (const playerId of playerIds) enqueue({ sessionId: session.id, playerId, status, at, note: notes[playerId] });
+    setLocal((prev) => ({
+      ...prev,
+      ...Object.fromEntries(playerIds.map((id) => [id, { status, updatedAt: at, note: notes[id] }])),
+    }));
     setQueued(readQueue().length);
     navigator.vibrate?.(10);
     flush();
@@ -168,7 +164,7 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
       sessionDate: session.date,
       startTime: session.startTime,
       location: session.location,
-      rows: rows.map((r) => ({ name: r.fullName, status: r.status })),
+      rows: rows.map((r) => ({ name: r.fullName, status: r.status === "BELUM" ? "ALPA" : r.status, note: r.note })),
     });
 
   async function copyRekap() {
@@ -181,45 +177,63 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
   }
 
   const q = query.trim().toLowerCase();
-  const visible = rows.filter(
+  const shownStatus = (r: (typeof rows)[number]): Status => (r.status === "BELUM" ? "ALPA" : r.status);
+  const displayName = (r: (typeof rows)[number]) => r.nickname || r.fullName;
+  function sortBy(key: "name" | Status) {
+    // Ketuk lagi: nama dibalik Z–A; status kembali ke urutan asal.
+    if (sort?.key === key && (key !== "name" || sort.desc)) return setSort(null);
+    const desc = sort?.key === key;
+    const byName = (a: (typeof rows)[number], b: (typeof rows)[number]) => displayName(a).localeCompare(displayName(b), "id");
+    const sorted = [...rows].sort((a, b) =>
+      key === "name"
+        ? byName(a, b) * (desc ? -1 : 1)
+        : Number(shownStatus(b) === key) - Number(shownStatus(a) === key) || byName(a, b)
+    );
+    setSort({ key, desc, order: sorted.map((r) => r.id) });
+  }
+  const rank = new Map(sort?.order.map((id, i) => [id, i]));
+  const visible = [...rows].sort((a, b) => (rank.get(a.id) ?? 0) - (rank.get(b.id) ?? 0)).filter(
     (r) =>
-      (filter === "all" || (filter === "belum" ? r.status === "BELUM" : r.status === "HADIR")) &&
       (!q || r.fullName.toLowerCase().includes(q) || r.nickname?.toLowerCase().includes(q) || String(r.jerseyNumber) === q)
   );
   const total = rows.length;
-  const filled = total - counts.BELUM;
-  const pct = total ? Math.round((filled / total) * 100) : 0;
-  const bulk = counts.BELUM > 0 && (
-    <Button size="md" className="col-span-2 sm:col-span-1" onClick={() => setConfirmBulk(true)}>
-      <Check size={18} aria-hidden /> Sisanya Hadir ({counts.BELUM})
-    </Button>
-  );
+  // Seperti Generus Mandiri: anak yang belum ditandai dihitung Alpa.
+  const alpa = counts.ALPA + counts.BELUM;
+  const pct = total ? Math.round((counts.HADIR / total) * 100) : 0;
+  const pctTone = pct >= 80 ? "bg-hadir/15 text-hadir" : pct >= 60 ? "bg-izin/15 text-izin" : "bg-alpa/15 text-alpa";
 
   return (
     <div className="space-y-4">
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-6">
-        <div className="min-w-0 space-y-4 pb-24 lg:pb-0">
-          <section className={cn(card, "p-4 md:p-5")}>
-            <div className="flex items-start gap-3">
-              <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary">
+        <div className="min-w-0 space-y-3 pb-24 lg:space-y-4 lg:pb-0">
+          <section className={cn(card, "p-3 md:p-4")}>
+            <div className="flex items-center gap-3">
+              <span className="hidden size-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary sm:grid">
                 <CalendarDays size={22} aria-hidden />
               </span>
-              <div className="min-w-0">
-                <p className="eyebrow">{session.cancelled ? "Sesi libur" : "Jadwal pertemuan aktif"}</p>
-                <h2 className="text-lg font-black tracking-tight">{formatDateId(session.date)}</h2>
-                <p className="text-sm font-medium text-muted">
-                  {[
-                    session.groupName,
-                    `${formatTimeId(session.startTime)} WIB`,
-                    session.location,
-                    session.topic,
-                  ]
+              <div className="min-w-0 flex-1">
+                <h2 className="text-base font-black tracking-tight md:text-lg">
+                  {formatDateId(session.date)}
+                  {session.cancelled && <span className="text-warn"> · Libur</span>}
+                </h2>
+                <p className="line-clamp-2 text-xs font-medium text-muted md:text-sm">
+                  {[session.groupName, `${formatTimeId(session.startTime)} WIB`, session.location, session.topic]
                     .filter(Boolean)
                     .join(" · ")}
                 </p>
               </div>
+              <Button
+                type="button"
+                variant="outline"
+                aria-expanded={settingsOpen}
+                aria-label="Atur sesi"
+                onClick={() => setSettingsOpen((o) => !o)}
+                className={cn("shrink-0 px-3", settingsOpen && "border-primary text-primary")}
+              >
+                <Settings2 size={18} aria-hidden /> <span className="hidden sm:inline">Atur sesi</span>
+              </Button>
             </div>
-            <SessionSettings session={session}>{bulk}</SessionSettings>
+            {settingsOpen && <SessionSettings session={session} />}
           </section>
 
           {session.cancelled ? (
@@ -230,156 +244,171 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
             </div>
           ) : (
             <>
-              <section className={cn(card, "space-y-3 p-4 md:p-5")}>
-                <div>
-                  <p className="eyebrow">Rekap kehadiran sesi lapangan</p>
-                  <h3 className="text-base font-black tracking-tight">
-                    {filled} dari {total} pemain sudah terdata ({pct}%)
-                  </h3>
+              {/* Kartu ringkasan pola Generus Mandiri: judul, satu baris angka, persen kehadiran. */}
+              <section className={cn(card, "flex items-center justify-between gap-3 px-4 py-3")}>
+                <div className="min-w-0">
+                  <h3 className="text-base font-bold">Pemain ({total} anak)</h3>
+                  <p className="text-sm text-muted">
+                    {counts.HADIR} hadir, {alpa} alpa, {counts.IZIN} izin, {counts.SAKIT} sakit
+                  </p>
                 </div>
-                <div className="flex h-2.5 overflow-hidden rounded-full bg-ground" aria-hidden>
-                  {(["HADIR", "IZIN", "SAKIT", "ALPA"] as const).map(
-                    (st) => counts[st] > 0 && <span key={st} className={BAR[st]} style={{ width: `${(counts[st] / total) * 100}%` }} />
-                  )}
-                </div>
-                <div className="grid grid-cols-5 gap-1.5 sm:gap-2.5">
-                  {(Object.keys(BOX) as SheetStatus[]).map((st) => (
-                    <div key={st} className={cn("rounded-xl border px-1 py-2 text-center", BOX[st])}>
-                      <p className="text-[9px] font-extrabold tracking-wider uppercase sm:text-[10px]">{st === "BELUM" ? "Belum" : STATUS_LABEL[st]}</p>
-                      <p className="text-xl font-black">{counts[st]}</p>
-                    </div>
-                  ))}
+                <div className="shrink-0 text-center">
+                  <p className="text-xs text-muted">Kehadiran</p>
+                  <p className={cn("rounded-full px-3 py-1 text-sm font-bold", pctTone)}>{pct}%</p>
                 </div>
               </section>
 
-              <div className={cn(card, "flex flex-col gap-2 p-3 sm:flex-row")}>
-                <label className="relative flex-1">
+              <div className="flex gap-2">
+                <label className="relative min-w-0 flex-1">
                   <Search size={18} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted" aria-hidden />
                   <input
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Cari nama atau nomor punggung"
+                    placeholder="Cari nama / nomor"
                     className={inputClass + " pl-10"}
                     aria-label="Cari pemain"
                   />
                 </label>
-                <div className="flex rounded-xl border border-line bg-subtle p-1" role="tablist">
-                  {(
-                    [
-                      ["all", `Semua ${total}`],
-                      ["belum", `Belum ${counts.BELUM}`],
-                      ["hadir", `Hadir ${counts.HADIR}`],
-                    ] as const
-                  ).map(([f, label]) => (
-                    <button
-                      key={f}
-                      role="tab"
-                      aria-selected={filter === f}
-                      onClick={() => setFilter(f)}
-                      className={cn(
-                        "min-h-11 flex-1 rounded-lg px-3 text-sm font-bold whitespace-nowrap",
-                        filter === f ? "bg-primary text-white shadow-sm" : "text-muted"
-                      )}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
+                {counts.BELUM > 0 && (
+                  <Button variant="outline" className="shrink-0 px-3 whitespace-nowrap" onClick={() => setConfirmBulk(true)}>
+                    <Check size={18} className="text-hadir" aria-hidden /> Hadir semua
+                  </Button>
+                )}
               </div>
 
-              <h3 className="eyebrow px-1 pt-1">
-                Daftar pemain {session.groupCode} ({total} anak)
-              </h3>
-              <ul className="space-y-2">
-                {visible.map((r) => (
-                  <li key={r.id} className={cn(card, "p-2.5")}>
-                    {/* HP: tombol selalu di baris sendiri selebar kartu (nama panjang/pendek tampil sama); layar lebar: satu baris. */}
-                    <div className="flex flex-wrap items-center gap-2.5">
-                      <span
-                        className={cn(
-                          "grid size-9 shrink-0 place-items-center rounded-lg text-xs font-black",
-                          r.status === "BELUM" ? "bg-ground text-muted" : BADGE[r.status]
-                        )}
-                      >
-                        {r.jerseyNumber ?? "–"}
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <p className="flex flex-wrap items-center gap-x-1.5 text-[15px] leading-tight font-bold [overflow-wrap:anywhere]">
-                          {r.fullName}
-                          {r.source === "parent" && r.status !== "BELUM" && (
-                            <span className={cn("rounded-md border px-1.5 py-px text-[10px] font-bold", PILL[r.status])}>
-                              {STATUS_LABEL[r.status]} dari ortu
-                            </span>
-                          )}
-                        </p>
-                        <p className="truncate text-[11px] font-medium text-muted">
-                          {[positionLabel(r.position), session.groupCode].filter(Boolean).join(" · ")}
-                        </p>
-                      </div>
-                      <div className="flex w-full gap-1 sm:w-auto">
-                        {BUTTONS.map((b) => {
-                          const on = r.status === b.status && r.source === "coach";
-                          const fromParent = r.status === b.status && r.source === "parent";
-                          return (
-                            <button
-                              key={b.status}
-                              onClick={() => mark([r.id], b.status)}
-                              aria-pressed={on}
-                              aria-label={`${STATUS_LABEL[b.status]} — ${r.fullName}`}
-                              className={cn(
-                                // Minimal 44 × 56 px; melebar sendiri saat tombol pindah ke baris bawah.
-                                "flex h-14 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl border-2 font-extrabold transition-transform active:scale-95 sm:w-14 sm:flex-none",
-                                on
-                                  ? TONE[b.status].solid
-                                  : fromParent
-                                    ? TONE[b.status].soft
-                                    : cn("border-line bg-subtle", TONE[b.status].text)
-                              )}
-                            >
-                              <b.icon size={18} strokeWidth={3} aria-hidden />
-                              <span className="text-xs leading-none">{b.letter}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                    {r.source === "parent" && permissions[r.id] && (
-                      <p className="mt-1.5 ml-[46px] text-xs text-muted">Alasan ortu: {permissions[r.id]!.reason}</p>
-                    )}
-                    {r.pending && <PendingPermission permission={r.pending} />}
-                  </li>
+              <datalist id="izin-alasan">
+                {REASONS.map((r) => (
+                  <option key={r} value={r} />
                 ))}
-                {visible.length === 0 && (
-                  <li className="rounded-2xl border border-dashed border-line p-6 text-center text-muted">
-                    {filter === "belum" ? "Semua anak sudah terisi. Saatnya kirim rekap." : "Tidak ada nama yang cocok."}
-                  </li>
-                )}
-              </ul>
+              </datalist>
+              <div className={cn(card, "overflow-hidden")}>
+                <table className="w-full text-sm">
+                  <caption className="sr-only">
+                    Presensi {session.groupCode}, {total} anak
+                  </caption>
+                  <thead className="border-b border-line bg-subtle text-xs font-bold text-muted">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="py-0 pl-3 text-left"
+                        aria-sort={sort?.key === "name" ? (sort.desc ? "descending" : "ascending") : "none"}
+                      >
+                        <button type="button" onClick={() => sortBy("name")} className="min-h-11 pr-2 font-bold">
+                          Nama {sort?.key === "name" ? (sort.desc ? "↓" : "↑") : ""}
+                        </button>
+                      </th>
+                      {BUTTONS.map((b) => (
+                        <th key={b.status} scope="col" className="w-11 p-0 text-center">
+                          <button
+                            type="button"
+                            onClick={() => sortBy(b.status)}
+                            aria-label={`Urutkan: ${STATUS_LABEL[b.status]} di atas`}
+                            aria-pressed={sort?.key === b.status}
+                            className={cn("min-h-11 w-11 font-bold", sort?.key === b.status && cn("underline underline-offset-4", TONE[b.status].text))}
+                          >
+                            {b.letter}
+                          </button>
+                        </th>
+                      ))}
+                      <th aria-hidden className="w-2" />
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-line">
+                    {visible.map((r) => {
+                      const meta =
+                        r.source === "parent" && r.status !== "BELUM"
+                          ? `${STATUS_LABEL[r.status]} dari ortu`
+                          : [r.jerseyNumber != null && `#${r.jerseyNumber}`, positionLabel(r.position)].filter(Boolean).join(" · ");
+                      // Belum ditandai = Alpa (tampil samar); izin ortu tampil samar sampai pelatih menekan.
+                      const shown = shownStatus(r);
+                      const extra =
+                        (r.source === "parent" && permissions[r.id]) || (r.source === "coach" && r.status === "IZIN") || r.pending;
+                      return (
+                        <Fragment key={r.id}>
+                          <tr>
+                            <td className="max-w-0 py-1 pl-3">
+                              {/* Panggilan dulu (yang dipakai di lapangan); nama lengkap tetap di rekap. */}
+                              <p className="truncate font-semibold" title={r.fullName}>
+                                {r.nickname || r.fullName}
+                              </p>
+                              {meta && (
+                                <p className={cn("truncate text-xs", r.source === "parent" ? TONE[r.status as Status].text : "text-muted")}>
+                                  {meta}
+                                </p>
+                              )}
+                            </td>
+                            {BUTTONS.map((b) => {
+                              const active = shown === b.status;
+                              const firm = active && r.source === "coach";
+                              return (
+                                <td key={b.status} className="p-0 text-center">
+                                  <button
+                                    onClick={() => mark([r.id], b.status)}
+                                    aria-pressed={firm}
+                                    aria-label={`${STATUS_LABEL[b.status]} — ${r.fullName}`}
+                                    // Area ketuk 44 × 56 px untuk dipakai satu tangan; lingkarannya kecil supaya tenang.
+                                    className="grid h-14 w-11 place-items-center"
+                                  >
+                                    <span
+                                      className={cn(
+                                        "grid size-8 place-items-center rounded-full border text-xs font-bold transition-transform active:scale-90",
+                                        firm ? TONE[b.status].solid : active ? TONE[b.status].soft : "border-line text-muted/60"
+                                      )}
+                                    >
+                                      {b.letter}
+                                    </span>
+                                  </button>
+                                </td>
+                              );
+                            })}
+                            <td aria-hidden />
+                          </tr>
+                          {extra && (
+                            <tr>
+                              <td colSpan={6} className="pr-3 pb-2 pl-3">
+                                {r.source === "parent" && permissions[r.id] && (
+                                  <p className="text-xs text-muted">Alasan ortu: {permissions[r.id]!.reason}</p>
+                                )}
+                                {r.source === "coach" && r.status === "IZIN" && (
+                                  <IzinReason key={r.note ?? ""} note={r.note} onChange={(n) => mark([r.id], "IZIN", n)} />
+                                )}
+                                {r.pending && <PendingPermission permission={r.pending} />}
+                              </td>
+                            </tr>
+                          )}
+                        </Fragment>
+                      );
+                    })}
+                    {visible.length === 0 && (
+                      <tr>
+                        <td colSpan={6} className="p-6 text-center text-muted">
+                          Tidak ada nama yang cocok.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </>
           )}
         </div>
 
         {!session.cancelled && (
-          // HP: bilah progres menempel di atas bottom-nav; desktop: panel preview menempel di kanan. Satu elemen supaya status simpan tidak ganda.
+          // HP: dua tombol melayang di atas bottom-nav; desktop: panel preview pesan menempel di kanan.
           <aside
             className={cn(
-              "fixed inset-x-3 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-30 flex items-center justify-between gap-3 rounded-2xl border border-slate-700/80 bg-hero p-3 text-white shadow-xl",
-              "lg:sticky lg:top-24 lg:inset-x-auto lg:bottom-auto lg:z-10 lg:block lg:space-y-3 lg:border-line lg:bg-card lg:p-5 lg:text-ink lg:shadow-sm"
+              "fixed inset-x-3 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-30 flex items-center gap-2",
+              "lg:sticky lg:top-24 lg:inset-x-auto lg:bottom-auto lg:z-10 lg:block lg:space-y-3 lg:rounded-2xl lg:border lg:border-line lg:bg-card lg:p-5 lg:shadow-sm"
             )}
           >
-            <div className="min-w-0 lg:flex lg:items-center lg:justify-between lg:gap-3">
-              <p className="eyebrow hidden lg:block">Preview pesan WhatsApp</p>
-              <p className="text-xs font-bold text-slate-300 lg:hidden">Terdata</p>
-              <p className="text-sm font-black lg:hidden">
-                {filled} / {total} ({pct}%)
-              </p>
-              <SyncBadge sync={sync} queued={queued} onRetry={flush} />
-            </div>
+            {/* Hanya muncul saat ada masalah; di sini selalu terlihat walau daftar sudah di-scroll. */}
+            <SyncBadge sync={sync} queued={queued} onRetry={flush} />
+            <p className="eyebrow hidden lg:block">Preview pesan WhatsApp</p>
             <pre className="hidden max-h-80 overflow-auto rounded-xl border border-line bg-subtle p-3 font-mono text-[11px] leading-relaxed whitespace-pre-wrap text-ink lg:block">
               {rekap()}
             </pre>
-            <div className="flex shrink-0 gap-2 lg:grid lg:grid-cols-1">
-              <Button onClick={copyRekap} className="min-h-11 px-3 lg:min-h-14 lg:w-full">
+            <div className="flex min-w-0 flex-1 gap-2 lg:grid lg:grid-cols-1">
+              <Button onClick={copyRekap} className="flex-1 rounded-full px-4 shadow-lg lg:min-h-14 lg:w-full lg:rounded-xl lg:shadow-md">
                 <Copy size={18} aria-hidden /> Salin rekap
               </Button>
               <a
@@ -387,7 +416,7 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Kirim ke WA"
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-hadir bg-card px-3 font-semibold text-hadir lg:min-h-14"
+                className="inline-flex size-11 shrink-0 items-center justify-center gap-2 rounded-full border border-hadir bg-card font-semibold text-hadir shadow-lg lg:h-14 lg:w-full lg:rounded-xl lg:shadow-none"
               >
                 <Send size={18} aria-hidden /> <span className="hidden lg:inline">Kirim ke WA</span>
               </a>
@@ -399,7 +428,7 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
       <ConfirmDialog
         open={confirmBulk}
         title={`Tandai ${counts.BELUM} anak sebagai Hadir?`}
-        message="Hanya anak yang masih 'Belum' yang berubah. Status yang sudah diisi tidak tersentuh."
+        message="Hanya anak yang belum ditandai. Yang sudah Izin, Sakit, atau Alpa tidak berubah."
         confirmLabel="Ya, tandai Hadir"
         onClose={() => setConfirmBulk(false)}
         onConfirm={() => {
@@ -417,27 +446,18 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
 function SyncBadge({ sync, queued, onRetry }: { sync: Sync; queued: number; onRetry: () => void }) {
   if (sync === "offline")
     return (
-      <button onClick={onRetry} className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-warn-soft px-2.5 py-1 text-xs font-bold text-warn">
-        <CloudOff size={14} /> {queued} di HP, menunggu sinyal
+      <button onClick={onRetry} className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-izin/40 bg-warn-soft px-3 text-xs font-bold text-warn shadow-md lg:min-h-0 lg:py-1 lg:shadow-none">
+        <CloudOff size={14} /> {queued} belum terkirim<span className="hidden lg:inline">, menunggu sinyal</span>
       </button>
     );
   if (sync === "error")
     return (
-      <button onClick={onRetry} className="shrink-0 rounded-full bg-alpa/10 px-2.5 py-1 text-xs font-bold text-alpa">
-        Gagal kirim — coba lagi
+      <button onClick={onRetry} className="min-h-11 shrink-0 rounded-full border border-alpa/40 bg-card px-3 text-xs font-bold text-alpa shadow-md lg:min-h-0 lg:py-1 lg:shadow-none">
+        Gagal kirim<span className="hidden lg:inline"> — coba lagi</span>
       </button>
     );
-  if (sync === "saving" || queued)
-    return (
-      <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold text-muted">
-        <Spinner size={12} /> Menyimpan
-      </span>
-    );
-  return (
-    <span className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-hadir">
-      <Check size={14} /> Tersimpan
-    </span>
-  );
+  // Menyimpan/tersimpan normal tanpa tanda; yang tampil hanya masalah (tanpa sinyal, gagal kirim).
+  return null;
 }
 
 function PendingPermission({ permission }: { permission: Permission }) {
@@ -464,24 +484,35 @@ function PendingPermission({ permission }: { permission: Permission }) {
   );
 }
 
-function SessionSettings({ session, children }: { session: Props["session"]; children?: React.ReactNode }) {
+const REASONS = ["Sekolah", "Acara keluarga", "Les", "Pulang kampung", "Bepergian"];
+
+/** Alasan izin opsional, satu isian dengan saran bawaan; tersimpan lewat antrean presensi yang sama. */
+function IzinReason({ note, onChange }: { note: string | null; onChange: (note: string | null) => void }) {
+  const [text, setText] = useState(note ?? "");
+  return (
+    <input
+      value={text}
+      list="izin-alasan"
+      maxLength={NOTE_MAX}
+      onChange={(e) => setText(e.target.value)}
+      onBlur={() => text.trim() !== (note ?? "") && onChange(text.trim() || null)}
+      onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
+      placeholder="Alasan izin (opsional), mis. sekolah"
+      aria-label="Alasan izin"
+      className={cn(inputClass, "min-h-11 py-1.5")}
+    />
+  );
+}
+
+function SessionSettings({ session }: { session: Props["session"] }) {
   const [pending, start] = useTransition();
-  const [open, setOpen] = useState(false);
   const [time, setTime] = useState(session.startTime.slice(0, 5));
   const [location, setLocation] = useState(session.location ?? "");
   const [topic, setTopic] = useState(session.topic ?? "");
 
   return (
-    <div className="mt-4 space-y-3 border-t border-line pt-4">
-      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-        {children}
-        <CancelSessionButton sessionId={session.id} cancelled={session.cancelled} className="px-3 whitespace-nowrap" />
-        <Button type="button" variant="outline" size="md" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
-          <Settings2 size={18} aria-hidden /> Atur sesi
-        </Button>
-      </div>
-      {open && (
-        <form
+    <div className="mt-3 border-t border-line pt-3">
+      <form
           className="grid gap-3 sm:grid-cols-3"
           onSubmit={(e) => {
             e.preventDefault();
@@ -501,13 +532,13 @@ function SessionSettings({ session, children }: { session: Props["session"]; chi
           <Field label="Materi latihan">
             <input value={topic} onChange={(e) => setTopic(e.target.value)} placeholder="mis. Passing pendek" className={inputClass} />
           </Field>
-          <div className="sm:col-span-3">
+          <div className="flex flex-wrap gap-2 sm:col-span-3">
             <Button type="submit" loading={pending}>
               Simpan info
             </Button>
+            <CancelSessionButton sessionId={session.id} cancelled={session.cancelled} className="px-3 whitespace-nowrap" />
           </div>
-        </form>
-      )}
+      </form>
     </div>
   );
 }

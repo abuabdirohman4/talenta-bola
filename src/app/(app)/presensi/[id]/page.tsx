@@ -43,7 +43,7 @@ export default async function SessionPage({ params }: { params: Promise<{ id: st
   ]);
 
   const markBy: Record<string, Mark> = {};
-  for (const m of marks) markBy[m.playerId] = { status: m.status, updatedAt: m.updatedAt.getTime() };
+  for (const m of marks) markBy[m.playerId] = { status: m.status, updatedAt: m.updatedAt.getTime(), note: m.note };
   // Izin ganda: yang terbaru menang (query sudah urut terbaru dulu).
   const permBy: Record<string, Permission> = {};
   for (const p of perms) {

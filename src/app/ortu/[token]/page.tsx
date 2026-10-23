@@ -201,6 +201,7 @@ export default async function ParentPage({ params }: { params: Promise<{ token: 
                       <span className="flex items-center gap-1.5 text-xs font-bold">
                         <span className={cn("size-2.5 rounded-full", s.status ? DOT[s.status] : "bg-belum")} aria-hidden />
                         {s.status ? STATUS_LABEL[s.status] : "Belum dicatat"}
+                        {s.note && <span className="font-medium text-muted">({s.note})</span>}
                       </span>
                     </li>
                   ))}

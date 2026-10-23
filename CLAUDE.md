@@ -24,7 +24,7 @@ DB lokal (WSL): cluster Postgres 18 `gm` di :5417, database `talenta_bola`, role
 
 ## Gaya tampilan
 
-**Mockup di `mockups/*.html` adalah acuan rupa yang mengikat** (diputuskan Abu 22 Okt 2026 setelah v1.0.0 menyimpang — issue `app-1xtg`). Halaman baru: buka mockup terkait dan bandingkan screenshot berdampingan.
+**Lembar presensi mengikuti pola tabel Generus Mandiri** (Nama | H | I | S | A, default Alpa, kartu ringkasan satu baris) — diputuskan Abu 23 Okt 2026 setelah versi kartu warna-warni terasa "kekanak-kanakan". Halaman lain: **mockup di `mockups/*.html` adalah acuan rupa yang mengikat** (diputuskan Abu 22 Okt 2026 setelah v1.0.0 menyimpang — issue `app-1xtg`). Halaman baru: buka mockup terkait dan bandingkan screenshot berdampingan.
 - **Layout**: sidebar desktop (≥ md) berseksi + panel KU aktif + top bar (remah + judul dari tabel `TITLES` di `_components/Nav.tsx`), bottom-nav 5 item di HP. Shell di `src/app/(app)/layout.tsx`.
 - **Rupa**: slate + emerald (`#059669`), latar `#F1F5F9`, kartu `rounded-2xl border-line shadow-sm`, label kapital kecil (utility `eyebrow`), kartu sorotan gelap (`from-hero`), Plus Jakarta Sans.
 - **Dark mode**: kelas `.dark` di `<html>` (skrip di root layout; pilihan tersimpan, default ikut sistem) + `ThemeToggle`. Token berganti nilai sendiri, jadi komponen cukup memakai token — hindari `bg-white`/`slate-*` mentah. Cetak/PDF selalu terang.

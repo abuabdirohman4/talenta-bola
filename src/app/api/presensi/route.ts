@@ -2,11 +2,11 @@ import { and, eq, inArray, isNull, lte, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { attendances, players, trainingSessions } from "@/db/schema";
-import { STATUSES, type Status } from "@/lib/attendance";
+import { NOTE_MAX, STATUSES, type Status } from "@/lib/attendance";
 import { requireUser } from "@/lib/auth/require-user";
 import { getSsb } from "@/lib/data";
 
-type Mark = { sessionId: string; playerId: string; status: Status; at: number };
+type Mark = { sessionId: string; playerId: string; status: Status; at: number; note?: string | null };
 
 const UUID = /^[0-9a-f-]{36}$/i;
 const isMark = (m: unknown): m is Mark => {
@@ -16,7 +16,8 @@ const isMark = (m: unknown): m is Mark => {
     UUID.test(x.sessionId) &&
     UUID.test(x.playerId) &&
     STATUSES.includes(x.status) &&
-    Number.isFinite(x.at)
+    Number.isFinite(x.at) &&
+    (x.note == null || (typeof x.note === "string" && x.note.length <= NOTE_MAX))
   );
 };
 
@@ -64,6 +65,8 @@ export async function POST(req: Request) {
     sessionId: m.sessionId,
     playerId: m.playerId,
     status: m.status,
+    // Alasan hanya untuk Izin; status lain menghapusnya.
+    note: m.status === "IZIN" ? m.note?.trim() || null : null,
     updatedAt: new Date(m.at),
   }));
   if (rows.length) {
@@ -72,7 +75,7 @@ export async function POST(req: Request) {
       .values(rows)
       .onConflictDoUpdate({
         target: [attendances.sessionId, attendances.playerId],
-        set: { status: sql`excluded.status`, updatedAt: sql`excluded.updated_at` },
+        set: { status: sql`excluded.status`, note: sql`excluded.note`, updatedAt: sql`excluded.updated_at` },
         setWhere: lte(attendances.updatedAt, sql`excluded.updated_at`),
       });
   }

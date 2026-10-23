@@ -10,7 +10,7 @@ export async function getAttendanceSummary(playerId: string, ageGroupId: string,
   const today = dateWib();
   const end = to && to < today ? to : today;
   const sessions = await db
-    .select({ id: trainingSessions.id, date: trainingSessions.sessionDate, status: attendances.status })
+    .select({ id: trainingSessions.id, date: trainingSessions.sessionDate, status: attendances.status, note: attendances.note })
     .from(trainingSessions)
     .leftJoin(
       attendances,
@@ -33,7 +33,7 @@ export async function getAttendanceSummary(playerId: string, ageGroupId: string,
     held: sessions.length,
     hadir,
     rate: sessions.length ? Math.round((hadir / sessions.length) * 100) : null,
-    recent: sessions.slice(-8).map((s) => ({ date: s.date, status: s.status ?? null })),
+    recent: sessions.slice(-8).map((s) => ({ date: s.date, status: s.status ?? null, note: s.note })),
   };
 }
 

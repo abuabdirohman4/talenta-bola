@@ -1,6 +1,6 @@
 import type { Status } from "@/lib/attendance";
 
-export type QueuedMark = { sessionId: string; playerId: string; status: Status; at: number };
+export type QueuedMark = { sessionId: string; playerId: string; status: Status; at: number; note?: string | null };
 
 const KEY = "tb-presensi-queue";
 

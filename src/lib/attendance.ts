@@ -10,7 +10,9 @@ export const STATUS_LABEL: Record<SheetStatus, string> = {
   BELUM: "Belum konfirmasi",
 };
 
-export type Mark = { status: Status; updatedAt: number };
+export type Mark = { status: Status; updatedAt: number; note?: string | null };
+/** Batas panjang alasan izin dari pelatih. */
+export const NOTE_MAX = 120;
 export type Permission = {
   id: string;
   type: "IZIN" | "SAKIT";

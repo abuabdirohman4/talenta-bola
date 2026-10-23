@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { ageGroups, attendances, parentPermissions, trainingSessions } from "@/db/schema";
+import { NOTE_MAX } from "@/lib/attendance";
 import { requireUser } from "@/lib/auth/require-user";
 import { getSsb } from "@/lib/data";
 import { dateWib } from "@/lib/format";
@@ -118,12 +119,14 @@ export async function resolvePermission(permissionId: string, accept: boolean): 
   const now = new Date();
   await db.transaction(async (tx) => {
     if (accept) {
+      // Alasan ortu ikut jadi catatan izin (rekap WA & riwayat ortu); sakit tanpa catatan.
+      const note = p.type === "IZIN" ? p.reason.slice(0, NOTE_MAX) : null;
       await tx
         .insert(attendances)
-        .values({ ssbId: ssb.id, sessionId: p.sessionId, playerId: p.playerId, status: p.type, updatedAt: now })
+        .values({ ssbId: ssb.id, sessionId: p.sessionId, playerId: p.playerId, status: p.type, note, updatedAt: now })
         .onConflictDoUpdate({
           target: [attendances.sessionId, attendances.playerId],
-          set: { status: p.type, updatedAt: now },
+          set: { status: p.type, note, updatedAt: now },
         });
     }
     await tx.update(parentPermissions).set({ resolvedAt: now }).where(eq(parentPermissions.id, p.id));
