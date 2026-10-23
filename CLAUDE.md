@@ -37,6 +37,8 @@ DB lokal (WSL): cluster Postgres 18 `gm` di :5417, database `talenta_bola`, role
 |---|---|
 | `requireUser()` di baris pertama **tiap** server action & route handler | `guard.test.ts` gagal kalau lupa. Pintu publik (masuk, izin ortu) terdaftar di set `PUBLIC` tes itu |
 | Proxy hanya mengalihkan halaman ke `/masuk` | Bukan penjaga data (CVE-2025-29927) |
+| KU aktif = `?ku=` di tautan, lalu cookie `tb_ku` (dipilih di header/sidebar, `setActiveKu`), lalu KU pertama — `getActiveGroup()` | Satu pilihan KU berlaku di semua halaman; jangan tambah chip KU per halaman |
+| Notifikasi lewat `notifySsb()` (`src/lib/server/notify.ts`), tidak pernah throw | Kegagalan push tidak boleh menggagalkan aksi ortu/pelatih |
 | SSB pelatih = `ssb_id` dari cookie sesi (`getSsb()`), dicek ulang ke DB: SSB terhapus atau `access_code_version` beda = keluar | Kode akses per SSB (`access_code_hash`); ganti kode = semua HP lain keluar. Jangan pernah ambil "SSB pertama" |
 | `/admin` = super-admin, cookie `tb_admin` + `SUPER_ADMIN_CODE`, `requireAdmin()` di tiap action | Terpisah dari sesi pelatih; halaman admin hanya angka, tanpa data anak |
 | Server Action **hanya untuk mutasi**; baca lewat RSC (page.tsx) | Server Action antre satu per satu |

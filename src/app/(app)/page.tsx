@@ -13,7 +13,6 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
-import { KuSwitcher } from "@/components/KuSwitcher";
 import { db } from "@/db";
 import { attendances, players, reportPeriods, reports, trainingSessions } from "@/db/schema";
 import { STATUS_LABEL, type Status } from "@/lib/attendance";
@@ -128,7 +127,6 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="space-y-6">
-      <KuSwitcher groups={groups} activeId={group.id} basePath="/" />
       <InstallCard />
 
       {/* Sorotan sesi berikutnya */}
@@ -275,7 +273,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
           {/* Agenda */}
           <section className={cn(card, "space-y-3 p-5")}>
-            <h3 className="text-xs font-extrabold tracking-wider uppercase">Jadwal agenda latihan</h3>
+            <h3 className="text-xs font-extrabold tracking-wider uppercase">Jadwal latihan berikutnya</h3>
             {upcoming.length ? (
               <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
                 {upcoming.map((s) => {

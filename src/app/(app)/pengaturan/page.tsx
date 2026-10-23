@@ -1,7 +1,10 @@
+import { ChevronRight } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getAgeGroups, getSsb } from "@/lib/data";
 import { InstallCard } from "../_components/InstallCard";
-import { AccessCodeForm, AgeGroupForm, LogoutButton, SsbForm } from "./_components/SettingsForms";
+import { PushCard } from "./_components/PushCard";
+import { AccessCodeForm, AgeGroupCoachInput, AgeGroupForm, LogoutButton, SsbForm } from "./_components/SettingsForms";
 
 export const metadata: Metadata = { title: "Pengaturan" };
 
@@ -34,18 +37,25 @@ export default async function PengaturanPage() {
             <h3 className="text-xs font-extrabold tracking-wider uppercase">Kelompok umur</h3>
             <ul className="mt-2 divide-y divide-line">
               {groups.map((g) => (
-                <li key={g.id} className="flex min-h-11 items-center justify-between gap-2 py-2">
-                  <span className="text-sm font-bold">{g.name}</span>
-                  <span className="rounded-md border border-line bg-subtle px-2 py-0.5 text-[11px] font-bold text-muted">
-                    {g.code}
-                    {g.birthYear ? ` · ${g.birthYear}` : ""}
-                  </span>
+                <li key={g.id} className="py-2">
+                  <div className="flex min-h-8 items-center justify-between gap-2">
+                    <span className="text-sm font-bold">{g.name}</span>
+                    <span className="rounded-md border border-line bg-subtle px-2 py-0.5 text-[11px] font-bold text-muted">
+                      {g.code}
+                      {g.birthYear ? ` · ${g.birthYear}` : ""}
+                    </span>
+                  </div>
+                  <AgeGroupCoachInput id={g.id} initial={g.coachName ?? ""} fallback={ssb.headCoachName ?? ""} />
                 </li>
               ))}
             </ul>
             <AgeGroupForm />
+            <Link href="/jadwal" className="mt-3 flex min-h-11 items-center justify-between gap-2 border-t border-line pt-3 text-sm font-semibold text-primary hover:underline">
+              Jadwal latihan rutin per KU <ChevronRight size={16} aria-hidden />
+            </Link>
           </section>
           <InstallCard variant="settings" />
+          <PushCard />
           <AccessCodeForm />
           <LogoutButton />
         </div>

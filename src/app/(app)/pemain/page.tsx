@@ -2,7 +2,6 @@ import { and, asc, count, desc, eq, gte, inArray, isNull, lte, ne } from "drizzl
 import { FileInput, FileText, Layers, UserCheck, UserPlus, Users } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { KuSwitcher } from "@/components/KuSwitcher";
 import { buttonClass } from "@/components/ui/Button";
 import { db } from "@/db";
 import { attendances, players, reportPeriods, reports, trainingSessions } from "@/db/schema";
@@ -97,7 +96,6 @@ export default async function PemainPage({ searchParams }: { searchParams: Promi
 
   return (
     <div className="space-y-5">
-      <KuSwitcher groups={groups} activeId={group.id} basePath="/pemain" />
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-xl font-extrabold tracking-tight md:hidden">Data pemain</h2>

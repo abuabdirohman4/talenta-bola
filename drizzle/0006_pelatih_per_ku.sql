@@ -1,0 +1,1 @@
+ALTER TABLE "age_groups" ADD COLUMN "coach_name" text;

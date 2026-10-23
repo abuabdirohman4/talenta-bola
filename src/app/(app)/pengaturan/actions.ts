@@ -71,3 +71,17 @@ export async function changeAccessCode(input: { code: string }): Promise<Result>
   await setCoachCookie(ssb.id, r.version);
   await audit({ ssbId: ssb.id, action: "update", tableName: "ssb_profiles", recordId: ssb.id, dataAfter: { accessCodeVersion: r.version } });
 }
+
+/** Nama pelatih satu KU; kosong = ikut pelatih kepala klub. */
+export async function setAgeGroupCoach(ageGroupId: string, coachName: string): Promise<Result> {
+  await requireUser();
+  const ssb = await getSsb();
+  const name = coachName.trim().slice(0, 60) || null;
+  const [g] = await db
+    .update(ageGroups)
+    .set({ coachName: name, updatedAt: new Date() })
+    .where(and(eq(ageGroups.id, ageGroupId), eq(ageGroups.ssbId, ssb.id), isNull(ageGroups.deletedAt)))
+    .returning({ id: ageGroups.id });
+  if (!g) return { error: "Kelompok umur tidak ditemukan" };
+  revalidatePath("/", "layout");
+}

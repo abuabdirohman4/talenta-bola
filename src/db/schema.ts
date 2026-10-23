@@ -60,6 +60,8 @@ export const ageGroups = pgTable(
     code: text("code").notNull(), // "KU-10"
     name: text("name").notNull(), // "KU 2016"
     birthYear: integer("birth_year"),
+    // Pelatih KU ini; kosong = pakai pelatih kepala klub (ssb_profiles.head_coach_name).
+    coachName: text("coach_name"),
     sortOrder: integer("sort_order").default(0).notNull(),
     ...ts,
     deletedAt: timestamp("deleted_at", { withTimezone: true }),
@@ -266,3 +268,38 @@ export const auditLog = pgTable("audit_log", {
     .default(sql`now()`)
     .notNull(),
 });
+
+// Langganan Web Push per HP (tanpa akun per pelatih): satu baris per endpoint.
+export const pushSubscriptions = pgTable("push_subscriptions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  ssbId: uuid("ssb_id")
+    .notNull()
+    .references(() => ssbProfiles.id, { onDelete: "cascade" }),
+  endpoint: text("endpoint").notNull().unique(),
+  p256dh: text("p256dh").notNull(),
+  auth: text("auth").notNull(),
+  userAgent: text("user_agent"),
+  createdAt: ts.createdAt,
+});
+
+// Notifikasi milik klub: dibaca bersama (read_at null = belum dibaca).
+export const notifications = pgTable(
+  "notifications",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    ssbId: uuid("ssb_id")
+      .notNull()
+      .references(() => ssbProfiles.id, { onDelete: "cascade" }),
+    kind: text("kind").notNull(), // izin_ortu | ...
+    title: text("title").notNull(),
+    body: text("body").notNull(),
+    url: text("url"),
+    dedupeKey: text("dedupe_key"),
+    readAt: timestamp("read_at", { withTimezone: true }),
+    createdAt: ts.createdAt,
+  },
+  (t) => [
+    uniqueIndex("notifications_ssb_dedupe_unique").on(t.ssbId, t.dedupeKey).where(sql`${t.dedupeKey} is not null`),
+    index("notifications_ssb_created_idx").on(t.ssbId, t.createdAt),
+  ]
+);

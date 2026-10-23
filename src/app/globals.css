@@ -87,6 +87,16 @@ html {
   }
 }
 
+/* Panah <select> bawaan menempel ke tepi kanan: ganti dengan chevron sendiri yang berjarak. Di luar @layer supaya menang atas px-* Tailwind. */
+select:not([multiple]):not([size]) {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.875rem center;
+  background-size: 1.1rem;
+  padding-right: 2.75rem;
+}
+
 body {
   background: var(--color-ground);
   color: var(--color-ink);
@@ -103,6 +113,19 @@ body {
 }
 
 /* Label seksi kecil kapital ala mockup ("MENU UTAMA", "TOTAL SISWA"). */
+/* Sidebar desktop: lebar lewat variabel, mode ciut lewat html[data-sb=collapsed] (skrip di root layout). */
+:root { --sbw: 16rem; }
+@media (min-width: 1024px) { :root { --sbw: 18rem; } }
+html[data-sb="collapsed"] { --sbw: 5rem; }
+.sb-show { display: none; }
+html[data-sb="collapsed"] .sb-hide { display: none; }
+html[data-sb="collapsed"] .sb-show { display: inline-flex; }
+html[data-sb="collapsed"] .sb-center { justify-content: center; padding-inline: 0; }
+/* Ciut: tombol buka menumpang di atas logo — muncul saat disorot, ketuk logo di layar sentuh langsung membuka. */
+html[data-sb="collapsed"] .sb-toggle { position: absolute; inset: 0; margin: auto; opacity: 0; transition: opacity 150ms; }
+html[data-sb="collapsed"] .sb-head:hover .sb-toggle,
+html[data-sb="collapsed"] .sb-toggle:focus-visible { opacity: 1; }
+
 @utility eyebrow {
   font-size: 11px;
   font-weight: 800;

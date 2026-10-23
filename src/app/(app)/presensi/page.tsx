@@ -1,18 +1,15 @@
-import { and, count, eq, gte, inArray, isNull, lt } from "drizzle-orm";
+import { and, count, eq, isNull } from "drizzle-orm";
 import { CalendarDays, ChevronRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { KuSwitcher } from "@/components/KuSwitcher";
 import { buttonClass } from "@/components/ui/Button";
 import { db } from "@/db";
-import { attendances, parentPermissions, players, trainingSessions } from "@/db/schema";
-import type { Status } from "@/lib/attendance";
+import { attendances, players, trainingSessions } from "@/db/schema";
 import { getActiveGroup } from "@/lib/data";
 import { dateWib, formatDateId, formatTimeId } from "@/lib/format";
-import { fillSessionsFromPatterns } from "@/lib/queries";
-import { shiftMonth } from "@/lib/schedule";
+import { fillSessionsFromPatterns, getMonthSessions } from "@/lib/queries";
 import { cn } from "@/lib/utils";
-import { PresensiCalendar, type DayInfo } from "./_components/PresensiCalendar";
+import { PresensiCalendar } from "./_components/PresensiCalendar";
 import { StartTodayButton } from "./_components/SessionControls";
 
 export const metadata: Metadata = { title: "Presensi" };
@@ -35,65 +32,27 @@ export default async function PresensiPage({ searchParams }: { searchParams: Pro
   // Jadwal rutin mengisi sesi 4 minggu ke depan supaya kalender tidak kosong.
   await fillSessionsFromPatterns(ssb.id, group.id, ssb.homeGround);
 
-  const live = and(eq(trainingSessions.ageGroupId, group.id), isNull(trainingSessions.deletedAt));
-  const [sessions, [todaySession], [{ total }]] = await Promise.all([
-    db
-      .select()
-      .from(trainingSessions)
-      .where(and(live, gte(trainingSessions.sessionDate, month + "-01"), lt(trainingSessions.sessionDate, shiftMonth(month, 1) + "-01")))
-      .orderBy(trainingSessions.sessionDate),
-    db.select().from(trainingSessions).where(and(live, eq(trainingSessions.sessionDate, today))),
+  const [[{ total }], [todaySession]] = await Promise.all([
     db
       .select({ total: count() })
       .from(players)
       .where(and(eq(players.ageGroupId, group.id), eq(players.isActive, true), isNull(players.deletedAt))),
+    db
+      .select()
+      .from(trainingSessions)
+      .where(and(eq(trainingSessions.ageGroupId, group.id), isNull(trainingSessions.deletedAt), eq(trainingSessions.sessionDate, today))),
   ]);
-  const ids = sessions.map((s) => s.id);
-  const [marks, izin, [todayHadir]] = await Promise.all([
-    ids.length
-      ? db
-          .select({ sessionId: attendances.sessionId, status: attendances.status, n: count() })
-          .from(attendances)
-          .where(inArray(attendances.sessionId, ids))
-          .groupBy(attendances.sessionId, attendances.status)
-      : [],
-    ids.length
-      ? db
-          .select({ sessionId: parentPermissions.sessionId, n: count() })
-          .from(parentPermissions)
-          .where(inArray(parentPermissions.sessionId, ids))
-          .groupBy(parentPermissions.sessionId)
-      : [],
-    todaySession
-      ? db
-          .select({ n: count() })
-          .from(attendances)
-          .where(and(eq(attendances.sessionId, todaySession.id), eq(attendances.status, "HADIR")))
-      : [{ n: 0 }],
-  ]);
-
-  const tally = new Map<string, Record<Status, number>>();
-  for (const m of marks) {
-    const t = tally.get(m.sessionId) ?? { HADIR: 0, IZIN: 0, SAKIT: 0, ALPA: 0 };
-    t[m.status] = m.n;
-    tally.set(m.sessionId, t);
-  }
-  const izinBy = new Map(izin.map((i) => [i.sessionId, i.n]));
-  const pctOf = (t: Record<Status, number> | undefined) => (t && total ? Math.round((t.HADIR / total) * 100) : null);
-
-  const days: Record<string, DayInfo> = {};
-  for (const s of sessions) {
-    days[s.sessionDate] = {
-      id: s.id,
-      state: s.status === "CANCELLED" ? "cancelled" : tally.has(s.id) ? "done" : "planned",
-      pct: pctOf(tally.get(s.id)),
-    };
-  }
+  const { sessions, tally, izinBy, days, pctOf } = await getMonthSessions(group.id, month, total);
+  const [todayHadir] = todaySession
+    ? await db
+        .select({ n: count() })
+        .from(attendances)
+        .where(and(eq(attendances.sessionId, todaySession.id), eq(attendances.status, "HADIR")))
+    : [{ n: 0 }];
 
   return (
     <>
       <h2 className="mb-4 text-2xl font-extrabold tracking-tight md:hidden">Presensi {group.name}</h2>
-      <KuSwitcher groups={groups} activeId={group.id} basePath="/presensi" />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-start">
         <div className="space-y-4">
@@ -131,7 +90,7 @@ export default async function PresensiPage({ searchParams }: { searchParams: Pro
             <ul className="divide-y divide-line">
               {sessions.map((s) => {
                 const t = tally.get(s.id);
-                const pct = pctOf(t);
+                const pct = pctOf(s.id);
                 const alpa = t ? total - t.HADIR - t.IZIN - t.SAKIT : 0;
                 return (
                   <li key={s.id}>

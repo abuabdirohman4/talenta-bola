@@ -29,7 +29,7 @@ const NARRATIVE_TONE = { strengths: "text-primary", improvements: "text-warn", n
 const load = cache(async (token: string) => {
   if (!/^[A-Za-z0-9_-]{20,64}$/.test(token)) return null;
   const [row] = await db
-    .select({ r: reports, p: players, period: reportPeriods, ssb: ssbProfiles, groupName: ageGroups.name })
+    .select({ r: reports, p: players, period: reportPeriods, ssb: ssbProfiles, groupName: ageGroups.name, groupCoach: ageGroups.coachName })
     .from(reports)
     .innerJoin(players, eq(players.id, reports.playerId))
     .innerJoin(reportPeriods, eq(reportPeriods.id, reports.periodId))
@@ -195,7 +195,7 @@ export default async function PublicReportPage({ params }: { params: Promise<{ t
           <section className="space-y-3 px-5 py-6 md:px-8">
             <div className="flex items-baseline justify-between gap-3">
               <h2 className="eyebrow">Ulasan naratif pelatih</h2>
-              {ssb.headCoachName && <p className="text-xs font-bold">{ssb.headCoachName}</p>}
+              {(row.groupCoach ?? ssb.headCoachName) && <p className="text-xs font-bold">{row.groupCoach ?? ssb.headCoachName}</p>}
             </div>
             {NARRATIVE_FIELDS.map((f) =>
               r[f.key].trim() ? (
@@ -214,8 +214,8 @@ export default async function PublicReportPage({ params }: { params: Promise<{ t
             <p className="max-w-xs text-xs text-muted">Dokumen ini diterbitkan oleh {ssb.name} untuk keluarga {p.nickname || p.fullName}.</p>
             <div className="text-right">
               <p className="text-xs text-muted">Diterbitkan {r.publishedAt ? formatDateId(dateWib(r.publishedAt), { weekday: false }) : ""}</p>
-              <p className="mt-5 font-serif text-base font-bold">{ssb.headCoachName ?? ssb.name}</p>
-              <p className="text-xs text-muted">Pelatih Kepala {row.groupName}</p>
+              <p className="mt-5 font-serif text-base font-bold">{row.groupCoach ?? ssb.headCoachName ?? ssb.name}</p>
+              <p className="text-xs text-muted">Pelatih {row.groupName}</p>
             </div>
           </footer>
         </article>

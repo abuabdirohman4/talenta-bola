@@ -1,7 +1,7 @@
 import "server-only";
 import { randomBytes } from "node:crypto";
 import { and, asc, eq, isNull } from "drizzle-orm";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 import { db } from "@/db";
@@ -27,7 +27,9 @@ export const getAgeGroups = cache(async (ssbId: string) =>
 export async function getActiveGroup(kuParam: string | string[] | undefined) {
   const ssb = await getSsb();
   const groups = await getAgeGroups(ssb.id);
-  const group = groups.find((g) => g.id === kuParam) ?? groups[0] ?? null;
+  // ?ku= dari tautan menang; selain itu KU terakhir yang dipilih di header (cookie tb_ku).
+  const saved = (await cookies()).get("tb_ku")?.value;
+  const group = groups.find((g) => g.id === kuParam) ?? groups.find((g) => g.id === saved) ?? groups[0] ?? null;
   return { ssb, groups, group };
 }
 

@@ -36,6 +36,20 @@
       "when": 1792655775545,
       "tag": "0004_kode_akses_per_ssb",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792770618404,
+      "tag": "0005_notifikasi",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792772110520,
+      "tag": "0006_pelatih_per_ku",
+      "breakpoints": true
     }
   ]
 }

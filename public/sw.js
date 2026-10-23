@@ -1,5 +1,5 @@
 // Service worker manual (tanpa next-pwa). Naikkan BUILD_VERSION tiap deploy berarti → cache lama dibuang.
-const BUILD_VERSION = "2026-10-23.3";
+const BUILD_VERSION = "2026-10-23.4";
 const CACHE = `talenta-bola-${BUILD_VERSION}`;
 // Cache "talenta-bola-pages" diisi halaman presensi sendiri (salinan offline); ikut dibuang saat versi berganti.
 
@@ -61,4 +61,37 @@ self.addEventListener("fetch", (event) => {
         )
     );
   }
+});
+
+// Web Push: payload JSON {title, body, url, tag} dari src/lib/server/notify.ts.
+self.addEventListener("push", (event) => {
+  let d = {};
+  try {
+    d = event.data ? event.data.json() : {};
+  } catch {
+    d = { body: event.data ? event.data.text() : "" };
+  }
+  event.waitUntil(
+    self.registration.showNotification(d.title || "TalentaBola", {
+      body: d.body || "",
+      icon: "/icons/icon-192.png",
+      tag: d.tag || undefined,
+      data: { url: d.url || "/" },
+    })
+  );
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const url = (event.notification.data && event.notification.data.url) || "/";
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
+      const c = clients.find((x) => "focus" in x);
+      if (c) {
+        if ("navigate" in c) c.navigate(url);
+        return c.focus();
+      }
+      return self.clients.openWindow(url);
+    })
+  );
 });

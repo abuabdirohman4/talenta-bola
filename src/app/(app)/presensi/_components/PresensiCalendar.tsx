@@ -8,9 +8,9 @@ import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { formatDateId } from "@/lib/format";
 import { monthGrid, shiftMonth } from "@/lib/schedule";
 import { cn } from "@/lib/utils";
+import type { DayInfo } from "@/lib/queries";
 import { openSession } from "../actions";
 
-export type DayInfo = { id: string; state: "done" | "planned" | "cancelled"; pct: number | null };
 
 const DAY_LABELS = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"];
 
@@ -28,18 +28,20 @@ export function PresensiCalendar({
   today,
   days,
   ageGroupId,
+  basePath = "/presensi",
 }: {
   month: string;
   today: string;
   days: Record<string, DayInfo>;
   ageGroupId: string;
+  basePath?: string;
 }) {
   const [pick, setPick] = useState<string | null>(null);
   const [pending, start] = useTransition();
   const label = new Intl.DateTimeFormat("id-ID", { month: "long", year: "numeric", timeZone: "UTC" }).format(
     new Date(month + "-01T00:00:00Z")
   );
-  const nav = (n: number) => `/presensi?ku=${ageGroupId}&bulan=${shiftMonth(month, n)}`;
+  const nav = (n: number) => `${basePath}?ku=${ageGroupId}&bulan=${shiftMonth(month, n)}`;
 
   return (
     <section className="rounded-2xl border border-line bg-card p-4 shadow-sm">

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Field, inputClass } from "@/components/ui/Field";
 import { signOut } from "@/app/masuk/actions";
-import { addAgeGroup, changeAccessCode, updateSsb } from "../actions";
+import { addAgeGroup, changeAccessCode, updateSsb, setAgeGroupCoach } from "../actions";
 
 type Ssb = { name: string; headCoachName: string; homeGround: string; phoneWa: string; primaryColor: string; logoUrl: string };
 
@@ -185,5 +185,31 @@ export function LogoutButton() {
     >
       <LogOut size={18} aria-hidden /> Keluar dari HP ini
     </Button>
+  );
+}
+
+/** Nama pelatih per KU, tersimpan saat kolom ditinggalkan. */
+export function AgeGroupCoachInput({ id, initial, fallback }: { id: string; initial: string; fallback: string }) {
+  const [pending, start] = useTransition();
+  const [value, setValue] = useState(initial);
+  return (
+    <input
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onBlur={() =>
+        value.trim() !== initial &&
+        start(async () => {
+          const r = await setAgeGroupCoach(id, value);
+          if (r?.error) toast.error(r.error);
+          else toast.success("Pelatih KU disimpan");
+        })
+      }
+      onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
+      maxLength={60}
+      placeholder={fallback ? `Pelatih (kosong = ${fallback})` : "Nama pelatih"}
+      aria-label="Nama pelatih kelompok umur"
+      aria-busy={pending || undefined}
+      className={inputClass + " mt-1.5 min-h-11 py-1.5" + (pending ? " opacity-60" : "")}
+    />
   );
 }

@@ -24,7 +24,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const THEME_SCRIPT = `try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark")}catch(e){}`;
+const THEME_SCRIPT = `try{var c=localStorage.getItem("tb-sidebar-collapsed");if(c==="1"||(c===null&&innerWidth<1024))document.documentElement.dataset.sb="collapsed"}catch(e){}try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark")}catch(e){}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

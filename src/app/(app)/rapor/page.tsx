@@ -2,7 +2,6 @@ import { and, count, desc, eq, inArray, isNotNull, isNull } from "drizzle-orm";
 import { ChevronRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { KuSwitcher } from "@/components/KuSwitcher";
 import { db } from "@/db";
 import { players, reportPeriods, reports } from "@/db/schema";
 import { getActiveGroup } from "@/lib/data";
@@ -42,7 +41,6 @@ export default async function RaporPage({ searchParams }: { searchParams: Promis
 
   return (
     <div className="space-y-6">
-      <KuSwitcher groups={groups} activeId={group.id} basePath="/rapor" />
       <div>
         <p className="eyebrow">Evaluasi & rapor</p>
         <h2 className="text-xl font-black tracking-tight">Rapor {group.name}</h2>
