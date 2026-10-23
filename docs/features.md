@@ -97,6 +97,25 @@ Step-by-step guide in Indonesian for the club: [`panduan-demo.md`](panduan-demo.
 - The card hides after installing or tapping ✕ (remembered on that phone).
 - Links opened inside WhatsApp use WhatsApp's own browser, which cannot install; open the link in Chrome/Safari first.
 
+## Notifications
+
+> Know at once when a parent sends leave.
+
+**How to use:**
+1. **Pengaturan → Notifikasi di HP ini → Aktifkan** on each coach's phone (iPhone: install the app first).
+2. The bell shows unread notifications; tap one to open that session's sheet. **Tandai semua dibaca** clears the count.
+
+**Notes:**
+- Notifications belong to the club: every phone that turned them on receives them.
+
+## Age groups & coaches
+
+> Switch age group once; every page follows.
+
+**How to use:**
+1. Tap the KU name under the club name (phone) or in the sidebar (desktop) and pick another KU.
+2. **Pengaturan → Kelompok umur**: write each KU's coach; empty uses the head coach.
+
 ## Light & dark mode
 
 > The app follows the phone's light/dark setting; coaches can switch with the sun/moon button.

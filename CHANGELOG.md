@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.9.0] — 2026-10-23
+
+### Added
+- **Notifications**: when a parent sends Izin/Sakit, the club gets a notification — a bell with an unread count (dropdown of the latest on desktop, its own page on phones) and a push notification on phones that turned it on in **Pengaturan → Notifikasi di HP ini** (iPhone: after installing the app to the home screen).
+- **Coach per age group**: each KU can have its own coach name (Pengaturan → Kelompok umur); the header, sidebar and the public report card use it, falling back to the head coach.
+- **Collapsible sidebar** on desktop; collapsed shows only the club logo, hovering it reveals the open button. The choice is remembered.
+
+### Changed
+- **One age-group picker for the whole app**: the KU chosen in the header (phone) or sidebar (desktop) applies to every page and is remembered; the per-page KU chips are gone.
+- **Menu order** follows how often it is used: Beranda · Presensi · Pemain · Rapor · Pengaturan; "Jadwal rutin" moved to the Klub section.
+- **Jadwal rutin** page only manages the weekly routine; sessions, extra sessions and cancellations live in the Presensi calendar.
+- Pages use the full width of the screen; dropdown arrows no longer touch the right edge; the sidebar's player count follows the chosen KU.
+
 ## [1.8.0] — 2026-10-23
 
 ### Added
