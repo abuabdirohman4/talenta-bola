@@ -19,7 +19,7 @@ export function KuSwitcher({
           key={g.id}
           href={`${basePath}?ku=${g.id}`}
           className={cn(
-            "min-h-10 shrink-0 rounded-full border px-4 py-2 text-sm font-semibold",
+            "min-h-11 shrink-0 rounded-full border px-4 py-2 text-sm font-semibold",
             g.id === activeId ? "border-primary bg-primary text-white" : "border-line bg-card text-ink"
           )}
         >

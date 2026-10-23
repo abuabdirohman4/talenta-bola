@@ -22,6 +22,7 @@ import { addDays, dateWib, formatDateId, formatTimeId } from "@/lib/format";
 import { positionLabel } from "@/lib/players";
 import { fillSessionsFromPatterns } from "@/lib/queries";
 import { cn } from "@/lib/utils";
+import { InstallCard } from "./_components/InstallCard";
 import { StartTodayButton } from "./presensi/_components/SessionControls";
 
 const card = "rounded-2xl border border-line bg-card shadow-sm";
@@ -128,6 +129,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
   return (
     <div className="space-y-6">
       <KuSwitcher groups={groups} activeId={group.id} basePath="/" />
+      <InstallCard />
 
       {/* Sorotan sesi berikutnya */}
       <section className="relative overflow-hidden rounded-2xl border border-slate-700/80 bg-linear-to-br from-hero via-hero-2 to-hero p-5 text-white shadow-md md:p-6">

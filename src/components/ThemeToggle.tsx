@@ -18,7 +18,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       onClick={toggleTheme}
       aria-label="Ganti mode terang/gelap"
       className={cn(
-        "grid size-10 shrink-0 place-items-center rounded-xl border border-line bg-subtle text-ink hover:bg-ground",
+        "grid size-10 shrink-0 place-items-center rounded-xl border border-line bg-subtle text-ink hover:bg-ground relative after:absolute after:-inset-1 after:content-['']",
         className
       )}
     >

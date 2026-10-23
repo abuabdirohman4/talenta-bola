@@ -38,7 +38,7 @@ export function ImportForm({ groups, defaultGroupId }: { groups: { id: string; n
           onChange={(e) => setText(e.target.value)}
           rows={10}
           placeholder={EXAMPLE}
-          className={inputClass + " font-mono text-sm"}
+          className={inputClass + " font-mono"}
         />
       </Field>
       </div>

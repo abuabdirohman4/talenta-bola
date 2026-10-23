@@ -51,10 +51,10 @@ const BUTTONS: { status: Status; letter: string; icon: typeof Check }[] = [
 
 // Kelas lengkap ditulis eksplisit supaya ikut dipindai Tailwind.
 const TONE: Record<Status, { solid: string; soft: string; text: string }> = {
-  HADIR: { solid: "bg-hadir border-hadir text-white", soft: "bg-hadir/15 border-hadir/50 text-hadir", text: "text-hadir" },
-  IZIN: { solid: "bg-izin border-izin text-white", soft: "bg-izin/15 border-izin/50 text-izin", text: "text-izin" },
-  SAKIT: { solid: "bg-sakit border-sakit text-white", soft: "bg-sakit/15 border-sakit/50 text-sakit", text: "text-sakit" },
-  ALPA: { solid: "bg-alpa border-alpa text-white", soft: "bg-alpa/15 border-alpa/50 text-alpa", text: "text-alpa" },
+  HADIR: { solid: "bg-hadir border-hadir text-white dark:text-ground", soft: "bg-hadir/15 border-hadir/50 text-hadir", text: "text-hadir" },
+  IZIN: { solid: "bg-izin border-izin text-white dark:text-ground", soft: "bg-izin/15 border-izin/50 text-izin", text: "text-izin" },
+  SAKIT: { solid: "bg-sakit border-sakit text-white dark:text-ground", soft: "bg-sakit/15 border-sakit/50 text-sakit", text: "text-sakit" },
+  ALPA: { solid: "bg-alpa border-alpa text-white dark:text-ground", soft: "bg-alpa/15 border-alpa/50 text-alpa", text: "text-alpa" },
 };
 const BADGE: Record<Status, string> = {
   HADIR: "bg-hadir/15 text-hadir",
@@ -277,7 +277,7 @@ export function AttendanceSheet({ session, roster, serverMarks, permissions }: P
                       aria-selected={filter === f}
                       onClick={() => setFilter(f)}
                       className={cn(
-                        "min-h-10 flex-1 rounded-lg px-3 text-sm font-bold whitespace-nowrap",
+                        "min-h-11 flex-1 rounded-lg px-3 text-sm font-bold whitespace-nowrap",
                         filter === f ? "bg-primary text-white shadow-sm" : "text-muted"
                       )}
                     >
@@ -475,7 +475,7 @@ function SessionSettings({ session, children }: { session: Props["session"]; chi
     <div className="mt-4 space-y-3 border-t border-line pt-4">
       <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
         {children}
-        <CancelSessionButton sessionId={session.id} cancelled={session.cancelled} />
+        <CancelSessionButton sessionId={session.id} cancelled={session.cancelled} className="px-3 whitespace-nowrap" />
         <Button type="button" variant="outline" size="md" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
           <Settings2 size={18} aria-hidden /> Atur sesi
         </Button>

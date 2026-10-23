@@ -84,7 +84,7 @@ export function PlayerList({ players, importHref }: { players: Row[]; importHref
               key={f.value}
               onClick={() => setPos(f.value)}
               className={cn(
-                "min-h-10 shrink-0 rounded-full border px-4 text-sm font-bold",
+                "min-h-11 shrink-0 rounded-full border px-4 text-sm font-bold",
                 pos === f.value ? "border-primary bg-primary text-white" : "border-line bg-subtle text-ink hover:border-muted/40"
               )}
             >

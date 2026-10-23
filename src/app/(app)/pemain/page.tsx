@@ -15,6 +15,8 @@ import { PlayerList, type ReportState } from "./_components/PlayerList";
 export const metadata: Metadata = { title: "Pemain" };
 
 const card = "rounded-2xl border border-line bg-card shadow-sm";
+/** Dua tombol aksi berbagi satu baris di HP 360px tanpa teks terlipat. */
+const MOBILE_BTN = "flex-1 whitespace-nowrap px-3 text-sm sm:flex-none sm:px-4 sm:text-[15px]";
 const SHORT: Record<string, string> = { GK: "Kiper", DF: "Bek", MF: "Tengah", FW: "Depan" };
 
 export default async function PemainPage({ searchParams }: { searchParams: Promise<{ ku?: string }> }) {
@@ -100,11 +102,11 @@ export default async function PemainPage({ searchParams }: { searchParams: Promi
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-xl font-extrabold tracking-tight md:hidden">Data pemain</h2>
         <p className="hidden text-sm font-medium text-muted md:block">{group.name}</p>
-        <div className="flex gap-2">
-          <Link href={`/pemain/impor?ku=${group.id}`} className={buttonClass("outline")}>
+        <div className="flex w-full gap-2 sm:w-auto">
+          <Link href={`/pemain/impor?ku=${group.id}`} className={buttonClass("outline", "md", MOBILE_BTN)}>
             <FileInput size={18} aria-hidden /> Impor dari WA
           </Link>
-          <Link href={`/pemain/baru?ku=${group.id}`} className={buttonClass("primary")}>
+          <Link href={`/pemain/baru?ku=${group.id}`} className={buttonClass("primary", "md", MOBILE_BTN)}>
             <UserPlus size={18} aria-hidden /> Tambah Pemain
           </Link>
         </div>

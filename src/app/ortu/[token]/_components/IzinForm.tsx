@@ -77,7 +77,7 @@ export function IzinForm({ token, sessions }: { token: string; sessions: Session
               onClick={() => setType(value)}
               className={cn(
                 "flex min-h-14 items-center justify-center gap-2 rounded-xl border-2 text-base font-bold",
-                type === value ? `${on} text-white` : "border-line bg-subtle"
+                type === value ? `${on} text-white dark:text-ground` : "border-line bg-subtle"
               )}
             >
               <Icon size={20} aria-hidden /> {label}

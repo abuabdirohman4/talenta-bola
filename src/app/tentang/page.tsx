@@ -91,10 +91,10 @@ export default function TentangPage() {
   return (
     <div className="min-h-dvh overflow-x-clip">
       <header className="sticky top-0 z-40 border-b border-line bg-ground/80 backdrop-blur">
-        <div className={cn(wrap, "flex h-16 items-center gap-3")}>
+        <div className={cn(wrap, "flex h-16 items-center gap-2 sm:gap-3")}>
           <Link href="/" className="mr-auto flex items-center gap-2.5" aria-label="TalentaBola">
             <Image src="/icon.png" alt="" width={36} height={36} className="size-9 rounded-xl shadow-md shadow-primary/25" />
-            <span className="text-lg font-black tracking-tight">TalentaBola</span>
+            <span className="text-base font-black tracking-tight sm:text-lg">TalentaBola</span>
           </Link>
           <nav className="hidden items-center gap-1 text-sm font-semibold text-muted md:flex">
             {[["#fitur", "Fitur"], ["#beda", "Bedanya"], ["#mulai", "Cara mulai"]].map(([href, label]) => (
@@ -103,7 +103,7 @@ export default function TentangPage() {
               </a>
             ))}
           </nav>
-          <Link href="/masuk" className="rounded-full border border-line bg-card px-4 py-2 text-sm font-bold shadow-sm hover:bg-subtle">
+          <Link href="/masuk" className="rounded-full border border-line bg-card px-3 py-2 text-sm font-bold whitespace-nowrap shadow-sm hover:bg-subtle sm:px-4">
             Masuk pelatih
           </Link>
           <ThemeToggle />

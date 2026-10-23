@@ -59,7 +59,7 @@ function BackButton({ href, className }: { href: string; className?: string }) {
     <Link
       href={href}
       aria-label="Kembali"
-      className={cn("grid size-10 shrink-0 place-items-center rounded-xl border border-line bg-subtle text-ink hover:bg-ground", className)}
+      className={cn("grid size-10 shrink-0 place-items-center rounded-xl border border-line bg-subtle text-ink hover:bg-ground relative after:absolute after:-inset-1 after:content-['']", className)}
     >
       <NavIcon icon={ArrowLeft} size={18} />
     </Link>

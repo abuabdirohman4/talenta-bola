@@ -162,7 +162,7 @@ export function ReportForm({ period, player, roster, nav, attendance, initial, b
               )}
               <div className="min-w-0">
                 <h2 className="flex flex-wrap items-center gap-x-2 text-lg font-black tracking-tight">
-                  <span className="truncate">{player.fullName}</span>
+                  <span className="min-w-0 break-words">{player.fullName}</span>
                   {player.position && (
                     <span className="rounded-md border border-line bg-subtle px-2 py-0.5 text-[11px] font-bold text-muted">
                       {player.position}
@@ -192,7 +192,7 @@ export function ReportForm({ period, player, roster, nav, attendance, initial, b
             <p className="flex items-baseline gap-2">
               <span className="eyebrow">Rata-rata skor saat ini</span>
               <span className="text-2xl font-black text-primary">{avg.toFixed(1)}</span>
-              <span className="text-xs text-muted">/ 5.0</span>
+              <span className="text-xs whitespace-nowrap text-muted">/ 5.0</span>
               <span className="rounded-md border border-primary/30 bg-primary-soft px-2 py-0.5 text-[11px] font-bold text-primary">
                 {SCORE_LABEL[Math.round(avg)]}
               </span>
@@ -273,7 +273,7 @@ export function ReportForm({ period, player, roster, nav, attendance, initial, b
                       disabled={used}
                       onClick={() => editNarrative(f.key, [narrative[f.key].trim(), sentence].filter(Boolean).join(" "))}
                       className={cn(
-                        "inline-flex min-h-9 items-center gap-1 rounded-lg border px-3 py-1 text-left text-xs font-semibold",
+                        "inline-flex min-h-11 items-center gap-1 rounded-lg border px-3 py-1 text-left text-xs font-semibold",
                         used ? "border-line bg-subtle text-muted" : "border-primary/30 bg-primary-soft text-primary hover:border-primary"
                       )}
                     >
@@ -364,7 +364,7 @@ function RosterList({
             onChange={(e) => setQ(e.target.value)}
             placeholder="Cari nama anak…"
             aria-label="Cari nama anak"
-            className={cn(inputClass, "py-2 pl-9 text-sm")}
+            className={cn(inputClass, "py-2 pl-9 lg:text-sm")}
           />
         </label>
         <ul className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-0.5">
@@ -415,7 +415,7 @@ function RosterSheet({ label, children }: { label: string; children: React.React
       <button
         type="button"
         onClick={() => ref.current?.showModal()}
-        className="flex min-h-9 items-center gap-1 rounded-lg border border-line bg-subtle px-2.5 text-xs font-bold lg:pointer-events-none lg:border-transparent lg:bg-transparent lg:px-0 lg:font-semibold lg:text-muted"
+        className="flex min-h-11 items-center gap-1 rounded-lg border border-line bg-subtle px-2.5 text-xs font-bold lg:pointer-events-none lg:border-transparent lg:bg-transparent lg:px-0 lg:font-semibold lg:text-muted"
       >
         {label}
         <ChevronDown size={14} className="lg:hidden" aria-hidden />
@@ -427,7 +427,7 @@ function RosterSheet({ label, children }: { label: string; children: React.React
       >
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-xs font-extrabold tracking-wider uppercase">Pilih anak</h3>
-          <button type="button" onClick={() => ref.current?.close()} className="grid size-9 place-items-center rounded-lg hover:bg-ground" aria-label="Tutup">
+          <button type="button" onClick={() => ref.current?.close()} className="grid size-11 place-items-center rounded-lg hover:bg-ground" aria-label="Tutup">
             <X size={18} aria-hidden />
           </button>
         </div>
