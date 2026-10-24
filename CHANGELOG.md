@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.11.0] — 2026-10-24
+
+### Added
+- **Squad-style player list**: each row shows the shirt number, photo (or a person silhouette when there is none), name with age and preferred foot, and is grouped by position (Kiper · Bek · Gelandang · Penyerang) when no filter or search is active.
+- **Last 5 sessions** as colored dots (Hadir/Izin/Sakit/Alpa, unmarked counts as Alpa) next to the 30-day attendance percentage.
+- **Rating badge** from the latest published report card, colored like a football card: gold ≥4, silver ≥3, bronze below. On phones it sits on the corner of the photo; on wider screens it has its own column next to the report status.
+
+### Changed
+- **Install prompt** on the home page is now a small floating popup instead of a banner, with an **Install** button; "Pasang" is renamed "Install" everywhere.
+- The four summary cards above the player list are gone; position filters use full names and "Data kurang" only appears when something is missing.
+- Player photos load as cached images instead of being embedded in the page, so the list opens faster.
+
 ## [1.10.0] — 2026-10-24
 
 ### Added

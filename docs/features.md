@@ -62,8 +62,12 @@ Step-by-step guide in Indonesian for the club: [`panduan-demo.md`](panduan-demo.
 1. **Pemain → Impor dari WA**: paste the numbered list from the group, check the preview, import.
 2. **Pemain → child** to complete birth date, position, number, height/weight, parent's WhatsApp and photo.
 
+3. The list reads like a squad sheet: photo, age and foot, the last 5 sessions as dots, attendance %, and a gold/silver/bronze rating badge from the latest published report card.
+
 **Notes:**
 - Height 90–200 cm, weight 15–120 kg, plausible BMI, shirt number 1–99. Birth year outside the age group is a warning only.
+- No photo shows a silhouette. Rows are grouped by position until you filter or search.
+- Rating badge: gold ≥4, silver ≥3, bronze below; no badge until a report card is published. On phones it sits on the photo.
 
 ## Report cards
 
@@ -89,12 +93,12 @@ Step-by-step guide in Indonesian for the club: [`panduan-demo.md`](panduan-demo.
 > TalentaBola can sit on the home screen and open like an app.
 
 **How to use:**
-1. Android/Chrome: tap **Pasang** on the card at the top of the home page.
+1. Android/Chrome: tap **Install** on the popup on the home page.
 2. iPhone (Safari): tap Share, then **Tambah ke Layar Utama**.
 
 **Notes:**
-- **Pengaturan → Pasang aplikasi** is always there, also after the home card was closed.
-- The card hides after installing or tapping ✕ (remembered on that phone).
+- **Pengaturan → Install aplikasi** is always there, also after the popup was closed.
+- The popup hides after installing or tapping **Nanti** (remembered on that phone).
 - Links opened inside WhatsApp use WhatsApp's own browser, which cannot install; open the link in Chrome/Safari first.
 
 ## Notifications
