@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Download, Share, X } from "lucide-react";
+import { Check, Download, Share } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -79,18 +79,54 @@ export function InstallCard({ variant = "home" }: { variant?: "home" | "settings
     setMode(choice.outcome === "accepted" ? "installed" : detect());
   };
 
+  // Beranda: popup kecil melayang (pola Better Planner), tidak memakan tempat konten.
+  if (variant === "home") {
+    return (
+      <div
+        role="dialog"
+        aria-label="Install aplikasi"
+        className="no-print fixed top-20 left-1/2 z-50 w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 rounded-xl border border-line bg-card p-4 shadow-2xl"
+      >
+        <div className="flex items-center gap-3">
+          <img src="/icons/icon-192.png" alt="" className="size-11 shrink-0 rounded-xl" />
+          <div className="min-w-0">
+            <p className="text-sm font-bold text-ink">Install TalentaBola</p>
+            <p className="text-xs text-muted">
+              {mode === "ios" ? (
+                <>
+                  Ketuk <Share size={13} className="inline align-text-bottom text-info" aria-label="Bagikan" /> lalu <b>Tambah ke Layar Utama</b>.
+                </>
+              ) : (
+                "Buka dari layar utama, lebih cepat."
+              )}
+            </p>
+          </div>
+        </div>
+        <div className="mt-3 flex gap-2">
+          {mode === "prompt" && (
+            <button type="button" onClick={install} className="min-h-11 flex-1 rounded-lg bg-primary text-sm font-semibold text-white hover:opacity-90">
+              Install
+            </button>
+          )}
+          <button type="button" onClick={dismiss} className="min-h-11 flex-1 rounded-lg bg-ground text-sm font-semibold text-ink hover:bg-line">
+            {mode === "ios" ? "Mengerti" : "Nanti"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <section
       className={cn(
         "relative flex items-start gap-3 rounded-2xl border border-line bg-card p-4 shadow-sm",
-        variant === "home" && "pr-12",
         variant === "settings" && "mt-4"
       )}
     >
       <img src="/icons/icon-192.png" alt="" className="size-11 shrink-0 rounded-xl" />
       <div className="min-w-0 flex-1 space-y-2">
         <div>
-          <p className="font-bold text-ink">{variant === "settings" ? "Pasang aplikasi" : "Pasang TalentaBola di HP"}</p>
+          <p className="font-bold text-ink">Install aplikasi</p>
           <p className="text-sm text-muted">Buka langsung dari layar utama seperti aplikasi, tanpa mengetik alamat.</p>
         </div>
         {mode === "installed" ? (
@@ -99,7 +135,7 @@ export function InstallCard({ variant = "home" }: { variant?: "home" | "settings
           </p>
         ) : mode === "prompt" ? (
           <Button onClick={install}>
-            <Download size={18} aria-hidden /> Pasang
+            <Download size={18} aria-hidden /> Install
           </Button>
         ) : mode === "ios" ? (
           <p className="text-sm text-ink">
@@ -113,16 +149,6 @@ export function InstallCard({ variant = "home" }: { variant?: "home" | "settings
           </p>
         )}
       </div>
-      {variant === "home" && (
-        <button
-          type="button"
-          onClick={dismiss}
-          aria-label="Tutup"
-          className="absolute top-2 right-2 grid size-10 place-items-center rounded-xl text-muted hover:bg-ground"
-        >
-          <X size={18} aria-hidden />
-        </button>
-      )}
     </section>
   );
 }
