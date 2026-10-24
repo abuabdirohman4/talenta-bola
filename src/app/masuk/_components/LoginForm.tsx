@@ -30,8 +30,9 @@ export function LoginForm({ action: submit = signIn }: { action?: typeof signIn 
             onClick={() => setShow((s) => !s)}
             className="absolute inset-y-0 right-0 grid w-12 place-items-center text-muted"
             aria-label={show ? "Sembunyikan kode" : "Tampilkan kode"}
+            aria-pressed={show}
           >
-            {show ? <EyeOff size={20} /> : <Eye size={20} />}
+            {show ? <Eye size={20} /> : <EyeOff size={20} />}
           </button>
         </span>
       </label>
