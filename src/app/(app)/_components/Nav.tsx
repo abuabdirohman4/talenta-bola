@@ -10,7 +10,6 @@ import { initials } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { setActiveKu } from "./ku-actions";
 import { NotifMenu, type NotifItem } from "./NotifBell";
-import { StartTodayButton } from "../presensi/_components/SessionControls";
 
 export type NavGroup = { id: string; name: string; code: string; birthYear: number | null; players: number; coach: string | null };
 
@@ -281,8 +280,7 @@ export function SidebarToggle() {
   );
 }
 
-export function TopBar({ ssbName, groups, unread, savedKu, notifs }: { ssbName: string; groups: NavGroup[]; unread: number; savedKu?: string; notifs: NotifItem[] }) {
-  const path = usePathname();
+export function TopBar({ ssbName, unread, notifs }: { ssbName: string; unread: number; notifs: NotifItem[] }) {
   const parent = useParent();
   const { crumb, title } = useTitle();
   return (
@@ -301,20 +299,9 @@ export function TopBar({ ssbName, groups, unread, savedKu, notifs }: { ssbName: 
       <div className="flex shrink-0 items-center gap-3">
         <NotifMenu unread={unread} items={notifs} />
         <ThemeToggle />
-        {!path.startsWith("/presensi/") && (
-          <Suspense>
-            <TopBarAction groups={groups} savedKu={savedKu} />
-          </Suspense>
-        )}
       </div>
     </div>
   );
-}
-
-/** Satu-satunya bagian top bar yang membaca ?ku — dibungkus Suspense sendiri supaya judul & tombol kembali hydrate bersama layout. */
-function TopBarAction({ groups, savedKu }: { groups: NavGroup[]; savedKu?: string }) {
-  const g = useActiveGroup(groups, savedKu);
-  return g ? <StartTodayButton ageGroupId={g.id} size="md" label="Catat Presensi Hari Ini" className="mt-0 w-auto" /> : null;
 }
 
 export function BottomNav() {

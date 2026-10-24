@@ -81,7 +81,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </div>
         </header>
 
-        <TopBar ssbName={ssb.name} groups={groups} unread={unread} savedKu={savedKu} notifs={notifs} />
+        <TopBar ssbName={ssb.name} unread={unread} notifs={notifs} />
 
         <main className="w-full flex-1 px-4 pt-4 pb-28 md:px-8 md:pt-8 md:pb-12">{children}</main>
       </div>

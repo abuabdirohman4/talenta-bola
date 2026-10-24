@@ -1,4 +1,4 @@
-import { and, asc, count, desc, eq, gte, inArray, isNotNull, isNull, lte, ne, or } from "drizzle-orm";
+import { and, asc, count, desc, eq, gte, isNotNull, isNull, lte, ne, or, sql } from "drizzle-orm";
 import {
   CalendarDays,
   ChartColumn,
@@ -6,22 +6,23 @@ import {
   Clock,
   FileText,
   MapPin,
-  MessageSquareText,
-  NotebookPen,
+  MailCheck,
   TriangleAlert,
-  UserCheck,
   Users,
 } from "lucide-react";
 import Link from "next/link";
 import { db } from "@/db";
-import { attendances, players, reportPeriods, reports, trainingSessions } from "@/db/schema";
+import { attendances, parentPermissions, players, reportPeriods, reportScores, reports, trainingSessions } from "@/db/schema";
 import { STATUS_LABEL, type Status } from "@/lib/attendance";
+import { categoryStats, summarizeAttendance } from "@/lib/dashboard";
 import { getActiveGroup } from "@/lib/data";
 import { addDays, dateWib, formatDateId, formatTimeId } from "@/lib/format";
 import { positionLabel } from "@/lib/players";
 import { fillSessionsFromPatterns } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 import { InstallCard } from "./_components/InstallCard";
+import { RadarChart } from "./_components/RadarChart";
+import { TrendChart } from "./_components/TrendChart";
 import { StartTodayButton } from "./presensi/_components/SessionControls";
 
 const card = "rounded-2xl border border-line bg-card shadow-sm";
@@ -47,83 +48,108 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
     ne(trainingSessions.status, "CANCELLED")
   );
 
-  const [upcoming, [{ total }], [{ incomplete }], [{ fresh }], recentSessions, [last], [period]] = await Promise.all([
+  const filledSessions = (from: string | null) =>
     db
-      .select()
+      .select({
+        id: trainingSessions.id,
+        date: trainingSessions.sessionDate,
+        hadir: sql<number>`count(*) filter (where ${attendances.status} = 'HADIR')`.mapWith(Number),
+      })
       .from(trainingSessions)
-      .where(and(liveSession, gte(trainingSessions.sessionDate, today)))
-      .orderBy(asc(trainingSessions.sessionDate))
-      .limit(3),
-    db.select({ total: count() }).from(players).where(activePlayer),
-    db
-      .select({ incomplete: count() })
-      .from(players)
-      .where(and(activePlayer, or(isNull(players.birthDate), isNull(players.parentPhoneWa)))),
-    db
-      .select({ fresh: count() })
-      .from(players)
-      .where(and(activePlayer, gte(players.createdAt, new Date(monthAgo + "T00:00:00+07:00")))),
-    db
-      .select({ id: trainingSessions.id })
-      .from(trainingSessions)
-      .where(and(liveSession, gte(trainingSessions.sessionDate, monthAgo), lte(trainingSessions.sessionDate, today))),
-    // Sesi terakhir yang sudah ada isinya — sumber daftar "perlu perhatian".
-    db
-      .select({ id: trainingSessions.id, sessionDate: trainingSessions.sessionDate })
-      .from(trainingSessions)
-      .where(
-        and(
-          liveSession,
-          lte(trainingSessions.sessionDate, today),
-          inArray(trainingSessions.id, db.select({ id: attendances.sessionId }).from(attendances))
-        )
-      )
-      .orderBy(desc(trainingSessions.sessionDate))
-      .limit(1),
-    db
-      .select()
-      .from(reportPeriods)
-      .where(
-        and(
-          eq(reportPeriods.ageGroupId, group.id),
-          isNull(reportPeriods.deletedAt),
-          lte(reportPeriods.startDate, today),
-          gte(reportPeriods.endDate, today)
-        )
-      )
-      .orderBy(desc(reportPeriods.startDate))
-      .limit(1),
-  ]);
+      .innerJoin(attendances, eq(attendances.sessionId, trainingSessions.id))
+      .where(and(liveSession, lte(trainingSessions.sessionDate, today), from ? gte(trainingSessions.sessionDate, from) : undefined))
+      .groupBy(trainingSessions.id, trainingSessions.sessionDate)
+      .orderBy(desc(trainingSessions.sessionDate));
+  const periodWhere = and(eq(reportPeriods.ageGroupId, group.id), isNull(reportPeriods.deletedAt));
 
-  const ids = recentSessions.map((s) => s.id);
-  const [[hadir], [published], lastMarks] = await Promise.all([
-    ids.length
-      ? db.select({ n: count() }).from(attendances).where(and(inArray(attendances.sessionId, ids), eq(attendances.status, "HADIR")))
-      : [{ n: 0 }],
+  const [upcoming, [{ total }], [{ incomplete }], monthSessions, trendRows, [period], [latestPeriod], [{ izinWeek }], roster] =
+    await Promise.all([
+      db
+        .select()
+        .from(trainingSessions)
+        .where(and(liveSession, gte(trainingSessions.sessionDate, today)))
+        .orderBy(asc(trainingSessions.sessionDate))
+        .limit(3),
+      db.select({ total: count() }).from(players).where(activePlayer),
+      db
+        .select({ incomplete: count() })
+        .from(players)
+        .where(and(activePlayer, or(isNull(players.birthDate), isNull(players.parentPhoneWa)))),
+      filledSessions(monthAgo),
+      filledSessions(null).limit(12),
+      db
+        .select()
+        .from(reportPeriods)
+        .where(and(periodWhere, lte(reportPeriods.startDate, today), gte(reportPeriods.endDate, today)))
+        .orderBy(desc(reportPeriods.startDate))
+        .limit(1),
+      db.select().from(reportPeriods).where(periodWhere).orderBy(desc(reportPeriods.startDate)).limit(1),
+      db
+        .select({ izinWeek: count() })
+        .from(parentPermissions)
+        .innerJoin(trainingSessions, eq(trainingSessions.id, parentPermissions.sessionId))
+        .where(
+          and(
+            eq(parentPermissions.ssbId, ssb.id),
+            eq(trainingSessions.ageGroupId, group.id),
+            gte(parentPermissions.createdAt, new Date(Date.now() - 7 * 86400_000))
+          )
+        ),
+      db
+        .select({ id: players.id, name: players.fullName, jersey: players.jerseyNumber, position: players.position })
+        .from(players)
+        .where(activePlayer),
+    ]);
+
+  const last = trendRows[0];
+  const radarPeriod = period ?? latestPeriod;
+  const [[published], lastMarks, lastPerms, scoreRows] = await Promise.all([
     period
       ? db.select({ n: count() }).from(reports).where(and(eq(reports.periodId, period.id), isNotNull(reports.publishedAt)))
       : [{ n: 0 }],
     last
       ? db
-          .select({
-            status: attendances.status,
-            note: attendances.note,
-            id: players.id,
-            name: players.fullName,
-            jersey: players.jerseyNumber,
-            position: players.position,
-          })
+          .select({ playerId: attendances.playerId, status: attendances.status, note: attendances.note })
           .from(attendances)
-          .innerJoin(players, eq(players.id, attendances.playerId))
           .where(eq(attendances.sessionId, last.id))
       : [],
+    last
+      ? db
+          .select({ playerId: parentPermissions.playerId, type: parentPermissions.type, reason: parentPermissions.reason, createdAt: parentPermissions.createdAt })
+          .from(parentPermissions)
+          .where(eq(parentPermissions.sessionId, last.id))
+      : [],
+    radarPeriod
+      ? db
+          .select({ playerId: reports.playerId, name: players.fullName, aspectKey: reportScores.aspectKey, score: reportScores.score })
+          .from(reportScores)
+          .innerJoin(reports, eq(reports.id, reportScores.reportId))
+          .innerJoin(players, eq(players.id, reports.playerId))
+          .where(and(eq(reports.periodId, radarPeriod.id), isNotNull(reports.publishedAt)))
+      : [],
   ]);
-  const rate = ids.length && total ? Math.round((hadir!.n / (ids.length * total)) * 1000) / 10 : null;
+  const radarReports = radarPeriod
+    ? (await db.select({ n: count() }).from(reports).where(and(eq(reports.periodId, radarPeriod.id), isNotNull(reports.publishedAt))))[0].n
+    : 0;
+
+  // Rata-rata: hadir ÷ (sesi berisi × total anak aktif), 30 hari terakhir.
+  const rate = monthSessions.length && total
+    ? Math.round((monthSessions.reduce((s, x) => s + x.hadir, 0) / (monthSessions.length * total)) * 1000) / 10
+    : null;
+  const trend = trendRows
+    .map((s) => ({ date: s.date, pct: total ? Math.min(100, Math.round((s.hadir / total) * 100)) : 0 }))
+    .reverse();
   const next = upcoming[0];
   const isToday = next?.sessionDate === today;
-  const lastHadir = lastMarks.filter((m) => m.status === "HADIR").length;
-  const attention = lastMarks.filter((m) => m.status !== "HADIR").slice(0, 6);
+  const { counts, attention: attentionAll } = summarizeAttendance(
+    roster,
+    lastMarks,
+    lastPerms.map((p) => ({ ...p, createdAt: p.createdAt.getTime() }))
+  );
+  const attention = attentionAll.slice(0, 6);
   const unrated = period ? total - published!.n : 0;
+  const stats = categoryStats(scoreRows);
+  const enoughReports = radarReports >= 3;
 
   return (
     <div className="space-y-6">
@@ -198,11 +224,11 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
       <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
         <Kpi href={`/pemain?ku=${group.id}`} icon={Users} tone="text-primary bg-primary-soft" label={`Total pemain ${group.code}`}>
           {total}
-          <Note className="text-primary">{fresh ? `+${fresh} anak baru bulan ini` : group.name}</Note>
+          <Note>{group.name}</Note>
         </Kpi>
         <Kpi href={`/presensi?ku=${group.id}`} icon={ChartColumn} tone="text-info bg-info/10" label="Rata-rata presensi">
           {rate == null ? "—" : `${rate}%`}
-          <Note>{ids.length ? `${ids.length} sesi · target > 85%` : "Belum ada sesi 30 hari"}</Note>
+          <Note>{monthSessions.length ? `${monthSessions.length} sesi · 30 hari · target > 85%` : "Belum ada sesi 30 hari"}</Note>
         </Kpi>
         <Kpi
           href={period ? `/rapor/${period.id}` : `/rapor?ku=${group.id}`}
@@ -212,26 +238,25 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
         >
           {period ? published!.n : "—"}
           {period && <span className="text-sm font-semibold text-muted"> / {total}</span>}
-          <Note className="text-izin">{period ? (unrated ? `${unrated} anak belum terbit` : "Semua terbit") : "Belum ada periode"}</Note>
+          <Note>{period ? (unrated ? `${unrated} anak belum terbit` : "Semua terbit") : "Belum ada periode"}</Note>
         </Kpi>
-        <Kpi href={`/pemain?ku=${group.id}`} icon={UserCheck} tone="text-sakit bg-sakit/10" label="Data lengkap">
-          {total - incomplete}
-          <span className="text-sm font-semibold text-muted"> / {total}</span>
-          <Note className={incomplete ? "text-alpa" : "text-primary"}>
-            {incomplete ? `${incomplete} belum lengkap` : "Siap kirim link ortu"}
-          </Note>
+        <Kpi href="/notifikasi" icon={MailCheck} tone="text-sakit bg-sakit/10" label="Izin dari ortu · 7 hari">
+          {izinWeek}
+          <Note>{izinWeek ? "Lihat di notifikasi" : "Belum ada yang masuk"}</Note>
         </Kpi>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="space-y-6 lg:col-span-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="space-y-6">
           {/* Perlu perhatian dari sesi terakhir */}
           <section className={cn(card, "space-y-3 p-5")}>
             <div className="flex items-center justify-between gap-3 border-b border-line pb-3">
               <div>
-                <h3 className="text-xs font-extrabold tracking-wider uppercase">Presensi terakhir & perlu perhatian</h3>
-                <p className="text-[11px] font-medium text-muted">
-                  {last ? `Sesi ${formatDateId(last.sessionDate)} · ${lastHadir}/${total} hadir` : "Belum ada sesi yang dicatat"}
+                <h3 className="eyebrow">Presensi terakhir & perlu perhatian</h3>
+                <p className="mt-0.5 text-[11px] font-medium text-muted">
+                  {last
+                    ? `Sesi ${formatDateId(last.date)} · ${counts.HADIR} hadir, ${counts.ALPA} alpa, ${counts.IZIN} izin, ${counts.SAKIT} sakit`
+                    : "Belum ada sesi yang dicatat"}
                 </p>
               </div>
               {last && (
@@ -242,7 +267,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
             </div>
             {attention.length ? (
               <ul className="space-y-2">
-                {attention.map((m) => (
+                {attention.map(({ player: m, status, note }) => (
                   <li key={m.id}>
                     <Link
                       href={`/pemain/${m.id}`}
@@ -255,14 +280,17 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
                         <span className="min-w-0">
                           <span className="block truncate text-sm font-bold">{m.name}</span>
                           <span className="block truncate text-[11px] font-medium text-muted">
-                            {[positionLabel(m.position), group.code, m.note].filter(Boolean).join(" · ")}
+                            {[positionLabel(m.position), note].filter(Boolean).join(" · ")}
                           </span>
                         </span>
                       </span>
-                      <StatusPill status={m.status} />
+                      <StatusPill status={status} />
                     </Link>
                   </li>
                 ))}
+                {attentionAll.length > attention.length && (
+                  <li className="text-center text-[11px] font-medium text-muted">+{attentionAll.length - attention.length} anak lain tidak hadir</li>
+                )}
               </ul>
             ) : (
               <p className="rounded-xl bg-subtle p-4 text-sm text-muted">
@@ -271,11 +299,51 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
             )}
           </section>
 
+          {/* Tren kehadiran */}
+          <section className={cn(card, "space-y-3 p-5")}>
+            <div className="border-b border-line pb-3">
+              <h3 className="eyebrow">Tren kehadiran</h3>
+              <p className="mt-0.5 text-[11px] font-medium text-muted">% hadir dari {total} anak · {trend.length} sesi terakhir yang diisi</p>
+            </div>
+            <TrendChart sessions={trend} />
+          </section>
+        </div>
+
+        <div className="space-y-6">
+          {/* Profil kemampuan tim */}
+          <section className={cn(card, "space-y-3 p-5")}>
+            <div className="border-b border-line pb-3">
+              <h3 className="eyebrow">Profil kemampuan tim</h3>
+              <p className="mt-0.5 text-[11px] font-medium text-muted">
+                {radarPeriod ? `${radarPeriod.name} · dari ${radarReports} rapor terbit · skala 1–5` : "Belum ada periode rapor"}
+              </p>
+            </div>
+            {enoughReports ? (
+              <>
+                <RadarChart axes={stats} />
+                <ul className="space-y-1 text-xs text-muted">
+                  {stats.map((c) => (
+                    <li key={c.key}>
+                      <b className="text-ink">Unggul di {c.label}:</b> {c.top.map((t) => `${t.name} (${t.avg})`).join(", ")}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p className="rounded-xl bg-subtle p-4 text-sm text-muted">
+                Profil tim muncul setelah minimal 3 rapor terbit ({radarReports} sekarang).{" "}
+                <Link href={radarPeriod ? `/rapor/${radarPeriod.id}` : `/rapor?ku=${group.id}`} className="font-semibold text-primary underline">
+                  Isi rapor
+                </Link>
+              </p>
+            )}
+          </section>
+
           {/* Agenda */}
           <section className={cn(card, "space-y-3 p-5")}>
-            <h3 className="text-xs font-extrabold tracking-wider uppercase">Jadwal latihan berikutnya</h3>
+            <h3 className="eyebrow">Jadwal latihan berikutnya</h3>
             {upcoming.length ? (
-              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+              <div className="grid grid-cols-1 gap-2.5">
                 {upcoming.map((s) => {
                   const today_ = s.sessionDate === today;
                   return (
@@ -309,22 +377,10 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
               </p>
             )}
           </section>
-        </div>
-
-        <div className="space-y-6">
-          <section className={cn(card, "space-y-3 p-5")}>
-            <h3 className="text-xs font-extrabold tracking-wider uppercase">Fitur pelatih</h3>
-            <div className="grid grid-cols-2 gap-2.5">
-              <Shortcut href={`/presensi?ku=${group.id}`} icon={ClipboardCheck} tone="text-primary bg-primary-soft" title="Presensi" sub="Catat lapangan" />
-              <Shortcut href={`/pemain?ku=${group.id}`} icon={Users} tone="text-primary bg-primary-soft" title="Data Pemain" sub="Profil & link ortu" />
-              <Shortcut href={period ? `/rapor/${period.id}` : `/rapor?ku=${group.id}`} icon={NotebookPen} tone="text-info bg-info/10" title="Isi Rapor" sub="22 aspek bintang" />
-              <Shortcut href="/pemain/impor" icon={MessageSquareText} tone="text-izin bg-izin/10" title="Impor WA" sub="Tempel daftar grup" />
-            </div>
-          </section>
 
           {incomplete > 0 && (
             <section className={cn(card, "space-y-2.5 p-5")}>
-              <h3 className="text-xs font-extrabold tracking-wider uppercase">Catatan</h3>
+              <h3 className="eyebrow">Catatan</h3>
               <Link
                 href={`/pemain?ku=${group.id}`}
                 className="flex gap-3 rounded-xl border border-izin/30 bg-warn-soft p-3.5 text-warn hover:border-izin/60"
@@ -384,32 +440,5 @@ function StatusPill({ status }: { status: Status }) {
     <span className={cn("shrink-0 rounded-md border px-2 py-0.5 text-[11px] font-bold", PILL[status])}>
       {STATUS_LABEL[status]}
     </span>
-  );
-}
-
-function Shortcut({
-  href,
-  icon: Icon,
-  tone,
-  title,
-  sub,
-}: {
-  href: string;
-  icon: typeof Users;
-  tone: string;
-  title: string;
-  sub: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="group rounded-xl border border-line bg-subtle p-3 text-center hover:border-primary/40 hover:bg-primary-soft"
-    >
-      <span className={cn("mx-auto mb-1.5 grid size-8 place-items-center rounded-lg transition-transform group-hover:scale-105", tone)}>
-        <Icon size={16} aria-hidden />
-      </span>
-      <span className="block text-xs font-extrabold">{title}</span>
-      <span className="block text-[10px] text-muted">{sub}</span>
-    </Link>
   );
 }
