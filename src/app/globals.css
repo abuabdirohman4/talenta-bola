@@ -31,6 +31,13 @@
   --color-warn: #b45309;
   --color-warn-soft: #fffbeb;
   --color-info: #2563eb;
+  /* Lencana nilai pemain ala kartu FIFA: emas / perak / perunggu, sama di kedua mode. */
+  --color-gold: #f3d36b;
+  --color-gold-2: #c99a1e;
+  --color-silver: #eef1f5;
+  --color-silver-2: #a3acb9;
+  --color-bronze: #e3a574;
+  --color-bronze-2: #a3602c;
 }
 
 /* Warna klub bisa diganti (ssb_profiles.primary_color): wrapper .brand mengisi --color-primary, turunannya dihitung ulang di sini. */
