@@ -125,6 +125,19 @@ Step-by-step guide in Indonesian for the club: [`panduan-demo.md`](panduan-demo.
 **Notes:**
 - Printed / PDF report cards are always light.
 
+## Dashboard
+
+> One screen that tells the coach how the team is doing: attendance, who needs attention, and team skills.
+
+**How to use:**
+1. Open **Beranda**; the numbers follow the KU chosen in the header or sidebar.
+2. Read the four cards: players, average attendance (30 days), report progress, parent izin this week.
+3. "Perlu perhatian" lists children absent at the last session; the trend chart shows the last 12 sessions; the radar shows team skills from published report cards.
+
+**Notes:**
+- Unmarked children count as Alpa, as on the attendance sheet.
+- The radar needs at least three published report cards in the current (or latest) period. "Fisik & mental" in the rubric is split into Fisik and Mental on the radar.
+
 ## Landing page
 
 > Visitors who are not signed in see a product page at the root address; signed-in coaches still land on their dashboard.

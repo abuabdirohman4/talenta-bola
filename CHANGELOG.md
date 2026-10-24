@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.10.0] — 2026-10-24
+
+### Added
+- **Attendance trend** on the dashboard: attendance percentage over the last 12 filled sessions, with 50% and 80% guide lines.
+- **Team skill radar**: Teknik, Taktik, Fisik and Mental averaged from the published report cards of the current period, plus "Unggul di …" with the top three children per area. Fewer than three published reports shows an invitation to fill them in.
+- **"Izin dari ortu (7 hari)"** card, linking to notifications.
+
+### Fixed
+- **"Perlu perhatian"** now counts unmarked children as Alpa (same as the sheet and the recap) and parent izin as Izin; it lists at most six children (alpa first) plus "+N anak lain".
+- **Password eye icon** shows the state: crossed eye while the code is hidden, open eye while it is visible; the button reports its state to screen readers.
+
+### Changed
+- The "Catat Presensi Hari Ini" button in the top bar is gone; the top bar keeps only notifications and the theme switch. The "Fitur pelatih" box is removed and the data-incomplete note appears once.
+
 ## [1.9.0] — 2026-10-23
 
 ### Added
