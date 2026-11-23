@@ -19,3 +19,8 @@ Tes: `pnpm test:run` (unit + guard keamanan), `pnpm test:e2e` (Playwright, butuh
 
 Dokumen: [`docs/konsep-ssb.md`](docs/konsep-ssb.md) · [`docs/roadmap.md`](docs/roadmap.md) · [`docs/panduan-demo.md`](docs/panduan-demo.md) · [`docs/brand.md`](docs/brand.md).
 Mockup HTML awal: [`mockups/`](mockups/).
+
+## Umami (analitik)
+
+Env `NEXT_PUBLIC_UMAMI_WEBSITE_ID` dan `NEXT_PUBLIC_UMAMI_HOST` harus diisi di Vercel (Environment Variables) supaya aktif; tanpa itu tidak ada skrip.
+

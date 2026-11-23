@@ -6,12 +6,12 @@ const isDev = process.env.NODE_ENV === "development";
 // hasil injeksi XSS tidak diblokir. Naikkan ke nonce lewat proxy.ts atau experimental.sri saat ada login per pelatih.
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://umami.abuabdirohman.com`,
   "style-src 'self' 'unsafe-inline'",
   // Foto pemain & logo disimpan sebagai data URL.
   "img-src 'self' blob: data:",
   "font-src 'self' data:",
-  `connect-src 'self'${isDev ? " ws://localhost:*" : ""}`,
+  `connect-src 'self'${isDev ? " ws://localhost:*" : ""} https://umami.abuabdirohman.com`,
   "worker-src 'self'",
   "manifest-src 'self'",
   "object-src 'none'",
