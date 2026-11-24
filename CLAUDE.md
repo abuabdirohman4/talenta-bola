@@ -1,7 +1,7 @@
 # TalentaBola — Operating Manual
 
 Aplikasi manajemen SSB (Sekolah Sepak Bola): **presensi lapangan 1-tap**, **rapor perkembangan**, dan **link ortu tanpa login**.
-Klien demo: SSB Galuh Putra Tasikmalaya, KU 2016 (40 anak). Epic beads `app-4r39` (label `tb`, beads di hub `~/Documents/applications`).
+Klien demo: SSB Garuda Muda Tasikmalaya, KU 2016 (40 anak). Epic beads `app-4r39` (label `tb`, beads di hub `~/Documents/applications`).
 
 Baca dulu: `docs/konsep-ssb.md` (alur + invariant), `docs/brand.md` (suara copy), `docs/roadmap.md` (status).
 Mockup HTML statis lama ada di `mockups/` — acuan rupa, bukan kode.

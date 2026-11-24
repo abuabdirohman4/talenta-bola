@@ -1,6 +1,6 @@
 # TalentaBola
 
-Presensi lapangan satu tap dan rapor perkembangan pemain untuk Sekolah Sepak Bola. Dibangun pertama untuk SSB Galuh Putra Tasikmalaya (KU 2016).
+Presensi lapangan satu tap dan rapor perkembangan pemain untuk Sekolah Sepak Bola. Dibangun pertama untuk SSB Garuda Muda Tasikmalaya (KU 2016).
 
 - **Pelatih:** presensi 1-tap per anak (tetap jalan tanpa sinyal), rekap siap tempel ke grup WA, jadwal rutin, rapor 22 aspek bintang 1–5 dengan kalimat siap pakai.
 - **Orang tua:** link khusus per anak tanpa login — lihat kehadiran, ajukan izin/sakit, baca rapor.
