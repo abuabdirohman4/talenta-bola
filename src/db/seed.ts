@@ -1,4 +1,4 @@
-// Isi awal: SSB Galuh Putra (kode akses = COACH_ACCESS_CODE), KU 2016, daftar pemain, dan satu periode rapor. Aman dijalankan ulang (lewati kalau sudah ada).
+// Isi awal: SSB Garuda Muda (kode akses = COACH_ACCESS_CODE), KU 2016, daftar pemain, dan satu periode rapor. Aman dijalankan ulang (lewati kalau sudah ada).
 // Nama anak asli dibaca dari src/db/roster.local.txt (tidak masuk git); tanpa file itu dipakai nama contoh.
 import { randomBytes } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
@@ -37,10 +37,10 @@ async function main() {
   const [ssb] = await db
     .insert(ssbProfiles)
     .values({
-      name: "SSB Galuh Putra",
-      slug: "galuh-putra",
-      homeGround: "Lapang Brigif 13 Galuh",
-      headCoachName: "Coach Rizky",
+      name: "SSB Garuda Muda",
+      slug: "garuda-muda",
+      homeGround: "Lapangan Merdeka",
+      headCoachName: "Coach Dimas",
       accessCodeHash: hashAccessCode(code),
     })
     .returning();
