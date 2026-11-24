@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Data Siswa & Roster KU-10 · SSB Galuh Putra</title>
+  <title>Data Siswa & Roster KU-10 · SSB Garuda Muda</title>
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,7 +59,7 @@
             <span class="font-extrabold text-sm text-slate-900 dark:text-white tracking-tight">TalentaBola</span>
             <span class="text-[9px] font-extrabold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-400 px-1.5 py-0.2 rounded border border-emerald-300 dark:border-emerald-800">PRO</span>
           </div>
-          <p class="text-[11px] text-slate-600 dark:text-slate-400 font-medium">SSB Galuh Putra Tasikmalaya</p>
+          <p class="text-[11px] text-slate-600 dark:text-slate-400 font-medium">SSB Garuda Muda Tasikmalaya</p>
         </div>
       </div>
     </div>
@@ -166,7 +166,7 @@
           CR
         </div>
         <div class="leading-tight overflow-hidden">
-          <p class="text-xs font-bold text-slate-900 dark:text-white truncate">Coach Riyandi</p>
+          <p class="text-xs font-bold text-slate-900 dark:text-white truncate">Coach Dimas</p>
           <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Pelatih Kepala KU-10</p>
         </div>
       </div>
@@ -201,7 +201,7 @@
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
         </button>
 
-        <button onclick="alert('Fitur tambah siswa baru: formulir pendaftaran siswa SSB Galuh Putra')" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-xs font-bold text-white flex items-center gap-1.5 shadow-sm transition-all">
+        <button onclick="alert('Fitur tambah siswa baru: formulir pendaftaran siswa SSB Garuda Muda')" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-xs font-bold text-white flex items-center gap-1.5 shadow-sm transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
           <span>Tambah Siswa</span>
         </button>
@@ -457,7 +457,7 @@
       document.getElementById('modal-medical').innerText = s.medical;
       document.getElementById('modal-att').innerText = s.att;
       document.getElementById('modal-score').innerText = s.score !== '-' ? s.score + ' / 5.0 (Siap)' : 'Belum Lengkap';
-      document.getElementById('modal-wa-link').href = `https://api.whatsapp.com/send?phone=62${s.phone.replace(/^0/, '')}&text=Halo%20Bpk/Ibu%20${encodeURIComponent(s.parent)},%20kami%20dari%20SSB%20Galuh%20Putra...`;
+      document.getElementById('modal-wa-link').href = `https://api.whatsapp.com/send?phone=62${s.phone.replace(/^0/, '')}&text=Halo%20Bpk/Ibu%20${encodeURIComponent(s.parent)},%20kami%20dari%20SSB%20Garuda%20Muda...`;
       document.getElementById('student-modal').classList.remove('hidden');
     }
 

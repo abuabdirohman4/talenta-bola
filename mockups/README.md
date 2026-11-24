@@ -1,6 +1,6 @@
 # TalentaBola · Prototipe Interaktif Manajemen SSB
 
-Prototipe aplikasi manajemen Sekolah Sepak Bola (SSB) berbasis filosofi **Filanesia (Filosofi Sepak Bola Indonesia)** yang dirancang untuk **SSB Galuh Putra Tasikmalaya** (Kelompok Usia KU-10 / Kelahiran 2016).
+Prototipe aplikasi manajemen Sekolah Sepak Bola (SSB) berbasis filosofi **Filanesia (Filosofi Sepak Bola Indonesia)** yang dirancang untuk **SSB Garuda Muda Tasikmalaya** (Kelompok Usia KU-10 / Kelahiran 2016).
 
 🌐 **Live Demo GitHub Pages:**  
 https://abuabdirohman4.github.io/talenta-bola/
@@ -18,7 +18,7 @@ https://abuabdirohman4.github.io/talenta-bola/
 | **Form Evaluasi / Rapor** | [`mockup-02-form-rapor.html`](mockup-02-form-rapor.html) | Form nilai lisensi C PSSI (Teknik, Taktik, Fisik, Karakter) + auto-save |
 | **Rapor Digital Ortu** | [`mockup-03-rapor-ortu.html`](mockup-03-rapor-ortu.html) | Kartu pemain EA Sports FIFA, sertifikat evaluasi, & tombol share WhatsApp |
 | **Data Siswa & Roster** | [`roster.html`](roster.html) | Database 40 siswa KU-10, filter posisi (GK/Bek/Mid/Fwd), & modal biodata |
-| **Jadwal & Agenda** | [`jadwal.html`](jadwal.html) | Pola jadwal mingguan rutin (Brigif & Dadaha) + timeline September 2026 |
+| **Jadwal & Agenda** | [`jadwal.html`](jadwal.html) | Pola jadwal mingguan rutin (Merdeka & Dadaha) + timeline September 2026 |
 | **Iuran SPP Bulanan** | [`spp.html`](spp.html) | Tracking keuangan SSB (34 lunas / 6 nunggak) + reminder WhatsApp 1-klik |
 | **Broadcast WhatsApp** | [`broadcast.html`](broadcast.html) | 5 template resmi SSB, live frame chat bubble WhatsApp, & kirim personal |
 
