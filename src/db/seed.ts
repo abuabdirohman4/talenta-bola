@@ -1,22 +1,14 @@
 // Isi awal: SSB Garuda Muda (kode akses = COACH_ACCESS_CODE), KU 2016, daftar pemain, dan satu periode rapor. Aman dijalankan ulang (lewati kalau sudah ada).
-// Nama anak asli dibaca dari src/db/roster.local.txt (tidak masuk git); tanpa file itu dipakai nama contoh.
+// Roster = src/db/roster.demo.ts (79 nama fiktif). Daftar anak sungguhan tidak pernah dipakai seed.
 import { randomBytes } from "node:crypto";
-import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
 import { config } from "dotenv";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { hashAccessCode, MIN_CODE } from "../lib/auth/session";
-import { parseWaList } from "../lib/wa-import";
+import { ROSTER_DEMO } from "./roster.demo";
 import { ageGroups, players, reportPeriods, ssbProfiles } from "./schema";
 
 config({ path: process.env.ENV_FILE ?? ".env.local" });
-
-const SAMPLE = `Athar, Bima, Candra, Daffa, Elang, Fikri, Galih, Hafidz, Ilham, Jaka, Kevin, Luthfi, Malik,
-Naufal, Omar, Pandu, Qais, Raka, Satria, Taufik, Umar, Vino, Wira, Yusuf, Zaki, Arka, Bagas, Dimas, Fadil, Gilang`
-  .split(",")
-  .map((s) => s.trim())
-  .join("\n");
 
 async function main() {
   const code = process.env.COACH_ACCESS_CODE ?? "";
@@ -31,8 +23,7 @@ async function main() {
     return;
   }
 
-  const rosterPath = join(process.cwd(), "src/db/roster.local.txt");
-  const roster = parseWaList(existsSync(rosterPath) ? readFileSync(rosterPath, "utf8") : SAMPLE);
+  const roster = ROSTER_DEMO.map((fullName) => ({ fullName, nickname: null as string | null }));
 
   const [ssb] = await db
     .insert(ssbProfiles)
