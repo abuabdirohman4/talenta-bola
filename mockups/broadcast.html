@@ -562,46 +562,46 @@
   <script>
     // 40 KU-10 Students database with parents
     const studentsData = [
-      { id: 1, name: "Athar Razka Pratama", no: 10, pos: "Tengah", parent: "Hendra Pratama", phone: "6281234567890", spp: "LUNAS", squad: true },
-      { id: 2, name: "Argya", no: 7, pos: "Depan", parent: "Dedi Kurnia", phone: "6281298765432", spp: "LUNAS", squad: true },
-      { id: 3, name: "Argyo", no: 11, pos: "Depan", parent: "Dedi Kurnia", phone: "6281298765432", spp: "LUNAS", squad: true },
-      { id: 4, name: "Azril", no: 4, pos: "Bek", parent: "Iwan Setiawan", phone: "6281345678901", spp: "LUNAS", squad: true },
-      { id: 5, name: "Arsyadan", no: 8, pos: "Tengah", parent: "Budi Santoso", phone: "6281378901234", spp: "BELUM", squad: false },
-      { id: 6, name: "Chandra", no: 1, pos: "Kiper", parent: "Agus Ramdani", phone: "6281211223344", spp: "LUNAS", squad: true },
-      { id: 7, name: "Shiraj", no: 9, pos: "Depan", parent: "Yudi Suryadi", phone: "6281355667788", spp: "LUNAS", squad: true },
-      { id: 8, name: "Hanif", no: 5, pos: "Bek", parent: "Rahmat Hidayat", phone: "6281266778899", spp: "LUNAS", squad: true },
-      { id: 9, name: "Hibat", no: 6, pos: "Bek", parent: "Asep Saepudin", phone: "6281277889900", spp: "BELUM", squad: false },
-      { id: 10, name: "Kenzie", no: 14, pos: "Tengah", parent: "Dadan Ramdan", phone: "6281288990011", spp: "LUNAS", squad: true },
-      { id: 11, name: "Harlan", no: 17, pos: "Bek", parent: "Ade Gunawan", phone: "6281399001122", spp: "LUNAS", squad: true },
-      { id: 12, name: "Mahrez", no: 26, pos: "Tengah", parent: "Eka Permana", phone: "6281300112233", spp: "LUNAS", squad: true },
-      { id: 13, name: "Nazriel", no: 20, pos: "Tengah", parent: "Wawan Hermawan", phone: "6281212345678", spp: "BELUM", squad: false },
-      { id: 14, name: "Hasan", no: 18, pos: "Bek", parent: "Cecep Supriatna", phone: "6281223456789", spp: "LUNAS", squad: true },
-      { id: 15, name: "Kasatria", no: 22, pos: "Kiper", parent: "Dadang Darmawan", phone: "6281234567891", spp: "LUNAS", squad: true },
-      { id: 16, name: "Abidzar", no: 23, pos: "Bek", parent: "Taufik Hidayat", phone: "6281245678912", spp: "LUNAS", squad: false },
-      { id: 17, name: "Sakha", no: 19, pos: "Depan", parent: "Guntur Tri", phone: "6281256789123", spp: "LUNAS", squad: false },
-      { id: 18, name: "Abiyan", no: 24, pos: "Tengah", parent: "Jajang Nurjaman", phone: "6281267891234", spp: "LUNAS", squad: false },
-      { id: 19, name: "Izzul", no: 25, pos: "Bek", parent: "Kiki Rizki", phone: "6281278912345", spp: "BELUM", squad: false },
-      { id: 20, name: "Raz", no: 15, pos: "Tengah", parent: "Lutfi Hakim", phone: "6281289123456", spp: "LUNAS", squad: false },
-      { id: 21, name: "Fatih", no: 12, pos: "Depan", parent: "Mamat Rohimat", phone: "6281290123457", spp: "LUNAS", squad: false },
-      { id: 22, name: "Najwan", no: 28, pos: "Bek", parent: "Nana Suryana", phone: "6281301234568", spp: "LUNAS", squad: false },
-      { id: 23, name: "Nabil", no: 30, pos: "Tengah", parent: "Oki Setiawan", phone: "6281312345679", spp: "LUNAS", squad: false },
-      { id: 24, name: "Reza", no: 31, pos: "Depan", parent: "Panji Gumilang", phone: "6281323456780", spp: "LUNAS", squad: false },
-      { id: 25, name: "Rafandra", no: 32, pos: "Bek", parent: "Qomarudin", phone: "6281334567891", spp: "LUNAS", squad: false },
-      { id: 26, name: "Rhehan", no: 33, pos: "Tengah", parent: "Rudi Hartono", phone: "6281345678902", spp: "BELUM", squad: false },
-      { id: 27, name: "Tristan", no: 34, pos: "Depan", parent: "Soleh Solihun", phone: "6281356789013", spp: "LUNAS", squad: false },
-      { id: 28, name: "Zuhud", no: 35, pos: "Bek", parent: "Tatang Sutisna", phone: "6281367890124", spp: "LUNAS", squad: false },
-      { id: 29, name: "Khalifah", no: 37, pos: "Tengah", parent: "Ujang Koswara", phone: "6281378901235", spp: "LUNAS", squad: false },
-      { id: 30, name: "Gilby", no: 38, pos: "Depan", parent: "Vicky Prasetyo", phone: "6281389012346", spp: "LUNAS", squad: false },
-      { id: 31, name: "Kelvin", no: 39, pos: "Kiper", parent: "Wahyu Hidayat", phone: "6281390123457", spp: "LUNAS", squad: false },
-      { id: 32, name: "Raditya", no: 40, pos: "Bek", parent: "Yana Mulyana", phone: "6281401234568", spp: "LUNAS", squad: false },
-      { id: 33, name: "Zaki", no: 41, pos: "Tengah", parent: "Zainal Abidin", phone: "6281412345679", spp: "LUNAS", squad: false },
-      { id: 34, name: "Arka", no: 42, pos: "Depan", parent: "Andi Wijaya", phone: "6281423456780", spp: "LUNAS", squad: false },
-      { id: 35, name: "Bilal", no: 43, pos: "Bek", parent: "Bambang Tri", phone: "6281434567891", spp: "LUNAS", squad: false },
-      { id: 36, name: "Daffa", no: 44, pos: "Tengah", parent: "Dani Hamdani", phone: "6281445678902", spp: "LUNAS", squad: false },
-      { id: 37, name: "Farhan", no: 45, pos: "Depan", parent: "Faisal Reza", phone: "6281456789013", spp: "LUNAS", squad: false },
-      { id: 38, name: "Ghazi", no: 46, pos: "Bek", parent: "Gilang Ramadhan", phone: "6281467890124", spp: "LUNAS", squad: false },
-      { id: 39, name: "Hamzah", no: 47, pos: "Tengah", parent: "Haris Fadilah", phone: "6281478901235", spp: "LUNAS", squad: false },
-      { id: 40, name: "Irfan", no: 48, pos: "Depan", parent: "Imam Safii", phone: "6281489012346", spp: "BELUM", squad: false }
+      { id: 1, name: "Kahfi Jatmiko", no: 10, pos: "Tengah", parent: "Marzuki Jatmiko", phone: "6280000000000", spp: "LUNAS", squad: true },
+      { id: 2, name: "Wildan", no: 7, pos: "Depan", parent: "Hendro Saputra", phone: "6280000000001", spp: "LUNAS", squad: true },
+      { id: 3, name: "Evan", no: 11, pos: "Depan", parent: "Hendro Saputra", phone: "6280000000001", spp: "LUNAS", squad: true },
+      { id: 4, name: "Jovan", no: 4, pos: "Bek", parent: "Vivi Susanto", phone: "6280000000002", spp: "LUNAS", squad: true },
+      { id: 5, name: "Kenzo", no: 8, pos: "Tengah", parent: "Udin Susanto", phone: "6280000000003", spp: "BELUM", squad: false },
+      { id: 6, name: "Tegar", no: 1, pos: "Kiper", parent: "Dedy Wardana", phone: "6280000000004", spp: "LUNAS", squad: true },
+      { id: 7, name: "Wahyu", no: 9, pos: "Depan", parent: "Rudi Susanto", phone: "6280000000005", spp: "LUNAS", squad: true },
+      { id: 8, name: "Irfan", no: 5, pos: "Bek", parent: "Usman Purnama", phone: "6280000000006", spp: "LUNAS", squad: true },
+      { id: 9, name: "Ulil", no: 6, pos: "Bek", parent: "Indra Wibowo", phone: "6280000000007", spp: "BELUM", squad: false },
+      { id: 10, name: "Gema", no: 14, pos: "Tengah", parent: "Krisna Wijaya", phone: "6280000000008", spp: "LUNAS", squad: true },
+      { id: 11, name: "Abid", no: 17, pos: "Bek", parent: "Vino Efendi", phone: "6280000000009", spp: "LUNAS", squad: true },
+      { id: 12, name: "Zidane", no: 26, pos: "Tengah", parent: "Mulyo Widodo", phone: "6280000000010", spp: "LUNAS", squad: true },
+      { id: 13, name: "Yudha", no: 20, pos: "Tengah", parent: "Wisnu Purnama", phone: "6280000000011", spp: "BELUM", squad: false },
+      { id: 14, name: "Cakra", no: 18, pos: "Bek", parent: "Bayu Iskandar", phone: "6280000000012", spp: "LUNAS", squad: true },
+      { id: 15, name: "Surya", no: 22, pos: "Kiper", parent: "Candra Haryanto", phone: "6280000000013", spp: "LUNAS", squad: true },
+      { id: 16, name: "Faris", no: 23, pos: "Bek", parent: "Edi Permana", phone: "6280000000014", spp: "LUNAS", squad: false },
+      { id: 17, name: "Zayn", no: 19, pos: "Depan", parent: "Teguh Wijaya", phone: "6280000000015", spp: "LUNAS", squad: false },
+      { id: 18, name: "Nizar", no: 24, pos: "Tengah", parent: "Pardi Jatmiko", phone: "6280000000016", spp: "LUNAS", squad: false },
+      { id: 19, name: "Arkan", no: 25, pos: "Bek", parent: "Eka Mahendra", phone: "6280000000017", spp: "BELUM", squad: false },
+      { id: 20, name: "Haikal", no: 15, pos: "Tengah", parent: "Cahya Suryadi", phone: "6280000000018", spp: "LUNAS", squad: false },
+      { id: 21, name: "Nizar", no: 12, pos: "Depan", parent: "Wawan Laksana", phone: "6280000000019", spp: "LUNAS", squad: false },
+      { id: 22, name: "Ubaidillah", no: 28, pos: "Bek", parent: "Nanda Santoso", phone: "6280000000020", spp: "LUNAS", squad: false },
+      { id: 23, name: "Ikbal", no: 30, pos: "Tengah", parent: "Gatot Laksana", phone: "6280000000021", spp: "LUNAS", squad: false },
+      { id: 24, name: "Ubaidillah", no: 31, pos: "Depan", parent: "Joni Purnama", phone: "6280000000022", spp: "LUNAS", squad: false },
+      { id: 25, name: "Zayn", no: 32, pos: "Bek", parent: "Oka Purnama", phone: "6280000000023", spp: "LUNAS", squad: false },
+      { id: 26, name: "Rendra", no: 33, pos: "Tengah", parent: "Heru Kurniawan", phone: "6280000000024", spp: "BELUM", squad: false },
+      { id: 27, name: "Arkan", no: 34, pos: "Depan", parent: "Kusno Purnama", phone: "6280000000025", spp: "LUNAS", squad: false },
+      { id: 28, name: "Kahfi", no: 35, pos: "Bek", parent: "Agung Saputra", phone: "6280000000026", spp: "LUNAS", squad: false },
+      { id: 29, name: "Nando", no: 37, pos: "Tengah", parent: "Lilik Hidayat", phone: "6280000000027", spp: "LUNAS", squad: false },
+      { id: 30, name: "Bintang", no: 38, pos: "Depan", parent: "Tono Rahardjo", phone: "6280000000028", spp: "LUNAS", squad: false },
+      { id: 31, name: "Leo", no: 39, pos: "Kiper", parent: "Narto Darmawan", phone: "6280000000029", spp: "LUNAS", squad: false },
+      { id: 32, name: "Rafif", no: 40, pos: "Bek", parent: "Sigit Widodo", phone: "6280000000030", spp: "LUNAS", squad: false },
+      { id: 33, name: "Orlan", no: 41, pos: "Tengah", parent: "Anton Aditama", phone: "6280000000031", spp: "LUNAS", squad: false },
+      { id: 34, name: "Wahyu", no: 42, pos: "Depan", parent: "Opik Jatmiko", phone: "6280000000032", spp: "LUNAS", squad: false },
+      { id: 35, name: "Haikal", no: 43, pos: "Bek", parent: "Gani Lesmana", phone: "6280000000033", spp: "LUNAS", squad: false },
+      { id: 36, name: "Lutfan", no: 44, pos: "Tengah", parent: "Zulkifli Firmansyah", phone: "6280000000034", spp: "LUNAS", squad: false },
+      { id: 37, name: "Cakra", no: 45, pos: "Depan", parent: "Imam Jatmiko", phone: "6280000000035", spp: "LUNAS", squad: false },
+      { id: 38, name: "Surya", no: 46, pos: "Bek", parent: "Lukas Cahyono", phone: "6280000000036", spp: "LUNAS", squad: false },
+      { id: 39, name: "Kafka", no: 47, pos: "Tengah", parent: "Dwi Purnama", phone: "6280000000037", spp: "LUNAS", squad: false },
+      { id: 40, name: "Lukman", no: 48, pos: "Depan", parent: "Qodir Hakim", phone: "6280000000038", spp: "BELUM", squad: false }
     ];
 
     // Template definitions
@@ -761,9 +761,9 @@ Salam olahraga,
     }
 
     function renderSimulator(rawText) {
-      // Format dummy preview with sample student: Athar Razka Pratama
+      // Format dummy preview with sample student: Kahfi Jatmiko
       let formatted = rawText
-        .replace(/\{nama_siswa\}/g, "Athar Razka Pratama (#10)")
+        .replace(/\{nama_siswa\}/g, "Kahfi Jatmiko (#10)")
         .replace(/\{id_siswa\}/g, "athar-10");
 
       // WhatsApp markdown parser: *bold* -> <strong>, _italic_ -> <em>, ~strike~ -> <del>
